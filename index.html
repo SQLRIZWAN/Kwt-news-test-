@@ -1,0 +1,3430 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>KWT News — Kuwait's Premier News Hub</title>
+<meta name="description" content="Kuwait's Premier News Hub — Latest Breaking News from Kuwait and the World. Al Qabas, Arab Times, Kuwait Times, Al Rai, Al Watan.">
+<meta name="theme-color" content="#c9a84c">
+<meta property="og:title" content="KWT News Hub — Kuwait's Premier News">
+<meta property="og:description" content="Latest breaking news from Kuwait and around the world">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KWT News Hub">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KWT News">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'><rect width='44' height='44' fill='%23c9a84c'/><text y='32' x='8' font-size='28' fill='black' font-weight='bold'>K</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+  --bg:#060606; --surface:#0e0e0e; --surface2:#131313; --surface3:#1a1a1a; --surface4:#212121;
+  --gold:#c9a84c; --gold2:#e8c96a; --gold3:#a8882a; --gold-glow:rgba(201,168,76,0.18); --gold-subtle:rgba(201,168,76,0.07);
+  --green:#00b853; --green-dim:rgba(0,184,83,0.12); --red:#e03535; --red-dim:rgba(224,53,53,0.12);
+  --text:#f0ede8; --text2:#9a9490; --text3:#565250; --text4:#333;
+  --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.1); --border-gold:rgba(201,168,76,0.3);
+  --radius:8px; --radius2:14px; --radius3:20px;
+  --shadow-sm:0 2px 12px rgba(0,0,0,0.5); --shadow:0 8px 40px rgba(0,0,0,0.7); --shadow-gold:0 4px 24px rgba(201,168,76,0.2);
+  --ease:cubic-bezier(0.4,0,0.2,1); --ease-enter:cubic-bezier(0,0,0.2,1); --ease-exit:cubic-bezier(0.4,0,1,1);
+}
+
+/* ============================================================
+   RESET & BASE
+============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
+input,textarea,select,[contenteditable]{-webkit-user-select:text;user-select:text;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden;position:relative;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:0.4;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--gold);}
+
+/* ============================================================
+   BREAKING NEWS TICKER
+============================================================ */
+.ticker-wrap{background:linear-gradient(90deg,#8b1010 0%,var(--red) 100%);padding:7px 0;overflow:hidden;position:relative;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);}
+.ticker-label{background:#6b0a0a;color:#fff;font-size:9px;font-weight:700;padding:0 14px;letter-spacing:3px;text-transform:uppercase;position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;z-index:2;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.ticker-content{display:flex;animation:ticker 45s linear infinite;padding-left:100vw;will-change:transform;}
+.ticker-item{white-space:nowrap;font-size:11px;color:rgba(255,255,255,0.92);padding:0 36px;font-weight:500;}
+.ticker-item::before{content:'◆';margin-right:12px;opacity:0.5;font-size:7px;vertical-align:middle;}
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+
+/* ============================================================
+   HEADER
+============================================================ */
+header{background:linear-gradient(180deg,#000 0%,var(--surface) 100%);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:250;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;gap:16px;min-height:64px;}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;transition:opacity 0.2s;}
+.logo-wrap:hover{opacity:0.85;}
+.logo-svg{width:44px;height:44px;flex-shrink:0;}
+.logo-text{display:flex;flex-direction:column;line-height:1.15;}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--gold);letter-spacing:1px;white-space:nowrap;}
+.logo-sub{font-size:9px;color:var(--text2);letter-spacing:1.5px;margin-top:3px;}
+
+/* ---- Search ---- */
+.header-search{flex:1;max-width:380px;position:relative;}
+.header-search input{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 42px 10px 16px;border-radius:var(--radius3);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.25s;}
+.header-search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+.header-search .s-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text3);cursor:pointer;}
+.search-close-btn{position:absolute;right:38px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.15s;}
+.search-close-btn:hover{color:var(--text);background:var(--surface3);}
+.search-icon-btn{display:none;width:40px;height:40px;border-radius:var(--radius);border:none;background:none;color:var(--text2);cursor:pointer;align-items:center;justify-content:center;transition:all 0.15s;}
+.search-icon-btn:hover{color:var(--gold);background:var(--gold-subtle);}
+
+/* Mobile search — fullwidth overlay */
+.header-search.mobile-open{
+  position:fixed;
+  top:0;left:0;right:0;
+  max-width:100%;
+  z-index:500;
+  padding:10px 12px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex !important;
+  align-items:center;
+  gap:8px;
+  box-shadow:var(--shadow);
+}
+
+/* ---- Header Actions ---- */
+.header-actions{display:flex;align-items:center;gap:8px;position:relative;flex-shrink:0;overflow:visible;z-index:1;}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);min-width:140px;display:none;z-index:600;box-shadow:var(--shadow);overflow:hidden;}
+.lang-dropdown.open{display:block;}
+.ham-btn{padding:8px;cursor:pointer;color:var(--text2);border:none;background:none;display:flex !important;align-items:center;justify-content:center;border-radius:var(--radius);min-width:44px;min-height:44px;transition:all 0.15s;flex-shrink:0;}
+.ham-btn:hover{color:var(--gold);background:var(--gold-subtle);}
+.icon-btn{background:none;border:none;cursor:pointer;padding:8px;border-radius:var(--radius);position:relative;color:var(--text2);transition:all 0.15s;display:flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;}
+.icon-btn:hover{color:var(--gold);background:var(--gold-subtle);}
+.notif-badge{position:absolute;top:4px;right:4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:8px;min-width:14px;text-align:center;font-family:'DM Sans',sans-serif;line-height:1.4;display:flex;align-items:center;justify-content:center;}
+
+/* ---- Language Pill ---- */
+.lang-pill{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius3);font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;position:relative;user-select:none;transition:all 0.2s;flex-shrink:0;min-height:36px;}
+.lang-pill:hover{border-color:var(--gold);color:var(--gold);}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);min-width:140px;display:none;z-index:400;box-shadow:var(--shadow);overflow:hidden;}
+.lang-dropdown.open{display:block;}
+.lang-dropdown button{display:block;width:100%;padding:10px 16px;text-align:left;background:none;border:none;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;}
+.lang-dropdown button:hover{background:var(--surface3);color:var(--gold);}
+
+/* ---- User Avatar & Dropdown ---- */
+.avatar-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold3);background:var(--surface3);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.user-menu{position:relative;}
+.user-dropdown{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius2);width:210px;display:none;z-index:600;box-shadow:var(--shadow);overflow:hidden;}
+.user-dropdown.open{display:block;}
+.user-dropdown a,.user-dropdown button{display:flex;align-items:center;gap:10px;padding:11px 16px;color:var(--text2);text-decoration:none;background:none;border:none;width:100%;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.user-dropdown a:hover,.user-dropdown button:hover{background:var(--surface3);color:var(--gold);}
+
+/* ---- Hamburger ---- */
+/* ham-btn styles above in header-actions block */
+
+/* ============================================================
+   CATEGORY NAV
+============================================================ */
+.channel-nav-wrap{position:relative;z-index:1;}
+.channel-nav-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(to right,transparent,var(--surface));pointer-events:none;z-index:1;}
+.channel-nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;flex-shrink:0;}
+.channel-nav::-webkit-scrollbar{display:none;}
+.channel-tab{padding:13px 18px;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;display:flex;align-items:center;gap:7px;flex-shrink:0;font-family:'DM Sans',sans-serif;background:none;border-top:none;border-left:none;border-right:none;transition:all 0.15s;}
+.channel-tab:hover{color:var(--text);background:rgba(255,255,255,0.02);}
+.channel-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.channel-tab .ch-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+
+/* More dropdown */
+.more-menu{position:relative;flex-shrink:0;}
+.more-dropdown{position:absolute;top:calc(100% + 1px);left:0;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);min-width:170px;display:none;z-index:600;box-shadow:var(--shadow);overflow:hidden;}
+.more-dropdown.open{display:block;}
+.more-dropdown button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 16px;background:none;border:none;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;transition:all 0.15s;}
+.more-dropdown button:hover{background:var(--surface3);color:var(--gold);}
+
+/* Sub-nav: Newspapers */
+.subnav-wrap{background:var(--surface2);border-bottom:1px solid var(--border);}
+.subnav-wrap .channel-nav{background:transparent;}
+.subnav-wrap .channel-tab{font-size:10px;padding:9px 14px;}
+
+/* Verified tab badge */
+.verified-tab-badge{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;background:var(--green);color:#000;font-size:8px;font-weight:900;border-radius:50%;vertical-align:middle;}
+
+/* ============================================================
+   SIDEBAR — FIX: OPENS FROM RIGHT
+============================================================ */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:450;display:none;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+.sidebar-overlay.open{display:block;}
+
+.sidebar{
+  position:fixed;
+  right:0;
+  left:auto;
+  top:0;
+  height:100%;
+  width:280px;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  border-right:none;
+  z-index:460;
+  transform:translateX(100%);
+  transition:transform 0.28s var(--ease-enter);
+  padding-top:0;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar.open{transform:translateX(0);}
+
+.sidebar-close{
+  position:absolute;
+  top:16px;
+  right:16px;
+  background:var(--surface3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  width:40px;  /* ← 40px as per spec */
+  height:40px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+  transition:all 0.15s;
+  flex-shrink:0;
+}
+.sidebar-close:hover{color:var(--text);background:var(--surface4);}
+
+.sidebar h3{font-size:9px;color:var(--text4);letter-spacing:3px;text-transform:uppercase;padding:16px 20px 8px;font-family:'DM Sans',sans-serif;font-weight:600;}
+.sidebar a,.sidebar button{display:flex;align-items:center;gap:12px;padding:11px 20px;color:var(--text2);text-decoration:none;background:none;border:none;width:100%;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.sidebar a:hover,.sidebar button:hover{background:var(--surface2);color:var(--gold);padding-left:26px;}
+.sidebar-brand{padding:20px 20px 16px 20px;border-bottom:1px solid var(--border);margin-bottom:4px;position:relative;padding-right:60px;}
+.sidebar-brand .name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);}
+.sidebar-brand .sub{font-size:9px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;}
+.sidebar-copyright{padding:16px 20px;font-size:10px;color:var(--text3);text-align:center;border-top:1px solid var(--border);letter-spacing:0.5px;margin-top:auto;}
+.sidebar-user-info{display:flex;align-items:center;gap:12px;}
+.sidebar-user-avatar{width:40px;height:40px;border-radius:50%;background:var(--surface3);border:1.5px solid var(--gold3);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--gold);flex-shrink:0;overflow:hidden;}
+.sidebar-user-avatar img{width:100%;height:100%;object-fit:cover;}
+.sidebar-user-name{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:15px;color:var(--text);}
+.sidebar-user-email{font-size:10px;color:var(--text3);margin-top:2px;}
+
+/* ============================================================
+   MAIN LAYOUT
+============================================================ */
+main{max-width:1280px;margin:0 auto;padding:24px 20px calc(80px + env(safe-area-inset-bottom));}
+.page{display:none;animation:pageFadeIn 0.22s ease;}
+.page.active{display:block;}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ============================================================
+   HERO / FEATURED SECTION
+============================================================ */
+.featured-section{margin-bottom:36px;}
+.featured-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:16px;
+  min-height:380px;
+  max-height:480px;
+}
+@media(max-width:640px){
+  .featured-grid{
+    grid-template-columns:1fr;
+    grid-template-rows:auto;
+    min-height:unset;
+    max-height:unset;
+    height:auto;
+  }
+  .featured-main{grid-row:1;aspect-ratio:16/9;height:auto;}
+  .featured-side{grid-column:1;flex-direction:row;overflow-x:auto;scrollbar-width:none;gap:10px;grid-row:unset;}
+  .featured-side::-webkit-scrollbar{display:none;}
+  .featured-side .news-card{min-width:200px;max-width:220px;flex-shrink:0;}
+}
+.featured-main{
+  grid-row:1/3;
+  position:relative;
+  border-radius:var(--radius2);
+  overflow:hidden;
+  background:var(--surface2);
+  cursor:pointer;
+  min-height:200px;
+}
+.featured-main img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+.featured-main:hover img{transform:scale(1.03);}
+.featured-main .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.25) 55%,transparent 100%);}
+.featured-main .info{position:absolute;bottom:0;left:0;right:0;padding:24px;}
+.featured-main .info .channel-badge{display:inline-block;background:linear-gradient(135deg,var(--gold3),var(--gold));color:#000;font-size:8px;font-weight:700;padding:3px 10px;border-radius:3px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;font-family:'DM Sans',sans-serif;}
+.featured-main .info h2{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,2.5vw,24px);font-weight:600;line-height:1.3;color:#fff;}
+
+/* Rotate dots */
+.hero-dots{display:flex;gap:6px;position:absolute;bottom:16px;right:16px;z-index:2;}
+.hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.25s;}
+.hero-dot.active{background:var(--gold);transform:scale(1.3);}
+
+.featured-side{grid-column:2;display:flex;flex-direction:column;gap:12px;}
+
+/* ============================================================
+   NEWS CARDS
+============================================================ */
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;cursor:pointer;transition:all 0.25s var(--ease);position:relative;contain:layout style;}
+.news-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.3s;z-index:1;}
+.news-card:hover::before{opacity:1;}
+.news-card:hover{border-color:var(--border-gold);box-shadow:0 8px 32px rgba(0,0,0,0.5),0 0 0 1px var(--border-gold);transform:translateY(-2px);}
+.news-card:active{transform:scale(0.98);}
+
+.news-card.side{display:flex;gap:12px;padding:12px;align-items:flex-start;}
+.news-card.side .card-img{width:88px;height:68px;flex-shrink:0;border-radius:6px;overflow:hidden;background:var(--surface3);}
+.news-card.side .card-img img{width:100%;height:100%;object-fit:cover;}
+
+.card-img-full{width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--surface2);}
+.card-img-full img{width:100%;height:100%;object-fit:cover;transition:transform 0.35s ease;}
+.news-card:hover .card-img-full img{transform:scale(1.04);}
+
+.card-body{padding:14px;flex:1;}
+.card-meta{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap;}
+.card-channel{font-size:9px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-family:'DM Sans',sans-serif;}
+.card-time{font-size:10px;color:var(--text3);letter-spacing:0.3px;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;line-height:1.45;color:var(--text);margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.card-excerpt{font-size:12px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+.card-actions{display:flex;align-items:center;gap:2px;padding:8px 12px 10px;border-top:1px solid var(--border);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-height:44px;-webkit-overflow-scrolling:touch;}
+.card-actions::-webkit-scrollbar{display:none;}
+.card-action{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:6px;transition:all 0.15s;font-family:'DM Sans',sans-serif;font-weight:500;min-height:32px;white-space:nowrap;flex-shrink:0;}
+.card-action:hover{color:var(--gold);background:var(--gold-subtle);}
+.card-action.liked{color:var(--red);}
+.card-action:disabled{opacity:0.5;pointer-events:none;}
+.card-action-spacer{flex:1;min-width:4px;}
+
+/* ============================================================
+   SECTION HEADERS
+============================================================ */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;display:flex;align-items:center;gap:12px;}
+.section-title::before{content:'';width:3px;height:20px;background:linear-gradient(180deg,var(--gold2),var(--gold3));border-radius:2px;display:block;flex-shrink:0;}
+.see-all{color:var(--gold);font-size:11px;text-decoration:none;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;transition:opacity 0.15s;}
+.see-all:hover{opacity:0.7;}
+
+/* ============================================================
+   NEWS GRID
+============================================================ */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:28px;}
+@media(max-width:768px){.news-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}}
+@media(max-width:480px){.news-grid{grid-template-columns:1fr;}}
+.news-section{margin-bottom:36px;}
+
+/* ============================================================
+   SKELETON LOADER
+============================================================ */
+@keyframes shimmer{0%{background-position:-400px 0;}100%{background-position:400px 0;}}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:800px 100%;animation:shimmer 1.5s infinite;border-radius:4px;}
+.skeleton-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;}
+.skeleton-img{height:160px;}
+.skeleton-body{padding:14px;display:flex;flex-direction:column;gap:8px;}
+.skeleton-line{height:12px;}
+.skeleton-line.short{width:40%;}
+.skeleton-line.medium{width:70%;}
+
+/* ============================================================
+   CHANNEL CARDS
+============================================================ */
+.channel-header{display:flex;align-items:center;gap:18px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);margin-bottom:24px;position:relative;overflow:hidden;}
+.channel-logo-big{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;font-family:'Cormorant Garamond',serif;border:1px solid var(--border2);flex-shrink:0;}
+.channel-info h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
+.channel-info p{font-size:12px;color:var(--text2);margin-top:4px;}
+
+/* ============================================================
+   NEWSPAPER COLORS
+============================================================ */
+.ch-alqabas{background:#122b18;border:1px solid rgba(45,158,66,0.3);}.dot-qabas{background:#2d9e42;}
+.ch-arabtimes{background:#121d30;border:1px solid rgba(45,98,184,0.3);}.dot-arabtimes{background:#2d62b8;}
+.ch-kuwaittimes{background:#2a1212;border:1px solid rgba(184,45,45,0.3);}.dot-kuwaittimes{background:#b82d2d;}
+.ch-alrai{background:#1e1230;border:1px solid rgba(123,45,184,0.3);}.dot-alrai{background:#7b2db8;}
+.ch-alwatan{background:#2a1e10;border:1px solid rgba(184,123,45,0.3);}.dot-alwatan{background:#b87b2d;}
+
+/* ============================================================
+   BOTTOM NAVIGATION — PHASE 1 FIX
+============================================================ */
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  height:60px;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:300;
+  padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 -4px 20px rgba(0,0,0,0.4);
+}
+/* Sliding gold indicator bar */
+.bottom-nav-indicator{
+  position:absolute;
+  top:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  border-radius:0 0 3px 3px;
+  width:48px;
+  left:0;
+  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none;
+  z-index:2;
+  box-shadow:0 0 8px var(--gold);
+}
+.bottom-nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  color:var(--text3);
+  font-size:10px;
+  font-weight:600;
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  flex:1;
+  height:60px;
+  position:relative;
+  transition:color 0.2s;
+  min-width:44px;
+  padding:0;
+}
+.bottom-nav-item .nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.bottom-nav-item .nav-label{font-size:10px;font-weight:600;line-height:1;white-space:nowrap;}
+.bottom-nav-item.active{color:var(--gold);}
+.bottom-nav-item.active .nav-icon svg{filter:drop-shadow(0 0 4px rgba(201,168,76,0.5));}
+.bottom-nav-item:active{transform:scale(0.90);}
+
+/* FAB (Post button) — center elevated */
+.bottom-nav-fab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:700;color:var(--gold);min-width:44px;position:relative;height:60px;
+}
+.fab-circle{
+  width:52px;
+  height:52px;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 20px rgba(201,168,76,0.4);
+  transform:translateY(-10px);          /* ← pop up effect */
+  transition:transform 0.2s var(--ease),box-shadow 0.2s;
+}
+.bottom-nav-fab:active .fab-circle{transform:translateY(-10px) scale(0.95);}
+.fab-circle svg{color:#000;}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn{padding:9px 18px;border-radius:var(--radius3);border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;position:relative;overflow:hidden;min-height:40px;}
+.btn-gold{background:linear-gradient(135deg,var(--gold3) 0%,var(--gold) 50%,var(--gold2) 100%);color:#000;font-weight:700;box-shadow:0 2px 12px rgba(201,168,76,0.25);}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:var(--shadow-gold);}
+.btn-gold:active{transform:scale(0.98);}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-subtle);}
+.btn-red{background:var(--red);color:#fff;}
+.btn-green{background:var(--green);color:#000;font-weight:700;}
+
+/* ============================================================
+   MODALS
+============================================================ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+/* Secondary modals that can open on top of postModal */
+#shareModal,#confirmModal{z-index:600;}
+#shareModal.open,#confirmModal.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius2);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;overflow-x:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.8);border-top:2px solid var(--gold3);animation:modalSlideIn 0.25s var(--ease-enter);}
+.modal-wide{max-width:680px;}
+.modal-xl{max-width:900px;}
+@media(max-width:640px){
+  .modal,.modal-wide,.modal-xl{max-width:100%;border-radius:var(--radius2) var(--radius2) 0 0;margin-bottom:0;max-height:96vh;}
+  .modal-overlay{align-items:flex-end;padding:0;}
+}
+@keyframes modalSlideIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-header h2{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;}
+.modal-close{background:none;border:none;color:var(--text3);cursor:pointer;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.15s;font-size:18px;font-weight:700;}
+.modal-close:hover{background:var(--surface2);color:var(--text);}
+.modal-body{padding:24px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+
+/* ============================================================
+   FORMS
+============================================================ */
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:10px;font-weight:700;color:var(--text2);margin-bottom:7px;text-transform:uppercase;font-family:'DM Sans',sans-serif;letter-spacing:0.5px;}
+.form-control{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:11px 14px;border-radius:var(--radius);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s;min-height:44px;}
+.form-control:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.auth-tabs{display:flex;background:var(--surface2);border-radius:var(--radius);padding:3px;margin-bottom:22px;border:1px solid var(--border);}
+.auth-tab{flex:1;padding:9px;text-align:center;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);font-family:'DM Sans',sans-serif;background:none;border:none;min-height:40px;}
+.auth-tab.active{background:linear-gradient(135deg,var(--gold3),var(--gold));color:#000;font-weight:700;}
+
+/* ============================================================
+   CREATE POST CARD
+============================================================ */
+.create-post-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius2);padding:16px;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.create-post-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius3);padding:10px 20px;color:var(--text3);font-size:13px;cursor:pointer;text-align:left;}
+
+/* ============================================================
+   VERIFIED BADGE
+============================================================ */
+.verified-badge{display:inline-flex;align-items:center;gap:3px;background:var(--green-dim);border:1px solid var(--green);color:var(--green);font-size:8px;font-weight:700;padding:2px 7px;border-radius:4px;font-family:'DM Sans',sans-serif;}
+.kwt-verified{display:inline-flex;align-items:center;gap:4px;background:var(--green-dim);border:1px solid rgba(0,184,83,0.4);color:var(--green);font-size:8px;font-weight:800;padding:2px 8px;border-radius:4px;letter-spacing:1px;text-transform:uppercase;}
+
+/* ============================================================
+   ADMIN
+============================================================ */
+.admin-wrap{display:grid;grid-template-columns:220px 1fr;border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;}
+.admin-sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0;}
+.admin-nav a,.admin-nav button{display:flex;align-items:center;gap:10px;padding:11px 20px;color:var(--text2);background:none;border:none;border-left:2px solid transparent;width:100%;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.admin-nav a.active,.admin-nav button.active{background:var(--gold-subtle);color:var(--gold);border-left-color:var(--gold);}
+.admin-content{padding:24px;overflow-y:auto;background:var(--bg);}
+.admin-table{width:100%;border-collapse:collapse;}
+.admin-table th{text-align:left;padding:10px 12px;font-size:9px;color:var(--text3);border-bottom:1px solid var(--border2);text-transform:uppercase;letter-spacing:1px;}
+.admin-table td{padding:11px 12px;font-size:12px;border-bottom:1px solid var(--border);}
+
+/* ============================================================
+   PROFILE
+============================================================ */
+.profile-header-card{background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--border);border-radius:var(--radius2);padding:26px;display:flex;align-items:flex-start;gap:22px;margin-bottom:22px;flex-wrap:wrap;}
+@media(max-width:480px){
+  .profile-header-card{flex-direction:column;align-items:center;text-align:center;padding:20px 16px;}
+  .profile-header-card>div:last-child{width:100%;}
+  .profile-header-card .kwt-verified{margin-top:8px;}
+}
+.profile-avatar-big{width:90px;height:90px;border-radius:50%;border:2px solid var(--gold3);background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--gold);overflow:hidden;cursor:pointer;flex-shrink:0;}
+.profile-avatar-big img{width:100%;height:100%;object-fit:cover;}
+.avatar-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold3);background:var(--surface3);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.profile-tabs,.admin-sub-nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:22px;}
+.profile-tab,.admin-sub-tab{padding:10px 20px;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all 0.15s;}
+.profile-tab.active,.admin-sub-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.avatar-upload{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:20px;}
+.avatar-preview{width:90px;height:90px;border-radius:50%;background:var(--surface2);border:2px solid var(--gold3);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;position:relative;}
+.avatar-preview img{width:100%;height:100%;object-fit:cover;}
+
+/* ============================================================
+   POST DETAIL
+============================================================ */
+.post-detail-img{width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:var(--surface2);margin-bottom:22px;}
+.post-detail-img img{width:100%;height:100%;object-fit:cover;}
+.post-detail-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,4vw,28px);font-weight:600;margin-bottom:14px;line-height:1.3;}
+.post-detail-meta{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.author-avatar-sm{width:32px;height:32px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);border:1px solid var(--border2);overflow:hidden;}
+.author-avatar-sm img{width:100%;height:100%;object-fit:cover;}
+.post-detail-content{font-size:15px;line-height:1.9;color:var(--text2);margin-bottom:22px;}
+
+/* ============================================================
+   TOAST
+============================================================ */
+.toast{position:fixed;bottom:80px;right:24px;background:var(--surface2);border:1px solid var(--border2);border-left:3px solid var(--gold3);color:var(--text);padding:12px 18px;border-radius:var(--radius);font-size:13px;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;box-shadow:var(--shadow);pointer-events:none;max-width:320px;word-break:break-word;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-left-color:var(--green);color:var(--green);}
+.toast.error{border-left-color:var(--red);color:var(--red);}
+@media(max-width:480px){.toast{right:12px;left:12px;max-width:none;bottom:76px;font-size:12px;}}
+
+/* ============================================================
+   LOADER
+============================================================ */
+.loader{display:inline-block;width:22px;height:22px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.75s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.page-loader{display:flex;justify-content:center;padding:64px;}
+
+/* ============================================================
+   SEARCH RESULTS PAGE
+============================================================ */
+.search-header{margin-bottom:20px;}
+.search-header h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
+.search-header p{color:var(--text2);font-size:12px;margin-top:4px;}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+============================================================ */
+@media (max-width: 1024px) {
+  .news-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+}
+
+@media (max-width: 768px) {
+  .header-top{padding:10px 14px;min-height:58px;}
+  .logo-name{font-size:15px;}
+  .logo-sub{display:none;}
+  .logo-svg{width:36px;height:36px;}
+  main{padding:16px 12px calc(80px + env(safe-area-inset-bottom));}
+  .admin-wrap{grid-template-columns:1fr;}
+  .admin-sidebar{display:block;border-right:none;border-bottom:1px solid var(--border);padding:10px 0;}
+  .admin-nav{display:flex;overflow-x:auto;}
+  .admin-nav a,.admin-nav button{white-space:nowrap;border-left:none;border-bottom:2px solid transparent;}
+  .admin-nav a.active,.admin-nav button.active{border-left:none;border-bottom-color:var(--gold);}
+  .form-row{grid-template-columns:1fr;}
+  .news-grid{grid-template-columns:1fr;}
+  .sidebar{width:100%;max-width:320px;}
+}
+
+@media (max-width: 480px) {
+  /* Desktop search bar hidden — mobile icon button dikhega */
+  .header-search{display:none;}
+  .header-search.mobile-open{display:flex !important;}
+  .search-icon-btn{display:flex;}
+  .header-top{padding:8px 10px;gap:6px;}
+  .lang-pill{padding:5px 8px;font-size:10px;min-height:32px;gap:3px;}
+  .lang-pill svg{display:none;}
+  .notif-btn{min-width:36px;min-height:36px;padding:6px;}
+  .avatar-btn{width:32px;height:32px;}
+  .header-actions{gap:4px;}
+}
+
+@media (max-width: 360px) {
+  .logo-name{font-size:13px;}
+  .logo-svg{width:34px;height:34px;}
+  .header-top{padding:6px 8px;}
+}
+
+/* Pull-to-refresh hint */
+.ptr-hint{text-align:center;padding:8px;font-size:11px;color:var(--text3);display:none;}
+
+.btn-gold:focus-visible{outline:2px solid var(--gold2);outline-offset:2px;}
+.btn-outline:focus-visible{outline:2px solid var(--gold3);outline-offset:2px;}
+.form-control::placeholder{color:var(--text4);opacity:1;}
+
+/* ============================================================
+   NEW: READING PROGRESS BAR
+============================================================ */
+.reading-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold3),var(--gold2));width:0%;z-index:10000;transition:width 0.08s linear;pointer-events:none;}
+
+/* ============================================================
+   NEW: HEADER SCROLL BEHAVIOR
+============================================================ */
+header{transition:box-shadow 0.35s;}
+
+/* ============================================================
+   NEW: TICKER PAUSE ON HOVER/TOUCH
+============================================================ */
+.ticker-content:hover{animation-play-state:paused;}
+
+/* ============================================================
+   NEW: CARD ENTRANCE ANIMATIONS
+============================================================ */
+@keyframes cardReveal{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.news-grid .news-card{opacity:1;}.news-grid .news-card.anim-ready{opacity:0;transform:translateY(20px);transition:opacity 0.38s ease,transform 0.38s ease;}.news-grid .news-card.card-animated{opacity:1!important;transform:translateY(0)!important;}
+.news-grid .news-card.card-animated{animation:cardReveal 0.42s var(--ease-enter) forwards;}
+
+/* ============================================================
+   NEW: LIKE HEART ANIMATION
+============================================================ */
+@keyframes heartPop{0%{transform:scale(1);}30%{transform:scale(1.45);}65%{transform:scale(0.88);}100%{transform:scale(1);}}
+.card-action.liked svg{animation:heartPop 0.42s cubic-bezier(0.68,-0.55,0.265,1.55);}
+
+/* ============================================================
+   NEW: RIPPLE EFFECT
+============================================================ */
+@keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
+.ripple-effect{position:absolute;border-radius:50%;background:rgba(255,255,255,0.18);transform:scale(0);animation:rippleAnim 0.5s linear;pointer-events:none;z-index:0;}
+
+/* ============================================================
+   NEW: THEME TOGGLE BUTTON
+============================================================ */
+.theme-btn{background:none;border:1px solid var(--border2);color:var(--text2);cursor:pointer;padding:6px 9px;border-radius:var(--radius3);font-size:15px;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0;}
+.theme-btn:hover{border-color:var(--gold);background:var(--gold-subtle);}
+
+/* ============================================================
+   NEW: LIGHT MODE
+============================================================ */
+:root.light{
+  --bg:#f5f3ef;--surface:#ffffff;--surface2:#f0ede8;--surface3:#e8e4dd;--surface4:#dbd6cd;
+  --gold:#b8922a;--gold2:#d4a832;--gold3:#9a7520;--gold-glow:rgba(184,146,42,0.18);--gold-subtle:rgba(184,146,42,0.08);
+  --text:#1a1612;--text2:#4a433a;--text3:#8a8278;--text4:#bab2a8;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.15);--border-gold:rgba(184,146,42,0.35);
+  --shadow-sm:0 2px 12px rgba(0,0,0,0.09);--shadow:0 8px 40px rgba(0,0,0,0.14);
+}
+:root.light body{background:#f5f3ef;}
+:root.light body::before{opacity:0.06;}
+:root.light header{background:linear-gradient(180deg,#fff 0%,#f8f6f2 100%);}
+:root.light .news-card{background:#fff;}
+:root.light .bottom-nav{background:#fff;border-top:1px solid rgba(0,0,0,0.1);}
+:root.light .channel-nav{background:#fff;}
+:root.light .modal{background:#fff;}
+:root.light .sidebar{background:#fff;}
+
+/* ============================================================
+   NEW: ARTICLE STICKY ENGAGEMENT BAR
+============================================================ */
+.article-engage-bar{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--radius2);
+  padding:12px 16px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
+.article-engage-bar .btn{flex:1;min-width:80px;}
+
+/* ============================================================
+   NEW: RELATED ARTICLES
+============================================================ */
+.related-articles{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+.related-articles h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.related-articles h3::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,var(--gold2),var(--gold3));border-radius:2px;display:block;flex-shrink:0;}
+.related-scroll{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.related-scroll::-webkit-scrollbar{display:none;}
+.related-card{flex-shrink:0;width:190px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;transition:all 0.2s;position:relative;}
+.related-card:hover{border-color:var(--border-gold);transform:translateY(-2px);}
+.related-card-channel{font-size:8px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.related-card-title{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--text);}
+.related-card-time{font-size:10px;color:var(--text3);margin-top:8px;}
+
+/* ============================================================
+   NEW: BACK TO TOP
+============================================================ */
+.back-to-top{position:fixed;right:18px;bottom:80px;width:40px;height:40px;background:var(--surface2);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:290;opacity:0;transform:translateY(12px);transition:all 0.28s;color:var(--gold);box-shadow:var(--shadow-sm);}
+.back-to-top.visible{opacity:1;transform:translateY(0);}
+.back-to-top:hover{background:var(--gold-subtle);box-shadow:var(--shadow-gold);}
+@media(max-width:480px){.back-to-top{right:12px;bottom:76px;width:36px;height:36px;}}
+
+/* ============================================================
+   NEW: TRENDING BADGE & READ TIME
+============================================================ */
+.trending-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(224,53,53,0.12);border:1px solid rgba(224,53,53,0.3);color:var(--red);font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;text-transform:uppercase;}
+.read-time-badge{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:3px;}
+
+/* ============================================================
+   NEW: SAVE BUTTON SAVED STATE
+============================================================ */
+.card-action.saved{color:var(--gold);}
+.card-action.saved svg{fill:var(--gold);}
+.card-action.liked{color:var(--red);}
+.card-action.liked svg{fill:var(--red);}
+.card-actions{display:flex;align-items:center;gap:2px;padding:8px 12px 10px;border-top:1px solid var(--border);flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-height:44px;}
+.card-actions::-webkit-scrollbar{display:none;}
+
+/* ============================================================
+   NEW: SHARE SHEET MODAL
+============================================================ */
+.share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px;}
+.share-option{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:10px;font-weight:600;color:var(--text2);transition:all 0.15s;text-align:center;}
+.share-option:hover{border-color:var(--border-gold);color:var(--gold);}
+.share-option .share-icon{font-size:22px;}
+
+/* ============================================================
+   NEW: CATEGORY SELECT
+============================================================ */
+.category-select{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:11px 14px;border-radius:var(--radius);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s;min-height:44px;cursor:pointer;-webkit-appearance:none;}
+.category-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+
+/* ============================================================
+   NEW: TL;DR BOX
+============================================================ */
+.tldr-box{background:var(--gold-subtle);border:1px solid var(--border-gold);border-left:3px solid var(--gold);border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;}
+.tldr-label{font-size:9px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.tldr-text{font-size:13px;color:var(--text2);line-height:1.65;}
+
+/* ============================================================
+   NEW: SEARCH SUGGESTIONS
+============================================================ */
+.search-suggestions{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;display:none;z-index:700;box-shadow:var(--shadow);}
+.search-suggestions.open{display:block;}
+.search-suggestion-item{padding:10px 16px;font-size:12px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.12s;}
+.search-suggestion-item:hover{background:var(--surface3);color:var(--gold);}
+.search-suggestions-header{padding:8px 16px 4px;font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+
+/* ============================================================
+   NEW: HERO ROTATE TRANSITION
+============================================================ */
+.featured-main .info{transition:opacity 0.35s var(--ease);}
+.featured-main.hero-transitioning .info{opacity:0;}
+
+/* ============================================================
+   NEW: CATEGORY CHIP
+============================================================ */
+.cat-chip{display:inline-flex;align-items:center;gap:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text3);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ============================================================
+   NEW: HAPTIC + ACTIVE PRESS FEEDBACK
+============================================================ */
+.bottom-nav-item:active{transform:scale(0.92);}
+.bottom-nav-fab:hover .fab-circle{transform:translateY(-12px);box-shadow:0 6px 24px rgba(201,168,76,0.5);}
+
+/* ============================================================
+   NEW: TRENDING SECTION HOME
+============================================================ */
+.trending-row{display:flex;flex-direction:column;gap:10px;}
+.trending-item{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
+.trending-item:last-child{border-bottom:none;}
+.trending-item:hover .trending-item-title{color:var(--gold);}
+.trending-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--text4);line-height:1;flex-shrink:0;width:28px;text-align:center;}
+.trending-item-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;line-height:1.4;margin-bottom:5px;color:var(--text);}
+.trending-item-meta{font-size:10px;color:var(--text3);}
+
+/* ============================================================
+   MEDIA UPLOAD — IMAGE / VIDEO PICKER
+============================================================ */
+.media-tabs{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:3px;gap:3px;margin-bottom:14px;}
+.media-tab{flex:1;padding:8px 6px;text-align:center;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;color:var(--text3);background:none;border:none;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.18s;min-height:36px;}
+.media-tab.active{background:linear-gradient(135deg,var(--gold3),var(--gold));color:#000;font-weight:700;}
+
+/* Drop zone */
+.media-dropzone{border:2px dashed var(--border2);border-radius:var(--radius2);padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.22s;position:relative;overflow:hidden;background:var(--surface2);}
+.media-dropzone:hover,.media-dropzone.dragover{border-color:var(--gold);background:var(--gold-subtle);}
+.media-dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.media-dropzone-icon{font-size:32px;margin-bottom:10px;display:block;pointer-events:none;}
+.media-dropzone-text{font-size:12px;color:var(--text2);pointer-events:none;line-height:1.6;}
+.media-dropzone-hint{font-size:10px;color:var(--text3);margin-top:6px;pointer-events:none;}
+
+/* Preview */
+.media-preview-wrap{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface3);margin-top:4px;}
+.media-preview-img{width:100%;max-height:220px;object-fit:cover;display:block;border-radius:var(--radius);}
+.media-preview-video{width:100%;max-height:220px;border-radius:var(--radius);display:block;background:#000;}
+.media-remove-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700;transition:all 0.15s;z-index:2;}
+.media-remove-btn:hover{background:var(--red);}
+.media-preview-label{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.6);color:rgba(255,255,255,0.85);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:1px;text-transform:uppercase;}
+
+/* Upload progress */
+.upload-progress-wrap{margin-top:10px;}
+.upload-progress-bar{height:3px;background:var(--surface3);border-radius:2px;overflow:hidden;}
+.upload-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold2));border-radius:2px;transition:width 0.3s ease;width:0%;}
+.upload-progress-text{font-size:10px;color:var(--text3);margin-top:5px;text-align:center;}
+
+/* Video URL tab */
+.video-url-wrap{display:flex;flex-direction:column;gap:10px;}
+.video-platform-hint{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.video-platform-chip{font-size:10px;padding:3px 9px;background:var(--surface3);border:1px solid var(--border);border-radius:4px;color:var(--text3);display:flex;align-items:center;gap:4px;}
+
+/* Image URL tab */
+.url-preview-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px;}
+.url-preview-thumb{width:80px;height:60px;border-radius:var(--radius);object-fit:cover;border:1px solid var(--border);flex-shrink:0;display:none;background:var(--surface3);}
+
+/* ============================================================
+   MEDIA QUICK BUTTONS (Gallery / Camera)
+============================================================ */
+.media-quick-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:16px 10px;
+  background:var(--surface2);border:1.5px dashed var(--border2);
+  border-radius:var(--radius2);cursor:pointer;
+  font-size:11px;font-weight:600;color:var(--text2);
+  text-align:center;transition:all 0.18s;
+  font-family:'DM Sans',sans-serif;
+  min-height:80px;
+}
+.media-quick-btn:hover,.media-quick-btn:active{
+  border-color:var(--gold);
+  background:var(--gold-subtle);
+  color:var(--gold);
+}
+.media-quick-btn svg{opacity:0.7;}
+.media-quick-btn:hover svg,.media-quick-btn:active svg{opacity:1;}
+
+/* ============================================================
+   COMMENT SECTION
+============================================================ */
+.comment-section{margin-top:8px;}
+.comment-input-wrap{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
+.comment-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+.comment-item:last-child{border-bottom:none;}
+.comment-avatar{width:32px;height:32px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);border:1px solid var(--border2);overflow:hidden;flex-shrink:0;}
+.comment-avatar img{width:100%;height:100%;object-fit:cover;}
+.comment-body{flex:1;}
+.comment-author{font-size:12px;font-weight:700;color:var(--text);}
+.comment-time{font-size:10px;color:var(--text3);margin-left:8px;}
+.comment-text{font-size:13px;color:var(--text2);line-height:1.6;margin-top:4px;}
+.comment-delete-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:2px 6px;border-radius:4px;transition:all 0.15s;}
+.comment-delete-btn:hover{color:var(--red);background:var(--red-dim);}
+
+/* ============================================================
+   NOTIFICATION PANEL
+============================================================ */
+.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:300px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius2);z-index:600;box-shadow:var(--shadow);display:none;overflow:hidden;}
+.notif-panel.open{display:block;}
+.notif-panel-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.notif-panel-header span{font-size:13px;font-weight:700;}
+.notif-panel-body{max-height:320px;overflow-y:auto;}
+.notif-item{padding:12px 16px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);display:flex;gap:10px;align-items:flex-start;}
+.notif-item:last-child{border-bottom:none;}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;}
+
+/* ============================================================
+   PROFILE PAGE FIXES
+============================================================ */
+.profile-avatar-big{cursor:pointer;}
+.profile-avatar-big:hover{opacity:0.85;}
+
+/* ============================================================
+   CARD LAYOUT — prevent overflow
+============================================================ */
+.news-card{overflow:hidden;word-break:break-word;}
+.card-title{word-break:break-word;}
+.card-excerpt{word-break:break-word;}
+.featured-main .info h2{word-break:break-word;}
+
+/* ============================================================
+   MOBILE OVERRIDES — no element should overflow screen
+============================================================ */
+@media(max-width:480px){
+  .modal{max-height:88vh;}
+  .modal-wide,.modal-xl{max-width:100%;}
+  .article-engage-bar{gap:6px;}
+  .article-engage-bar .btn{flex:1;padding:8px 6px;font-size:11px;}
+  .share-grid{grid-template-columns:repeat(3,1fr);}
+  .post-detail-title{font-size:22px;}
+  .profile-header-card{flex-direction:column;align-items:center;text-align:center;}
+  .news-grid{grid-template-columns:1fr;}
+  .featured-grid{min-height:unset;}
+  .featured-side .news-card{min-width:200px;}
+  .channel-nav-wrap::after{display:none;}
+  .bottom-nav-fab .fab-circle{width:46px;height:46px;}
+}
+
+/* Fix: bottom nav label never wraps or gets cut */
+.bottom-nav-item .nav-label,.bottom-nav-fab .nav-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px;}
+
+/* Fix: category chip never breaks layout */
+.cat-chip{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Fix: ticker on very small screens */
+@media(max-width:360px){
+  .ticker-label{font-size:8px;padding:0 10px;}
+  .ticker-item{font-size:10px;padding:0 24px;}
+}
+
+/* Fix: modal body scroll on iOS */
+.modal-body{-webkit-overflow-scrolling:touch;}
+</style>
+</head>
+<body>
+
+<!-- READING PROGRESS BAR -->
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- BREAKING TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">🔴 Breaking</div>
+  <div class="ticker-content">
+    <span class="ticker-item">Kuwait Airways announces new routes to Asian cities</span>
+    <span class="ticker-item">Kuwait Oil Company reports record quarter</span>
+    <span class="ticker-item">His Highness receives diplomatic delegation from GCC</span>
+    <span class="ticker-item">New economic reform package announced by Cabinet</span>
+    <span class="ticker-item">Kuwait stock exchange closes at three-month high</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <a href="#" class="logo-wrap" onclick="showCategoryPage('home',null);setBottomNav('home');return false;">
+      <svg class="logo-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="shieldOuter" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#e8c96a"/><stop offset="50%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#7a5c18"/>
+          </linearGradient>
+          <linearGradient id="shieldInner" x1="4" y1="4" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1a1410"/><stop offset="100%" stop-color="#0d0d0d"/>
+          </linearGradient>
+          <linearGradient id="kGrad" x1="12" y1="10" x2="32" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#f5e08a"/><stop offset="100%" stop-color="#c9a84c"/>
+          </linearGradient>
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <path d="M22 1.5 L41 8.5 L41 24 C41 35 32 42.5 22 44 C12 42.5 3 35 3 24 L3 8.5 Z" fill="url(#shieldInner)" stroke="url(#shieldOuter)" stroke-width="1.4"/>
+        <path d="M22 5 L37.5 11 L37.5 24 C37.5 33.5 29.5 40.5 22 42 C14.5 40.5 6.5 33.5 6.5 24 L6.5 11 Z" fill="none" stroke="rgba(201,168,76,0.18)" stroke-width="0.8"/>
+        <g filter="url(#glow)">
+          <line x1="15" y1="12" x2="15" y2="32" stroke="url(#kGrad)" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="15" y1="22" x2="28" y2="12" stroke="url(#kGrad)" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="15" y1="22" x2="29" y2="32" stroke="url(#kGrad)" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <line x1="14" y1="35" x2="30" y2="35" stroke="rgba(201,168,76,0.5)" stroke-width="0.8" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text"><span class="logo-name">KWT NEWS HUB</span><span class="logo-sub">kwtnews.com</span></div>
+    </a>
+
+    <!-- Desktop Search -->
+    <div class="header-search" id="headerSearchWrap">
+      <input type="text" id="searchInput" placeholder="Search Kuwait news…"
+             onkeydown="if(event.key==='Enter')doSearch();if(event.key==='Escape')closeSearchBar();"
+             oninput="onSearchType(this.value)">
+      <span class="s-icon" onclick="doSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </span>
+      <button class="search-close-btn" id="searchCloseBtn" onclick="closeSearchBar()" style="display:none;" title="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <!-- Mobile search icon -->
+      <button class="search-icon-btn" id="mobileSearchBtn" onclick="openSearchBar()" title="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+
+      <!-- Language Pill -->
+      <div class="lang-pill" id="langPill" onclick="toggleLangPicker()" title="Change Language">
+        <span id="langFlag">🇬🇧</span>
+        <span id="langLabel">EN</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="lang-dropdown" id="langDropdown">
+          <button onclick="setLang('en','🇬🇧','EN');event.stopPropagation()">🇬🇧 English</button>
+          <button onclick="setLang('ar','🇰🇼','AR');event.stopPropagation()">🇰🇼 العربية</button>
+        </div>
+      </div>
+
+      <!-- Notification Bell -->
+      <div style="position:relative;" id="notifBtnWrap">
+        <button class="icon-btn notif-btn" id="notifBtn" onclick="handleNotifClick()" title="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+        </button>
+        <!-- Notification Panel -->
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-header">
+            <span>Notifications</span>
+            <button style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;" onclick="document.getElementById('notifPanel').classList.remove('open')">✕</button>
+          </div>
+          <div class="notif-panel-body" id="notifPanelBody">
+            <div class="notif-item">
+              <div class="notif-dot"></div>
+              <div>
+                <div style="font-size:12px;color:var(--text);font-weight:600;">Welcome to KWT News!</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:2px;">Post karo, share karo, trending mein aao.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Avatar + Dropdown -->
+      <div id="userActions" style="display:none;" class="user-menu">
+        <div class="avatar-btn" onclick="toggleUserMenu()" id="headerAvatar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+          <div style="padding:14px 16px;border-bottom:1px solid var(--border);">
+            <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;" id="dropdownName">User</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="dropdownEmail"></div>
+          </div>
+          <button onclick="showPage('profile');closeUserMenu();">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            My Profile
+          </button>
+          <button onclick="openModal('createPostModal');closeUserMenu();">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Create Post
+          </button>
+          <button onclick="showPage('saved');closeUserMenu();">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            Saved Articles
+          </button>
+
+          <button onclick="logout()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <!-- Guest state: visible by default, hidden when user logs in -->
+      <div id="guestActions" style="display:flex;"></div>
+
+      <!-- Hamburger → Opens RIGHT sidebar -->
+      <button class="ham-btn" onclick="toggleSidebar()" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2.2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Category Navigation (5 fixed + More dropdown) -->
+  <div class="channel-nav-wrap">
+    <nav class="channel-nav" id="channelNav">
+      <button class="channel-tab active" onclick="showCategoryPage('home',this)" data-cat="home">
+        <span class="verified-tab-badge">✓</span> Verified
+      </button>
+      <button class="channel-tab" onclick="showKuwaitPage(this)" data-cat="kuwait">🇰🇼 Kuwait</button>
+      <button class="channel-tab" onclick="showCategoryPage('world',this)" data-cat="world">🌍 World</button>
+      <button class="channel-tab" onclick="showCategoryPage('business',this)" data-cat="business">💼 Business</button>
+      <button class="channel-tab" onclick="showCategoryPage('sports',this)" data-cat="sports">⚽ Sports</button>
+
+      <!-- More dropdown -->
+      <div class="more-menu" id="moreMenuWrap">
+        <button class="channel-tab" onclick="toggleMoreMenu()" id="moreMenuBtn">
+          More
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="more-dropdown" id="moreDropdown">
+          <button onclick="showCategoryPage('technology',null);closeMoreMenu();">📱 Technology</button>
+          <button onclick="showCategoryPage('health',null);closeMoreMenu();">🏥 Health</button>
+          <button onclick="showCategoryPage('entertainment',null);closeMoreMenu();">🎬 Entertainment</button>
+          <button onclick="showCategoryPage('lifestyle',null);closeMoreMenu();">🏠 Lifestyle</button>
+          <button onclick="showCategoryPage('opinion',null);closeMoreMenu();">📝 Opinion</button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Sub-nav: Kuwait Newspapers -->
+  <div class="subnav-wrap" id="newspapersSubnav" style="display:none;">
+    <nav class="channel-nav" id="subnav">
+      <button class="channel-tab" onclick="showChannelPage('alqabas');setSubnavActive(this)"><span class="ch-dot dot-qabas"></span> Al Qabas</button>
+      <button class="channel-tab" onclick="showChannelPage('arabtimes');setSubnavActive(this)"><span class="ch-dot dot-arabtimes"></span> Arab Times</button>
+      <button class="channel-tab" onclick="showChannelPage('kuwaittimes');setSubnavActive(this)"><span class="ch-dot dot-kuwaittimes"></span> Kuwait Times</button>
+      <button class="channel-tab" onclick="showChannelPage('alrai');setSubnavActive(this)"><span class="ch-dot dot-alrai"></span> Al Rai</button>
+      <button class="channel-tab" onclick="showChannelPage('alwatan');setSubnavActive(this)"><span class="ch-dot dot-alwatan"></span> Al Watan</button>
+    </nav>
+  </div>
+</header>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <!-- Close button: 40x40px, top-right -->
+  <button class="sidebar-close" onclick="closeSidebar()" aria-label="Close menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+
+  <div class="sidebar-brand">
+    <div class="name">KWT News</div>
+    <div class="sub">Kuwait's Premier Hub</div>
+  </div>
+
+  <!-- GUEST SECTION -->
+  <div id="sidebarGuest">
+    <h3>Account</h3>
+    <button onclick="openModal('authModal');closeSidebar();">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Login / Register
+    </button>
+    <h3>Browse</h3>
+    <button onclick="showCategoryPage('home');closeSidebar();">🏠 Home</button>
+    <button onclick="showKuwaitPage(null);closeSidebar();">🇰🇼 Kuwait</button>
+    <button onclick="showCategoryPage('world');closeSidebar();">🌍 World</button>
+    <button onclick="showCategoryPage('business');closeSidebar();">💼 Business</button>
+    <button onclick="showCategoryPage('sports');closeSidebar();">⚽ Sports</button>
+    <button onclick="showPage('general');closeSidebar();">🔥 Trending</button>
+    <button onclick="toggleLangPicker()">🌐 Language: <span id="sidebarLangLabel">English</span> ▾</button>
+    <h3>Info</h3>
+    <button onclick="openModal('contactModal');closeSidebar()">📧 Contact</button>
+    <button onclick="closeSidebar()">📱 About KWT News</button>
+  </div>
+
+  <!-- USER SECTION -->
+  <div id="sidebarUser" style="display:none;">
+    <div id="sidebarUserInfo" style="padding:12px 20px 16px;border-bottom:1px solid var(--border);"></div>
+    <h3>Account</h3>
+    <button onclick="showPage('profile');closeSidebar();">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      My Profile
+    </button>
+    <button onclick="openModal('createPostModal');closeSidebar();">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Create Post
+    </button>
+    <button onclick="showPage('saved');closeSidebar();">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Saved Articles <span id="savedCountBadge" style="background:var(--gold-subtle);border:1px solid var(--border-gold);color:var(--gold);font-size:9px;padding:1px 6px;border-radius:10px;margin-left:4px;"></span>
+    </button>
+    <h3>Notifications</h3>
+    <button onclick="handleNotifClick();closeSidebar()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+    </button>
+    <h3>Preferences</h3>
+    <button onclick="toggleLangPicker()">🌐 Language: <span id="sidebarLangLabelUser">English</span> ▾</button>
+    <button onclick="toggleTheme();closeSidebar()">🌙 Dark / Light Mode</button>
+    <button onclick="closeSidebar()">⚙️ Settings</button>
+
+    <h3>More</h3>
+    <button onclick="openModal('contactModal');closeSidebar()">📧 Contact</button>
+    <button onclick="logout();closeSidebar();">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+
+  <div class="sidebar-copyright">©kwtnews.com 2026 · v2.0</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main>
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
+    <div id="homeContent">
+      <div class="page-loader"><div class="loader"></div></div>
+    </div>
+  </div>
+
+  <!-- CHANNEL PAGES -->
+  <div class="page" id="page-alqabas"><div id="channelContent-alqabas"></div></div>
+  <div class="page" id="page-arabtimes"><div id="channelContent-arabtimes"></div></div>
+  <div class="page" id="page-kuwaittimes"><div id="channelContent-kuwaittimes"></div></div>
+  <div class="page" id="page-alrai"><div id="channelContent-alrai"></div></div>
+  <div class="page" id="page-alwatan"><div id="channelContent-alwatan"></div></div>
+
+  <!-- GENERAL / TRENDING PAGE -->
+  <div class="page" id="page-general">
+    <div class="create-post-card" id="createPostBar" style="display:none;">
+      <div class="avatar-btn" id="generalAvatar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="create-post-input" onclick="openModal('createPostModal')">What's on your mind?</div>
+      <button class="btn btn-gold" onclick="openModal('createPostModal')">✏️ Post</button>
+    </div>
+    <div class="create-post-card" id="createPostBarGuest">
+      <div class="avatar-btn" style="opacity:0.4;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="create-post-input" onclick="openModal('authModal')">Login to share something...</div>
+      <button class="btn btn-outline" onclick="openModal('authModal')">Sign In</button>
+    </div>
+    <div id="generalContent"><div class="page-loader"><div class="loader"></div></div></div>
+  </div>
+
+  <div class="page" id="page-profile"><div id="profileContent"></div></div>
+  <div class="page" id="page-saved"><div class="page-loader"><div class="loader"></div></div></div>
+  <div class="page" id="page-search">
+    <div class="search-header"><h2 id="searchResultTitle"></h2><p id="searchResultCount"></p></div>
+    <div id="searchResultsContent"></div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     BOTTOM NAVIGATION — SVG ICONS (Phase 1 Fix)
+============================================================ -->
+<nav class="bottom-nav" id="bottomNav">
+  <!-- Sliding gold indicator -->
+  <div class="bottom-nav-indicator" id="navIndicator"></div>
+
+  <!-- Home -->
+  <button class="bottom-nav-item active" id="bnav-home" onclick="showCategoryPage('home',null);setBottomNav('home')">
+    <span class="nav-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </span>
+    <span class="nav-label">Home</span>
+  </button>
+
+  <!-- Trending -->
+  <button class="bottom-nav-item" id="bnav-trending" onclick="showPage('general');setBottomNav('trending')">
+    <span class="nav-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+        <polyline points="17 6 23 6 23 12"/>
+      </svg>
+    </span>
+    <span class="nav-label">Trending</span>
+  </button>
+
+  <!-- Post FAB — center elevated -->
+  <button class="bottom-nav-fab" onclick="currentUser ? openModal('createPostModal') : openModal('authModal')">
+    <div class="fab-circle">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </div>
+    <span class="nav-label" style="font-size:10px;color:var(--gold);margin-top:2px;">Post</span>
+  </button>
+
+  <!-- Papers -->
+  <button class="bottom-nav-item" id="bnav-papers" onclick="showKuwaitPage(null);setBottomNav('papers')">
+    <span class="nav-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+        <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+      </svg>
+    </span>
+    <span class="nav-label">Papers</span>
+  </button>
+
+  <!-- Me / Profile -->
+  <button class="bottom-nav-item" id="bnav-me" onclick="handleProfileNav();setBottomNav('me')">
+    <span class="nav-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </span>
+    <span class="nav-label">Me</span>
+  </button>
+</nav>
+
+<!-- ============================================================
+     MODALS
+============================================================ -->
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="authModalTitle">Welcome</h2>
+      <button class="modal-close" onclick="closeModal('authModal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
+      </div>
+      <div id="loginForm">
+        <div class="form-group"><label>Email</label><input class="form-control" type="email" id="loginEmail" placeholder="your@email.com"></div>
+        <div class="form-group"><label>Password</label><input class="form-control" type="password" id="loginPassword" placeholder="••••••••"></div>
+        <button class="btn btn-gold" style="width:100%;padding:13px;" onclick="doLogin()">Login</button>
+        <div style="text-align:center;margin-top:14px;"><a href="#" onclick="switchAuthTab('forgot');return false;" style="color:var(--gold);font-size:12px;">Forgot Password?</a></div>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="form-group"><label>Full Name</label><input class="form-control" type="text" id="regName" placeholder="Your name"></div>
+        <div class="form-group"><label>Email</label><input class="form-control" type="email" id="regEmail" placeholder="your@email.com"></div>
+        <div class="form-group"><label>Password</label><input class="form-control" type="password" id="regPassword" placeholder="Min 6 characters"></div>
+        <button class="btn btn-gold" style="width:100%;padding:13px;" onclick="doRegister()">Create Account</button>
+      </div>
+      <div id="forgotForm" style="display:none;">
+        <div class="form-group"><p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Enter your email to receive a reset link.</p><input class="form-control" type="email" id="forgotEmail" placeholder="your@email.com"></div>
+        <button class="btn btn-gold" style="width:100%;padding:13px;" onclick="resetPassword()">Send Reset Email</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lang Modal -->
+<div class="modal-overlay" id="langModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Select Language</h2>
+      <button class="modal-close" onclick="closeModal('langModal')">✕</button>
+    </div>
+    <div class="modal-body" style="display:grid;gap:10px;">
+      <button class="btn btn-outline" onclick="setLang('en','🇬🇧','EN');closeModal('langModal')">🇬🇧 English</button>
+      <button class="btn btn-outline" onclick="setLang('ar','🇰🇼','AR');closeModal('langModal')">🇰🇼 العربية</button>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Modal -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <h2>Contact Us</h2>
+      <button class="modal-close" onclick="closeModal('contactModal')">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center;padding:28px 24px;">
+      <div style="width:60px;height:60px;background:var(--gold-subtle);border:1px solid var(--border-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 18px;">📧</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.7;">Have a question, feedback, or a news tip? Reach out to us directly.</p>
+      <a href="/cdn-cgi/l/email-protection#70191e161f301b07041e1507035e131f1d" style="display:block;background:linear-gradient(135deg,var(--gold3),var(--gold));color:#000;font-weight:700;font-size:13px;padding:13px 20px;border-radius:var(--radius3);text-decoration:none;">✉️ <span class="__cf_email__" data-cfemail="6900070f0629021e1d070c1e1a470a0604">[email&#160;protected]</span></a>
+      <p style="font-size:10px;color:var(--text3);margin-top:14px;">We typically respond within 24 hours.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" style="max-width:320px;">
+    <div class="modal-body" style="text-align:center;padding:30px;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:8px;">Are you sure?</h3>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:24px;">This action cannot be undone.</p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn btn-outline" onclick="closeModal('confirmModal')">Cancel</button>
+        <button class="btn btn-red" id="confirmBtnAction">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create / Edit Post Modal -->
+<div class="modal-overlay" id="createPostModal">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h2 id="postEditorTitle">Create Post</h2>
+      <button class="modal-close" onclick="closeModal('createPostModal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editPostId">
+
+      <!-- Headline -->
+      <div class="form-group">
+        <label>Headline <span style="color:var(--text3);font-weight:400;text-transform:none;">(required)</span></label>
+        <input class="form-control" type="text" id="postTitle" placeholder="Write a compelling headline…">
+      </div>
+
+      <!-- Story -->
+      <div class="form-group">
+        <label>Story <span style="color:var(--text3);font-weight:400;text-transform:none;">(required)</span></label>
+        <textarea class="form-control" id="postContent" style="min-height:120px;resize:vertical;" placeholder="Tell the full story…"></textarea>
+      </div>
+
+      <!-- Media Section -->
+      <div class="form-group">
+        <label>Media <span style="color:var(--text3);font-weight:400;text-transform:none;">(optional)</span></label>
+
+        <!-- Media type tabs -->
+        <div class="media-tabs">
+          <button class="media-tab active" id="mTab-image" onclick="switchMediaTab('image')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Image
+          </button>
+          <button class="media-tab" id="mTab-video" onclick="switchMediaTab('video')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            Video
+          </button>
+          <button class="media-tab" id="mTab-url" onclick="switchMediaTab('url')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            URL
+          </button>
+        </div>
+
+        <!-- TAB 1: Image — Gallery + Camera -->
+        <div id="mediaPanel-image">
+          <!-- Quick action buttons -->
+          <div id="imageDropzone" style="display:block;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <label class="media-quick-btn" for="galleryInput">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Gallery se choose karo</span>
+              <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handleImageFile(this.files[0])">
+            </label>
+            <label class="media-quick-btn" for="cameraInput">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Camera se lo</span>
+              <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleImageFile(this.files[0])">
+            </label>
+          </div>
+          </div><!-- end imageDropzone -->
+          <div id="imagePreviewWrap" style="display:none;" class="media-preview-wrap">
+            <img id="imagePreviewEl" class="media-preview-img" src="" alt="Preview">
+            <span class="media-preview-label">📷 Image</span>
+            <button class="media-remove-btn" onclick="clearMedia('image')" title="Remove">✕</button>
+          </div>
+          <div id="imageUploadProgress" class="upload-progress-wrap" style="display:none;">
+            <div class="upload-progress-bar"><div class="upload-progress-fill" id="imageProgressFill"></div></div>
+            <div class="upload-progress-text" id="imageProgressText">Processing…</div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Video — Gallery + Camera + URL -->
+        <div id="mediaPanel-video" style="display:none;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <label class="media-quick-btn" for="videoGalleryInput">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              <span>Gallery se video</span>
+              <input type="file" id="videoGalleryInput" accept="video/*" style="display:none;" onchange="handleVideoFile(this.files[0])">
+            </label>
+            <label class="media-quick-btn" for="videoCameraInput">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              <span>Camera se record</span>
+              <input type="file" id="videoCameraInput" accept="video/*" capture="environment" style="display:none;" onchange="handleVideoFile(this.files[0])">
+            </label>
+          </div>
+          <div style="margin-top:4px;">
+            <div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">Ya YouTube / Vimeo link paste karo</div>
+            <input class="form-control" type="url" id="postVideoUrl"
+                   placeholder="https://youtube.com/watch?v=…"
+                   oninput="previewVideoUrl(this.value)">
+            <div class="video-platform-hint">
+              <span class="video-platform-chip">▶️ YouTube</span>
+              <span class="video-platform-chip">🎬 Vimeo</span>
+              <span class="video-platform-chip">📹 MP4</span>
+            </div>
+          </div>
+          <div id="videoUploadProgress" class="upload-progress-wrap" style="display:none;margin-top:8px;">
+            <div class="upload-progress-bar"><div class="upload-progress-fill" id="videoProgressFill"></div></div>
+            <div class="upload-progress-text" id="videoProgressText">Processing…</div>
+          </div>
+          <div id="videoPreviewWrap" class="media-preview-wrap" style="display:none;margin-top:10px;">
+            <video id="videoPreviewEl" class="media-preview-video" controls playsinline style="display:none;"></video>
+            <iframe id="videoIframeEl" style="display:none;width:100%;height:200px;border:none;border-radius:var(--radius);" allowfullscreen></iframe>
+            <span class="media-preview-label">🎬 Video</span>
+            <button class="media-remove-btn" onclick="clearMedia('video')" title="Remove">✕</button>
+          </div>
+        </div>
+
+        <!-- TAB 3: Image URL -->
+        <div id="mediaPanel-url" style="display:none;">
+          <input class="form-control" type="url" id="postImageUrl"
+                 placeholder="https://example.com/photo.jpg"
+                 oninput="previewImageUrl(this.value)">
+          <div class="url-preview-row" style="margin-top:8px;">
+            <img id="urlPreviewThumb" class="url-preview-thumb" src="" alt=""
+                 onload="this.style.display='block'" onerror="this.style.display='none'">
+            <span style="font-size:11px;color:var(--text3);padding-top:4px;">Koi bhi direct image link paste karo.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Category</label>
+        <select class="category-select" id="postCategory">
+          <option value="">— Select Category —</option>
+          <option value="kuwait">🇰🇼 Kuwait</option>
+          <option value="world">🌍 World</option>
+          <option value="business">💼 Business</option>
+          <option value="sports">⚽ Sports</option>
+          <option value="technology">📱 Technology</option>
+          <option value="health">🏥 Health</option>
+          <option value="entertainment">🎬 Entertainment</option>
+          <option value="lifestyle">🏠 Lifestyle</option>
+          <option value="opinion">📝 Opinion</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('createPostModal')">Cancel</button>
+      <button class="btn btn-gold" id="publishBtn" onclick="submitPost()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Publish
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Post Detail Modal -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <div id="postModalMeta"></div>
+      <button class="modal-close" onclick="closeModal('postModal')">✕</button>
+    </div>
+    <div class="modal-body" id="postModalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Share Sheet Modal -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-header">
+      <h2>Share Article</h2>
+      <button class="modal-close" onclick="closeModal('shareModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="share-grid" id="shareGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+/* Firebase Init — Safe global init */
+let auth, db;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDLRqQ8WRohNDWz_6UgafI7Kn2f8U0KL3c",
+  authDomain: "kwt-news.firebaseapp.com",
+  databaseURL: "https://kwt-news-default-rtdb.firebaseio.com",
+  projectId: "kwt-news",
+  storageBucket: "kwt-news.firebasestorage.app",
+  messagingSenderId: "604704031845",
+  appId: "1:604704031845:web:b835af9ab1872ddd1d728c",
+  measurementId: "G-J161YE3FDP"
+};
+
+function initFirebase() {
+  try {
+    if(typeof firebase === 'undefined') {
+      document.getElementById('homeContent').innerHTML =
+        `<div style="text-align:center;padding:60px 20px;">
+          <div style="font-size:40px;margin-bottom:14px;">⚠️</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text2);margin-bottom:10px;">Internet connection check karo</h3>
+          <p style="font-size:13px;color:var(--text3);line-height:1.7;">Firebase load nahi ho saka. Internet on karo aur page reload karo.</p>
+          <button class="btn btn-gold" style="margin-top:18px;" onclick="location.reload()">🔄 Reload</button>
+        </div>`;
+      return false;
+    }
+    if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db   = firebase.firestore();
+    return true;
+  } catch(e) {
+    console.error('Firebase init error:', e);
+    return false;
+  }
+}
+
+/* ---- Cloudinary Config ---- */
+const CLOUDINARY_CLOUD = 'duqq5vfcx';
+const CLOUDINARY_PRESET = 'Kwt news';
+const CLOUDINARY_IMG_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+const CLOUDINARY_VID_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/video/upload`;
+
+let currentUser = null, currentUserData = null;
+window.postsCache = {};
+
+/* ---- Auth State ---- */
+// Auth listener setup deferred until firebase ready
+function setupAuthListener() {
+  if(!auth) return;
+  auth.onAuthStateChanged(async user => {
+  if(user) {
+    currentUser = user;
+    const doc = await db.collection('users').doc(user.uid).get();
+    currentUserData = doc.exists ? doc.data() : { name: user.email.split('@')[0], email: user.email, role: 'user' };
+    updateUIForUser();
+  } else {
+    currentUser = null; currentUserData = null; updateUIForGuest();
+  }
+  });
+}
+
+function updateUIForUser() {
+  document.getElementById('userActions').style.display = 'flex';
+  document.getElementById('guestActions').style.display = 'none';
+  document.getElementById('sidebarGuest').style.display = 'none';
+  document.getElementById('sidebarUser').style.display = 'block';
+  document.getElementById('createPostBar').style.display = 'flex';
+  document.getElementById('createPostBarGuest').style.display = 'none';
+
+  // Update general page avatar
+  const generalAvatar = document.getElementById('generalAvatar');
+  if(generalAvatar && currentUserData) {
+    if(currentUserData.photoUrl) {
+      generalAvatar.innerHTML = `<img src="${escHtml(currentUserData.photoUrl)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else if(currentUserData.name) {
+      generalAvatar.textContent = currentUserData.name.charAt(0).toUpperCase();
+    }
+  }
+
+  // Update header avatar initial or photo
+  const headerAvatar = document.getElementById('headerAvatar');
+  if(headerAvatar && currentUserData) {
+    if(currentUserData.photoUrl) {
+      headerAvatar.innerHTML = `<img src="${escHtml(currentUserData.photoUrl)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else if(currentUserData.name) {
+      headerAvatar.innerHTML = `<span style="font-size:15px;font-weight:700;color:var(--gold);">${currentUserData.name.charAt(0).toUpperCase()}</span>`;
+    }
+  }
+
+  // Update sidebar user info with photo
+  const info = document.getElementById('sidebarUserInfo');
+  if(info && currentUserData) {
+    const initials = currentUserData.name ? currentUserData.name.charAt(0).toUpperCase() : '?';
+    const avatarHtml = currentUserData.photoUrl
+      ? `<img src="${escHtml(currentUserData.photoUrl)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+      : initials;
+    info.innerHTML = `<div class="sidebar-user-info">
+      <div class="sidebar-user-avatar">${avatarHtml}</div>
+      <div>
+        <div class="sidebar-user-name">${escHtml(currentUserData.name || 'User')}</div>
+        <div class="sidebar-user-email">${escHtml(currentUser.email)}</div>
+      </div>
+    </div>`;
+  }
+
+  const ddName = document.getElementById('dropdownName');
+  const ddEmail = document.getElementById('dropdownEmail');
+  if(ddName) ddName.textContent = currentUserData?.name || 'User';
+  if(ddEmail) ddEmail.textContent = currentUser.email;
+
+  // Sync saved articles from Firestore
+  if(currentUserData?.savedArticles && Array.isArray(currentUserData.savedArticles)) {
+    try {
+      const merged = [...new Set([...getSavedArticles(), ...currentUserData.savedArticles])];
+      localStorage.setItem(SAVED_KEY, JSON.stringify(merged));
+      // Update badge
+      const badge2 = document.getElementById('savedCountBadge');
+      if(badge2) badge2.textContent = merged.length > 0 ? merged.length : '';
+    } catch {}
+  }
+
+  // Show notification badge for new activity
+  if(db) {
+    db.collection('posts').where('authorId','==',currentUser.uid)
+      .orderBy('createdAt','desc').limit(1).get()
+      .then(snap => {
+        if(!snap.empty) {
+          const badge = document.getElementById('notifBadge');
+          if(badge) { badge.style.display = 'flex'; badge.textContent = '●'; }
+        }
+      }).catch(()=>{});
+  }
+
+  // Invalidate caches so pages reload with correct user context
+  invalidatePageCache('home');
+  invalidatePageCache('general');
+}
+
+function updateUIForGuest() {
+  document.getElementById('userActions').style.display = 'none';
+  document.getElementById('guestActions').style.display = 'flex';
+  document.getElementById('sidebarGuest').style.display = 'block';
+  document.getElementById('sidebarUser').style.display = 'none';
+  const cpb = document.getElementById('createPostBar');
+  const cpbg = document.getElementById('createPostBarGuest');
+  if(cpb) cpb.style.display = 'none';
+  if(cpbg) cpbg.style.display = 'flex';
+}
+
+/* ---- Navigation ---- */
+// Track which pages have been loaded to avoid redundant Firestore fetches
+const _pageLoaded = {};
+function invalidatePageCache(page) { _pageLoaded[page] = false; }
+
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-' + page);
+  if(pg) pg.classList.add('active');
+
+  // Deactivate all channel tabs when navigating to utility pages
+  if(['profile','saved','search'].includes(page)) {
+    document.querySelectorAll('#channelNav .channel-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('newspapersSubnav').style.display = 'none';
+  }
+
+  // Restore create post bars for general/trending page
+  if(page === 'general') {
+    const bar = document.getElementById('createPostBar');
+    const guestBar = document.getElementById('createPostBarGuest');
+    // Only show create bars on trending (not when called from category)
+    if(bar) bar.style.display = currentUser ? 'flex' : 'none';
+    if(guestBar) guestBar.style.display = currentUser ? 'none' : 'flex';
+  }
+
+  // Only reload if not yet loaded (caching) — profile always reloads for fresh data
+  if(page === 'home') {
+    setBottomNav('home');
+    if(!_pageLoaded.home) { loadHome(); _pageLoaded.home = true; }
+  }
+  else if(page === 'general') {
+    if(!_pageLoaded.general) { loadGeneral(); _pageLoaded.general = true; }
+  }
+  else if(page === 'profile') loadProfile();
+  else if(page === 'saved') loadSaved();
+  window.scrollTo(0, 0);
+}
+
+function showCategoryPage(cat, btn) {
+  document.getElementById('newspapersSubnav').style.display = 'none';
+  document.querySelectorAll('#channelNav .channel-tab').forEach(t => t.classList.remove('active'));
+  if(btn) {
+    btn.classList.add('active');
+  } else {
+    const tab = document.querySelector(`#channelNav [data-cat="${cat}"]`);
+    if(tab) tab.classList.add('active');
+    else {
+      const moreBtn = document.getElementById('moreMenuBtn');
+      if(moreBtn) moreBtn.classList.add('active');
+    }
+  }
+  closeMoreMenu();
+  if(cat === 'home') { setBottomNav('home'); showPage('home'); }
+  else if(cat === 'general') { setBottomNav('trending'); showPage('general'); }
+  else loadCategoryPage(cat);
+}
+
+function showKuwaitPage(btn) {
+  document.querySelectorAll('#channelNav .channel-tab').forEach(t => t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else {
+    const t = document.querySelector('#channelNav [data-cat="kuwait"]');
+    if(t) t.classList.add('active');
+  }
+  document.getElementById('newspapersSubnav').style.display = 'block';
+  const firstSubTab = document.querySelector('#subnav .channel-tab');
+  setSubnavActive(firstSubTab);
+  showChannelPage('alqabas');
+}
+
+function setSubnavActive(btn) {
+  document.querySelectorAll('#subnav .channel-tab').forEach(t => t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function showChannelPage(ch) {
+  showPage(ch);
+  loadChannelPage(ch);
+}
+
+function handleProfileNav() {
+  if(currentUser) showPage('profile');
+  else openModal('authModal');
+}
+
+/* ---- Bottom Nav ---- */
+function setBottomNav(id) {
+  document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('bnav-' + id);
+  if(btn) {
+    btn.classList.add('active');
+    // Move sliding gold indicator to this tab
+    const indicator = document.getElementById('navIndicator');
+    if(indicator) {
+      const nav = document.getElementById('bottomNav');
+      const navRect = nav.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      const centerX = btnRect.left - navRect.left + btnRect.width / 2;
+      const indicatorW = 48;
+      indicator.style.transform = `translateX(${centerX - indicatorW/2}px)`;
+    }
+  }
+}
+
+/* ---- More Dropdown ---- */
+function toggleMoreMenu() {
+  document.getElementById('moreDropdown').classList.toggle('open');
+  document.getElementById('moreMenuBtn').classList.toggle('active');
+}
+function closeMoreMenu() {
+  document.getElementById('moreDropdown').classList.remove('open');
+  document.getElementById('moreMenuBtn').classList.remove('active');
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest('#moreMenuWrap')) closeMoreMenu();
+  if(!e.target.closest('.lang-pill')) document.getElementById('langDropdown')?.classList.remove('open');
+  if(!e.target.closest('.user-menu')) closeUserMenu();
+  // Click on overlay backdrop (not inside .modal) → close modal
+  if(e.target.classList.contains('modal-overlay') && e.target.classList.contains('open')) {
+    closeModal(e.target.id);
+  }
+});
+// Escape key closes topmost open modal
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Escape') return;
+  const openModals = [...document.querySelectorAll('.modal-overlay.open')];
+  if(openModals.length) closeModal(openModals[openModals.length - 1].id);
+});
+
+/* ---- Sidebar ---- */
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  const isOpen = sb.classList.contains('open');
+  if(isOpen) {
+    sb.classList.remove('open');
+    ov.classList.remove('open');
+    document.body.style.overflow = '';
+  } else {
+    sb.classList.add('open');
+    ov.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Close other dropdowns
+    closeMoreMenu();
+    closeUserMenu();
+    document.getElementById('langDropdown')?.classList.remove('open');
+  }
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ---- Language ---- */
+let currentLang = 'en';
+function toggleLangPicker() {
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+function setLang(code, flag, label) {
+  currentLang = code;
+  document.getElementById('langFlag').textContent = flag;
+  document.getElementById('langLabel').textContent = label;
+  const sl1 = document.getElementById('sidebarLangLabel');
+  const sl2 = document.getElementById('sidebarLangLabelUser');
+  const fullName = label === 'AR' ? 'العربية' : 'English';
+  if(sl1) sl1.textContent = fullName;
+  if(sl2) sl2.textContent = fullName;
+  document.getElementById('langDropdown').classList.remove('open');
+  document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr';
+  toast(code === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language set to English', 'success');
+}
+
+/* ---- User Menu ---- */
+function toggleUserMenu() { document.getElementById('userDropdown').classList.toggle('open'); }
+function closeUserMenu() { document.getElementById('userDropdown').classList.remove('open'); }
+
+function openModal(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.remove('open');
+  // Re-allow scroll only if no other modals are open
+  if(!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+  // If closing the create/edit post modal, reset the form editor title and editPostId
+  if(id === 'createPostModal') {
+    const eid = document.getElementById('editPostId');
+    if(eid) eid.value = '';
+    const title = document.getElementById('postEditorTitle');
+    if(title) title.textContent = 'Create Post';
+  }
+}
+
+/* ---- Auth ---- */
+function switchAuthTab(tab) {
+  ['loginForm','registerForm','forgotForm'].forEach(f => document.getElementById(f).style.display = 'none');
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  if(tab === 'login') {
+    document.getElementById('loginForm').style.display = 'block';
+    document.querySelectorAll('.auth-tab')[0].classList.add('active');
+  } else if(tab === 'register') {
+    document.getElementById('registerForm').style.display = 'block';
+    document.querySelectorAll('.auth-tab')[1].classList.add('active');
+  } else {
+    document.getElementById('forgotForm').style.display = 'block';
+    document.getElementById('authModalTitle').textContent = 'Reset Password';
+  }
+}
+
+async function doLogin() {
+  const email = (document.getElementById('loginEmail').value || '').trim();
+  const pass  = document.getElementById('loginPassword').value;
+  if(!email || !pass) { toast('Email aur password dono zaroori hain', 'error'); return; }
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+    closeModal('authModal');
+    toast('Welcome back! 👋', 'success');
+    invalidatePageCache('home');
+    invalidatePageCache('general');
+  } catch(e) {
+    const msg = e.code === 'auth/user-not-found' ? 'Account nahi mila. Register karo.'
+              : e.code === 'auth/wrong-password' ? 'Password galat hai.'
+              : e.code === 'auth/invalid-email' ? 'Email format galat hai.'
+              : e.message;
+    toast(msg, 'error');
+  }
+}
+
+async function doRegister() {
+  const name  = (document.getElementById('regName').value || '').trim();
+  const email = (document.getElementById('regEmail').value || '').trim();
+  const pass  = document.getElementById('regPassword').value;
+  if(!name)  { toast('Naam daalo', 'error'); return; }
+  if(!email) { toast('Email daalo', 'error'); return; }
+  if(pass.length < 6) { toast('Password kam se kam 6 characters ka hona chahiye', 'error'); return; }
+  try {
+    const res = await auth.createUserWithEmailAndPassword(email, pass);
+    await db.collection('users').doc(res.user.uid).set({
+      email: res.user.email,
+      name: name,
+      role: 'user',
+      photoUrl: '',
+      savedArticles: [],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeModal('authModal');
+    toast('Account ban gaya! Welcome 🎉', 'success');
+    invalidatePageCache('home');
+    invalidatePageCache('general');
+  } catch(e) {
+    const msg = e.code === 'auth/email-already-in-use' ? 'Yeh email pehle se registered hai. Login karo.'
+              : e.code === 'auth/invalid-email' ? 'Email format galat hai.'
+              : e.message;
+    toast(msg, 'error');
+  }
+}
+
+async function resetPassword() {
+  const emailEl = document.getElementById('forgotEmail');
+  const email = emailEl ? emailEl.value.trim() : (currentUser ? currentUser.email : '');
+  if(!email) { toast('Email dalo pehle', 'error'); return; }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    toast('Reset email sent! ✓', 'success');
+    closeModal('authModal');
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function logout() {
+  await auth.signOut();
+  invalidatePageCache('home');
+  invalidatePageCache('general');
+  showPage('home');
+  setBottomNav('home');
+  document.querySelectorAll('#channelNav .channel-tab').forEach(t => t.classList.remove('active'));
+  const homeTab = document.querySelector('#channelNav [data-cat="home"]');
+  if(homeTab) homeTab.classList.add('active');
+  // Reset badges
+  const notifBadge = document.getElementById('notifBadge');
+  if(notifBadge) notifBadge.style.display = 'none';
+  const savedBadge = document.getElementById('savedCountBadge');
+  if(savedBadge) savedBadge.textContent = '';
+  toast('Logged out 👋');
+}
+
+/* ---- Notifications ---- */
+async function handleNotifClick() {
+  if(!currentUser) { openModal('authModal'); return; }
+  const panel = document.getElementById('notifPanel');
+  if(!panel) return;
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  if(isOpen) return;
+  // Load notifications - show recent activity on user's posts
+  const body = document.getElementById('notifPanelBody');
+  if(body) {
+    body.innerHTML = '<div style="padding:16px;text-align:center;"><div class="loader"></div></div>';
+    try {
+      const snap = await db.collection('posts')
+        .where('authorId','==',currentUser.uid)
+        .orderBy('createdAt','desc').limit(5).get();
+      if(snap.empty) {
+        body.innerHTML = '<div class="notif-item"><div style="font-size:12px;color:var(--text3);">Koi notifications nahi. Post karo aur activity dekho!</div></div>';
+      } else {
+        body.innerHTML = snap.docs.map(d => {
+          const p = d.data();
+          const likes = (p.likes||[]).length;
+          const views = p.views||0;
+          const comments = p.commentCount||0;
+          return `<div class="notif-item" onclick="openPostDetail('${d.id}');document.getElementById('notifPanel').classList.remove('open');" style="cursor:pointer;">
+            <div class="notif-dot" style="background:${likes>0?'var(--red)':'var(--gold)'}"></div>
+            <div>
+              <div style="font-size:12px;color:var(--text);font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">${escHtml(p.title||'Untitled')}</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px;">❤️ ${likes} · 💬 ${comments} · 👁 ${views}</div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+    } catch {
+      body.innerHTML = '<div class="notif-item"><div style="font-size:12px;color:var(--text3);">Notifications load nahi ho sake.</div></div>';
+    }
+  }
+  // Hide badge
+  const badge = document.getElementById('notifBadge');
+  if(badge) badge.style.display = 'none';
+}
+
+/* ---- DB Guard ---- */
+function dbReady() {
+  if(!db) { toast('Connection error — reload karo', 'error'); return false; }
+  return true;
+}
+
+/* ---- Data Loading ---- */
+async function loadHome() {
+  if(!dbReady()) return;
+  _pageLoaded.home = true;
+  document.querySelectorAll('#channelNav .channel-tab').forEach(t => t.classList.remove('active'));
+  const homeTab = document.querySelector('#channelNav [data-cat="home"]');
+  if(homeTab) homeTab.classList.add('active');
+  document.getElementById('homeContent').innerHTML = buildSkeletonGrid(6);
+  try {
+    const snap = await db.collection('posts').orderBy('createdAt','desc').limit(24).get();
+    const posts = snap.docs.map(d => { const p = {id:d.id,...d.data()}; window.postsCache[d.id]=p; return p; });
+
+    if(posts.length === 0) {
+      document.getElementById('homeContent').innerHTML = `
+        <div style="text-align:center;padding:80px 20px;color:var(--text3);">
+          <div style="font-size:54px;margin-bottom:18px;">📰</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text2);margin-bottom:10px;">Koi khabar nahi abhi</h3>
+          <p style="font-size:13px;line-height:1.7;">Pehli breaking news share karne wale ban jao!</p>
+          <button class="btn btn-gold" style="margin-top:22px;padding:12px 28px;" onclick="currentUser?openModal('createPostModal'):openModal('authModal')">✏️ Pehli Story Post Karo</button>
+        </div>`;
+      return;
+    }
+
+    const featuredPosts = posts.slice(0, 3);
+    const restPosts = posts.slice(3);
+
+    document.getElementById('homeContent').innerHTML = `
+      ${buildHeroSection(featuredPosts)}
+      <div class="news-section">
+        <div class="section-header">
+          <h2 class="section-title">Latest Stories</h2>
+          <a href="#" class="see-all" onclick="showPage('general');setBottomNav('trending');return false;">See All →</a>
+        </div>
+        <div class="news-grid">${restPosts.length ? restPosts.map(p => buildNewsCard(p)).join('') : '<p style="color:var(--text3);font-size:13px;padding:20px 0;">Aur kahaniyan jald aayengi…</p>'}</div>
+      </div>`;
+
+    initHeroRotate(featuredPosts);
+    setTimeout(initCardAnimations, 100);
+  } catch(e) {
+    document.getElementById('homeContent').innerHTML = `<div style="text-align:center;padding:60px 20px;">
+      <p style="color:var(--red);font-size:13px;">Error loading: ${escHtml(e.message)}</p>
+      <button class="btn btn-outline" style="margin-top:16px;" onclick="invalidatePageCache('home');loadHome()">🔄 Retry</button>
+    </div>`;
+  }
+}
+
+async function loadGeneral() {
+  if(!dbReady()) return;
+  _pageLoaded.general = true;
+  document.getElementById('generalContent').innerHTML = buildSkeletonGrid(6);
+  try {
+    const snap = await db.collection('posts').orderBy('createdAt','desc').limit(40).get();
+    let posts = snap.docs.map(d => { const p={id:d.id,...d.data()}; window.postsCache[d.id]=p; return p; });
+    // Sort by likes count for trending
+    posts = posts.sort((a,b) => ((b.likes||[]).length + (b.views||0)*0.1) - ((a.likes||[]).length + (a.views||0)*0.1));
+    if(!posts.length) {
+      document.getElementById('generalContent').innerHTML = `
+        <div style="text-align:center;padding:60px 20px;color:var(--text3);">
+          <div style="font-size:48px;margin-bottom:16px;">🔥</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text2);margin-bottom:8px;">Koi trending story nahi</h3>
+          <p style="font-size:13px;">Pehli story share karo!</p>
+        </div>`;
+      return;
+    }
+    document.getElementById('generalContent').innerHTML = `
+      <div class="section-header">
+        <h2 class="section-title">🔥 Trending</h2>
+        <span style="font-size:11px;color:var(--text3);">${posts.length} stories</span>
+      </div>
+      <div class="news-grid">${posts.map(p=>buildNewsCard(p)).join('')}</div>`;
+    setTimeout(initCardAnimations, 80);
+  } catch(e) {
+    document.getElementById('generalContent').innerHTML = `<p style="color:var(--red);padding:20px;font-size:13px;">Error: ${escHtml(e.message)}</p>`;
+  }
+}
+
+async function loadChannelPage(ch) {
+  const container = document.getElementById('channelContent-' + ch);
+  if(!container || !db) return;
+  container.innerHTML = buildSkeletonGrid(4);
+  const channelMeta = {
+    alqabas:    { name:'Al Qabas',     sub:'Arabic daily · Est. 1972',  cls:'ch-alqabas',    dot:'dot-qabas' },
+    arabtimes:  { name:'Arab Times',   sub:'English daily · Est. 1977', cls:'ch-arabtimes',  dot:'dot-arabtimes' },
+    kuwaittimes:{ name:'Kuwait Times', sub:'English daily · Est. 1961', cls:'ch-kuwaittimes',dot:'dot-kuwaittimes' },
+    alrai:      { name:'Al Rai',       sub:'Arabic daily · Est. 1961',  cls:'ch-alrai',      dot:'dot-alrai' },
+    alwatan:    { name:'Al Watan',     sub:'Arabic daily · Est. 1962',  cls:'ch-alwatan',    dot:'dot-alwatan' }
+  };
+  const meta = channelMeta[ch] || { name:ch, sub:'', cls:'', dot:'' };
+
+  try {
+    // Try channel field first, fallback to category field
+    let snap = await db.collection('posts').where('channel','==',ch).orderBy('createdAt','desc').limit(20).get();
+    if(snap.empty) {
+      snap = await db.collection('posts').where('category','==',ch).orderBy('createdAt','desc').limit(20).get();
+    }
+    const posts = snap.docs.map(d => { const p = {id:d.id,...d.data()}; window.postsCache[d.id]=p; return p; });
+    container.innerHTML = `
+      <div class="channel-header ${meta.cls}">
+        <div class="channel-logo-big ${meta.cls}">${meta.name[0]}</div>
+        <div class="channel-info">
+          <h2>${escHtml(meta.name)}</h2>
+          <p>${escHtml(meta.sub)}</p>
+        </div>
+      </div>
+      ${posts.length
+        ? `<div class="news-grid">${posts.map(p=>buildNewsCard(p)).join('')}</div>`
+        : `<div style="text-align:center;padding:60px 20px;color:var(--text3);">
+            <div style="font-size:48px;margin-bottom:16px;">📰</div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text2);margin-bottom:8px;">${escHtml(meta.name)} — Abhi koi khabar nahi</h3>
+            <p style="font-size:13px;">Is akhbar ki stories abhi available nahi hain.</p>
+          </div>`}`;
+    if(posts.length) setTimeout(initCardAnimations, 80);
+  } catch(e) {
+    container.innerHTML = `<p style="color:var(--red);padding:20px;font-size:13px;">Error: ${escHtml(e.message)}</p>`;
+  }
+}
+
+async function loadProfile() {
+  if(!currentUser) { openModal('authModal'); return; }
+  // Wait briefly for currentUserData to populate from auth listener
+  if(!currentUserData) {
+    try {
+      const doc = await db.collection('users').doc(currentUser.uid).get();
+      currentUserData = doc.exists ? doc.data() : { name: currentUser.email.split('@')[0], email: currentUser.email, role: 'user' };
+    } catch(e) {
+      currentUserData = { name: currentUser.email.split('@')[0], email: currentUser.email, role: 'user' };
+    }
+  }
+  document.getElementById('profileContent').innerHTML = `
+    <div class="profile-header-card">
+      <div class="profile-avatar-big" onclick="switchProfileTab('info',document.querySelectorAll('.profile-tab')[1])">
+        ${currentUserData.photoUrl ? `<img src="${escHtml(currentUserData.photoUrl)}" alt="">` : `${currentUserData.name ? currentUserData.name[0].toUpperCase() : '?'}`}
+      </div>
+      <div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;">${escHtml(currentUserData.name || 'User')}</h2>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">${escHtml(currentUser.email)}</p>
+        <span class="kwt-verified" style="margin-top:10px;display:inline-flex;">✓ Member</span>
+      </div>
+    </div>
+    <div class="profile-tabs">
+      <button class="profile-tab active" onclick="switchProfileTab('posts',this)">My Posts</button>
+      <button class="profile-tab" onclick="switchProfileTab('info',this)">Settings</button>
+    </div>
+    <div id="profileTabContent"><div class="page-loader"><div class="loader"></div></div></div>`;
+  switchProfileTab('posts', document.querySelector('.profile-tab'));
+}
+
+async function switchProfileTab(tab, el) {
+  document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(tab === 'posts') {
+    let posts = [];
+    try {
+      const snap = await db.collection('posts').where('authorId','==',currentUser.uid).orderBy('createdAt','desc').get();
+      posts = snap.docs.map(d => { const p = {id:d.id,...d.data()}; window.postsCache[d.id]=p; return p; });
+    } catch(e) {
+      if(e.code === 'failed-precondition' || (e.message && e.message.includes('index'))) {
+        // Fallback: get all and filter client-side
+        const snap = await db.collection('posts').orderBy('createdAt','desc').limit(100).get();
+        posts = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.authorId===currentUser.uid);
+        posts.forEach(p=>window.postsCache[p.id]=p);
+      } else { throw e; }
+    }
+    document.getElementById('profileTabContent').innerHTML = posts.length ? `
+      <div style="margin-bottom:16px;">
+        <button class="btn btn-gold" onclick="openModal('createPostModal')">✏️ New Post</button>
+      </div>
+      <div class="news-grid">${posts.map(p => buildNewsCard(p, true)).join('')}</div>` :
+      `<div style="text-align:center;padding:50px 20px;color:var(--text3);">
+        <div style="font-size:44px;margin-bottom:14px;">✍️</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text2);margin-bottom:8px;">Abhi tak koi post nahi</h3>
+        <p style="font-size:13px;margin-bottom:18px;">Apni pehli story share karo!</p>
+        <button class="btn btn-gold" onclick="openModal('createPostModal')">✏️ Post Likhna Shuru Karo</button>
+      </div>`;
+    if(posts.length) setTimeout(initCardAnimations, 80);
+  } else {
+    const ud = currentUserData || {};
+    document.getElementById('profileTabContent').innerHTML = `
+      <div class="avatar-upload">
+        <div class="avatar-preview" id="profileAvatarPreview" onclick="document.getElementById('profileAvatarInput').click()">
+          ${ud.photoUrl ? `<img src="${escHtml(ud.photoUrl)}" alt="">` : `<span style="font-size:30px;font-weight:700;color:var(--gold);">${(ud.name||'U')[0].toUpperCase()}</span>`}
+          <div style="position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+        </div>
+        <input type="file" id="profileAvatarInput" accept="image/*" style="display:none;" onchange="uploadProfileAvatar(this.files[0])">
+        <div style="font-size:11px;color:var(--text3);">Tap to change photo</div>
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input class="form-control" type="text" id="profileNameInput" value="${escHtml(ud.name||'')}" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label>Account Email</label>
+        <div class="form-control" style="opacity:0.7;cursor:default;">${escHtml(currentUser?.email||'')}</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <button class="btn btn-gold" style="flex:1;" onclick="saveProfileName()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save Changes
+        </button>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <button class="btn btn-outline" style="width:100%;" onclick="auth.sendPasswordResetEmail('${escHtml(currentUser?.email||'')}').then(()=>toast('Reset email sent ✓','success')).catch(e=>toast(e.message,'error'))">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Send Password Reset Email
+        </button>
+      </div>`;
+  }
+}
+
+async function saveProfileName() {
+  const nameInput = document.getElementById('profileNameInput');
+  const newName = (nameInput?.value || '').trim();
+  if(!newName) { toast('Naam khali nahi ho sakta', 'error'); return; }
+  if(!currentUser || !db) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).update({ name: newName });
+    currentUserData = { ...currentUserData, name: newName };
+    toast('Profile updated ✓', 'success');
+    // Update header avatar
+    const headerAvatar = document.getElementById('headerAvatar');
+    if(headerAvatar) headerAvatar.innerHTML = `<span style="font-size:15px;font-weight:700;color:var(--gold);">${newName.charAt(0).toUpperCase()}</span>`;
+    // Update sidebar
+    const info = document.getElementById('sidebarUserInfo');
+    if(info) {
+      info.innerHTML = `<div class="sidebar-user-info">
+        <div class="sidebar-user-avatar">${newName.charAt(0).toUpperCase()}</div>
+        <div>
+          <div class="sidebar-user-name">${newName}</div>
+          <div class="sidebar-user-email">${currentUser.email}</div>
+        </div>
+      </div>`;
+    }
+    const ddName = document.getElementById('dropdownName');
+    if(ddName) ddName.textContent = newName;
+    // Update profile header card
+    const profileCard = document.querySelector('.profile-header-card h2');
+    if(profileCard) profileCard.textContent = newName;
+  } catch(e) { toast('Update failed: ' + e.message, 'error'); }
+}
+
+async function uploadProfileAvatar(file) {
+  if(!file) return;
+  if(file.size > 5 * 1024 * 1024) { toast('Photo too large (max 5 MB)', 'error'); return; }
+  toast('Uploading photo…');
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  try {
+    const res = await fetch(CLOUDINARY_IMG_URL, { method:'POST', body: formData });
+    const data = await res.json();
+    if(!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
+    await db.collection('users').doc(currentUser.uid).update({ photoUrl: data.secure_url });
+    currentUserData = { ...currentUserData, photoUrl: data.secure_url };
+    toast('Photo updated ✓', 'success');
+    // Update avatar preview
+    const prev = document.getElementById('profileAvatarPreview');
+    if(prev) prev.innerHTML = `<img src="${data.secure_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+      <div style="position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>`;
+    // Update header avatar with photo
+    const headerAvatar = document.getElementById('headerAvatar');
+    if(headerAvatar) headerAvatar.innerHTML = `<img src="${data.secure_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    // Update profile big avatar
+    const bigAvatar = document.querySelector('.profile-avatar-big');
+    if(bigAvatar) bigAvatar.innerHTML = `<img src="${data.secure_url}" alt="">`;
+  } catch(e) { toast('Photo upload failed: ' + e.message, 'error'); }
+}
+
+
+/* ============================================================
+   MEDIA UPLOAD — STATE + HELPERS
+============================================================ */
+let currentMediaTab = 'image';
+let uploadedImageUrl = '';   // Cloudinary URL for uploaded image
+let uploadedVideoUrl = '';   // Cloudinary URL for uploaded video file
+// Keep legacy alias for backward compat within same session
+Object.defineProperty(window,'uploadedImageBase64',{get:()=>uploadedImageUrl,set:v=>{uploadedImageUrl=v;}});
+
+function switchMediaTab(tab) {
+  currentMediaTab = tab;
+  ['image','video','url'].forEach(t => {
+    document.getElementById('mTab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('mediaPanel-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+/* Video file chosen from device — uploads to Cloudinary */
+function handleVideoFile(file) {
+  if(!file) return;
+  if(file.size > 100 * 1024 * 1024) { toast('Video too large (max 100 MB)', 'error'); return; }
+
+  const wrap = document.getElementById('videoPreviewWrap');
+  const vid  = document.getElementById('videoPreviewEl');
+  const ifr  = document.getElementById('videoIframeEl');
+
+  // Show local preview first while uploading
+  const localUrl = URL.createObjectURL(file);
+  ifr.style.display = 'none';
+  vid.src = localUrl;
+  vid.style.display = 'block';
+  wrap.style.display = 'block';
+
+  // Show upload progress
+  const progWrap = document.getElementById('videoUploadProgress');
+  const fill = document.getElementById('videoProgressFill');
+  const txt  = document.getElementById('videoProgressText');
+  if(progWrap) { progWrap.style.display = 'block'; fill.style.width = '5%'; txt.textContent = 'Uploading video…'; }
+
+  toast('Uploading video to Cloudinary…');
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  formData.append('resource_type', 'video');
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', CLOUDINARY_VID_URL, true);
+  xhr.upload.onprogress = e => {
+    if(e.lengthComputable && fill) {
+      const pct = Math.round(e.loaded / e.total * 90);
+      fill.style.width = pct + '%';
+      if(txt) txt.textContent = `Uploading… ${pct}%`;
+    }
+  };
+  xhr.onload = () => {
+    if(xhr.status === 200) {
+      const res = JSON.parse(xhr.responseText);
+      uploadedVideoUrl = res.secure_url;
+      vid.src = res.secure_url;
+      if(fill) fill.style.width = '100%';
+      if(txt) txt.textContent = 'Upload complete ✓';
+      setTimeout(() => { if(progWrap) progWrap.style.display = 'none'; }, 1200);
+      toast('Video uploaded ✓', 'success');
+    } else {
+      const err = JSON.parse(xhr.responseText);
+      if(fill) { fill.style.width = '0%'; }
+      if(txt) txt.textContent = 'Upload failed';
+      toast('Video upload failed: ' + (err.error?.message || 'Unknown'), 'error');
+    }
+  };
+  xhr.onerror = () => { toast('Network error during video upload', 'error'); };
+  xhr.send(formData);
+}
+
+/* Image file chosen from device — uploads to Cloudinary */
+function handleImageFile(file) {
+  if(!file) return;
+  if(file.size > 10 * 1024 * 1024) { toast('Image too large (max 10 MB)', 'error'); return; }
+  const progress = document.getElementById('imageUploadProgress');
+  const fill = document.getElementById('imageProgressFill');
+  const txt  = document.getElementById('imageProgressText');
+  progress.style.display = 'block';
+  fill.style.width = '5%';
+  txt.textContent = 'Uploading to Cloudinary…';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', CLOUDINARY_IMG_URL, true);
+  xhr.upload.onprogress = e => {
+    if(e.lengthComputable) {
+      const pct = Math.round(e.loaded / e.total * 90);
+      fill.style.width = pct + '%';
+      txt.textContent = `Uploading… ${pct}%`;
+    }
+  };
+  xhr.onload = () => {
+    if(xhr.status === 200) {
+      const res = JSON.parse(xhr.responseText);
+      fill.style.width = '100%';
+      txt.textContent = 'Upload complete ✓';
+      uploadedImageUrl = res.secure_url;
+      document.getElementById('imagePreviewEl').src = uploadedImageUrl;
+      document.getElementById('imagePreviewWrap').style.display = 'block';
+      document.getElementById('imageDropzone').style.display = 'none';
+      setTimeout(() => { progress.style.display = 'none'; }, 1200);
+      toast('Image uploaded ✓', 'success');
+    } else {
+      const err = JSON.parse(xhr.responseText);
+      fill.style.width = '0%';
+      txt.textContent = 'Upload failed';
+      toast('Upload failed: ' + (err.error?.message || 'Unknown error'), 'error');
+    }
+  };
+  xhr.onerror = () => { toast('Network error during upload', 'error'); progress.style.display = 'none'; };
+  xhr.send(formData);
+}
+
+/* Drag & Drop */
+function handleImageDrop(e) {
+  e.preventDefault();
+  document.getElementById('imageDropzone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if(file && file.type.startsWith('image/')) handleImageFile(file);
+  else toast('Please drop an image file', 'error');
+}
+
+/* Preview from URL input */
+function previewImageUrl(url) {
+  const thumb = document.getElementById('urlPreviewThumb');
+  if(url && url.startsWith('http')) thumb.src = url;
+  else { thumb.src = ''; thumb.style.display = 'none'; }
+}
+
+/* Video URL preview */
+function previewVideoUrl(url) {
+  const wrap  = document.getElementById('videoPreviewWrap');
+  const vid   = document.getElementById('videoPreviewEl');
+  const ifr   = document.getElementById('videoIframeEl');
+  if(!url) { wrap.style.display = 'none'; return; }
+
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if(ytMatch) {
+    vid.style.display = 'none';
+    ifr.src = `https://www.youtube.com/embed/${ytMatch[1]}`;
+    ifr.style.display = 'block';
+    wrap.style.display = 'block';
+    return;
+  }
+  // Vimeo
+  const vmMatch = url.match(/vimeo\.com\/(\d+)/);
+  if(vmMatch) {
+    vid.style.display = 'none';
+    ifr.src = `https://player.vimeo.com/video/${vmMatch[1]}`;
+    ifr.style.display = 'block';
+    wrap.style.display = 'block';
+    return;
+  }
+  // Direct mp4 / video URL
+  if(url.match(/\.(mp4|webm|ogg)(\?|$)/i)) {
+    ifr.style.display = 'none';
+    vid.src = url;
+    vid.style.display = 'block';
+    wrap.style.display = 'block';
+    return;
+  }
+  wrap.style.display = 'none';
+}
+
+/* Remove selected media */
+function clearMedia(type) {
+  if(type === 'image') {
+    uploadedImageUrl = '';
+    document.getElementById('imagePreviewWrap').style.display = 'none';
+    document.getElementById('imageDropzone').style.display = 'block';
+    const gi = document.getElementById('galleryInput');
+    if(gi) gi.value = '';
+    const ci = document.getElementById('cameraInput');
+    if(ci) ci.value = '';
+    const prog = document.getElementById('imageUploadProgress');
+    if(prog) prog.style.display = 'none';
+  }
+  if(type === 'video') {
+    uploadedVideoUrl = '';
+    const pu = document.getElementById('postVideoUrl');
+    if(pu) pu.value = '';
+    const vgI = document.getElementById('videoGalleryInput');
+    if(vgI) vgI.value = '';
+    const vcI = document.getElementById('videoCameraInput');
+    if(vcI) vcI.value = '';
+    const wrap = document.getElementById('videoPreviewWrap');
+    if(wrap) wrap.style.display = 'none';
+    const ifr = document.getElementById('videoIframeEl');
+    if(ifr) { ifr.src = ''; ifr.style.display = 'none'; }
+    const vid = document.getElementById('videoPreviewEl');
+    if(vid) { vid.src = ''; vid.style.display = 'none'; }
+    const vp = document.getElementById('videoUploadProgress');
+    if(vp) vp.style.display = 'none';
+  }
+}
+
+/* Collect final media URL before saving */
+function getFinalMediaUrl() {
+  if(currentMediaTab === 'image') {
+    // Cloudinary uploaded URL takes priority
+    if(uploadedImageUrl && !uploadedImageUrl.startsWith('blob:')) return uploadedImageUrl;
+    return '';
+  }
+  if(currentMediaTab === 'url') {
+    return (document.getElementById('postImageUrl')?.value || '').trim();
+  }
+  if(currentMediaTab === 'video') {
+    // Cloudinary uploaded video URL takes priority over manual URL input
+    if(uploadedVideoUrl && !uploadedVideoUrl.startsWith('blob:')) return uploadedVideoUrl;
+    return (document.getElementById('postVideoUrl')?.value || '').trim();
+  }
+  return '';
+}
+
+/* Reset entire media section */
+function resetMediaSection() {
+  uploadedImageUrl = '';
+  uploadedVideoUrl = '';
+  clearMedia('image');
+  clearMedia('video');
+  const pu = document.getElementById('postImageUrl');
+  if(pu) pu.value = '';
+  switchMediaTab('image');
+}
+
+/* ---- Post CRUD ---- */
+async function submitPost() {
+  // Guard: must be logged in
+  if(!currentUser) { closeModal('createPostModal'); openModal('authModal'); return; }
+  if(!dbReady()) return;
+
+  const t   = (document.getElementById('postTitle').value || '').trim();
+  const c   = (document.getElementById('postContent').value || '').trim();
+  const cat = document.getElementById('postCategory')?.value || '';
+  const eid = (document.getElementById('editPostId').value || '').trim();
+
+  if(!t) { toast('Headline zaroori hai', 'error'); document.getElementById('postTitle').focus(); return; }
+  if(!c) { toast('Story zaroori hai', 'error'); document.getElementById('postContent').focus(); return; }
+
+  const mediaUrl  = getFinalMediaUrl();
+  const isVideo   = currentMediaTab === 'video' && mediaUrl;
+
+  // Disable button while saving
+  const btn = document.getElementById('publishBtn');
+  if(btn) { btn.disabled = true; btn.innerHTML = '<span class="loader" style="width:13px;height:13px;border-width:1.5px;vertical-align:middle;display:inline-block;"></span> Saving…'; }
+
+  const data = {
+    title:     t,
+    content:   c,
+    category:  cat,
+    imageUrl:  isVideo ? '' : mediaUrl,
+    videoUrl:  isVideo ? mediaUrl : '',
+    mediaType: mediaUrl ? (isVideo ? 'video' : 'image') : '',
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    if(eid) {
+      await db.collection('posts').doc(eid).update(data);
+      toast('Updated! ✓', 'success');
+    } else {
+      data.authorId  = currentUser.uid;
+      data.authorName = currentUserData?.name || currentUser.email.split('@')[0];
+      data.likes     = [];
+      data.views     = 0;
+      data.commentCount = 0;
+      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      const ref = await db.collection('posts').add(data);
+      // Add to local cache immediately so it appears without re-fetch
+      const cachedPost = { ...data, id: ref.id, createdAt: { toDate: () => new Date() } };
+      window.postsCache[ref.id] = cachedPost;
+      toast('Published! 🎉', 'success');
+    }
+
+    // Reset all fields
+    const catVal = document.getElementById('postCategory')?.value || '';
+    document.getElementById('editPostId').value = '';
+    document.getElementById('postTitle').value  = '';
+    document.getElementById('postContent').value = '';
+    if(document.getElementById('postCategory')) document.getElementById('postCategory').value = '';
+    resetMediaSection();
+    closeModal('createPostModal');
+
+    // Invalidate caches so reload fetches fresh data
+    invalidatePageCache('home');
+    invalidatePageCache('general');
+
+    // Reload the currently active page
+    const activePage = document.querySelector('.page.active');
+    if(activePage) {
+      const pid = activePage.id.replace('page-', '');
+      if(pid === 'home') loadHome();
+      else if(pid === 'general') loadGeneral();
+      else if(pid === 'profile') loadProfile();
+      else {
+        // category page - reload with correct category
+        if(catVal) loadCategoryPage(catVal);
+        else loadHome();
+      }
+    } else {
+      loadHome();
+    }
+  } catch(err) {
+    console.error('submitPost error:', err);
+    toast('Error: ' + err.message, 'error');
+  } finally {
+    if(btn) { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Publish'; }
+  }
+}
+
+function editPost(id) {
+  const p = window.postsCache[id];
+  if(!p) { toast('Post not found', 'error'); return; }
+  document.getElementById('editPostId').value   = id;
+  document.getElementById('postTitle').value    = p.title   || '';
+  document.getElementById('postContent').value  = p.content || '';
+  document.getElementById('postEditorTitle').textContent = 'Edit Post';
+  if(document.getElementById('postCategory')) document.getElementById('postCategory').value = p.category || '';
+
+  // Restore existing media
+  resetMediaSection();
+  if(p.videoUrl) {
+    switchMediaTab('video');
+    document.getElementById('postVideoUrl').value = p.videoUrl;
+    previewVideoUrl(p.videoUrl);
+    uploadedVideoUrl = p.videoUrl;
+  } else if(p.imageUrl) {
+    if(p.imageUrl.startsWith('https://')) {
+      switchMediaTab('image');
+      uploadedImageUrl = p.imageUrl;
+      document.getElementById('imagePreviewEl').src = p.imageUrl;
+      document.getElementById('imagePreviewWrap').style.display = 'block';
+      document.getElementById('imageDropzone').style.display = 'none';
+    } else {
+      switchMediaTab('url');
+      document.getElementById('postImageUrl').value = p.imageUrl;
+      previewImageUrl(p.imageUrl);
+    }
+  }
+  openModal('createPostModal');
+}
+
+function confirmDeletePost(id) {
+  openModal('confirmModal');
+  document.getElementById('confirmBtnAction').onclick = async () => {
+    try {
+      await db.collection('posts').doc(id).delete();
+      delete window.postsCache[id];
+      closeModal('confirmModal');
+      toast('Post deleted', 'success');
+      // Reload current visible page
+      const activePage = document.querySelector('.page.active');
+      const pid = activePage ? activePage.id.replace('page-','') : 'home';
+      if(pid === 'profile') loadProfile();
+      else if(pid === 'home') { invalidatePageCache('home'); loadHome(); }
+      else if(pid === 'general') { invalidatePageCache('general'); loadGeneral(); }
+    } catch(e) { toast('Delete failed: ' + e.message, 'error'); }
+  };
+}
+
+async function toggleLikeCard(id, btn) {
+  if(!currentUser) return openModal('authModal');
+  btn.disabled = true;
+  const prevHTML = btn.innerHTML;
+  btn.innerHTML = '<span class="loader" style="width:12px;height:12px;border-width:1.5px;display:inline-block;vertical-align:middle;"></span>';
+  try {
+    const ref = db.collection('posts').doc(id);
+    const doc = await ref.get();
+    if(!doc.exists){ btn.disabled=false; btn.innerHTML=prevHTML; return; }
+    const likes = doc.data().likes || [];
+    const newL = likes.includes(currentUser.uid)
+      ? likes.filter(x => x !== currentUser.uid)
+      : [...likes, currentUser.uid];
+    await ref.update({ likes: newL });
+    const liked = newL.includes(currentUser.uid);
+    // Update ALL like buttons for this post
+    document.querySelectorAll(`#like-btn-${id}, #modal-like-btn-${id}`).forEach(b => {
+      b.className = b.className.replace(/\bliked\b/,'').trim() + (liked?' liked':'');
+      const isModal = b.id && b.id.startsWith('modal-');
+      if(isModal){
+        b.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="${liked?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> ${newL.length} Like${newL.length!==1?'s':''}`;
+        b.style.cssText = liked?'color:var(--red);border-color:var(--red);':'';
+      } else {
+        b.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="${liked?'currentColor':'none'}" stroke="${liked?'var(--red)':'currentColor'}" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> ${newL.length}`;
+      }
+      b.disabled = false;
+    });
+    window.postsCache[id] = { ...window.postsCache[id], likes: newL };
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = prevHTML;
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+/* ---- Search ---- */
+function openSearchBar() {
+  const wrap = document.getElementById('headerSearchWrap');
+  const input = document.getElementById('searchInput');
+  const closeBtn = document.getElementById('searchCloseBtn');
+  const mobileBtn = document.getElementById('mobileSearchBtn');
+  wrap.classList.add('mobile-open');
+  if(closeBtn) closeBtn.style.display = 'flex';
+  if(mobileBtn) mobileBtn.style.display = 'none';
+  setTimeout(() => input && input.focus(), 80);
+}
+
+function closeSearchBar() {
+  const wrap = document.getElementById('headerSearchWrap');
+  const input = document.getElementById('searchInput');
+  const closeBtn = document.getElementById('searchCloseBtn');
+  const mobileBtn = document.getElementById('mobileSearchBtn');
+  wrap.classList.remove('mobile-open');
+  // Reset inline style that old code may have set
+  wrap.style.display = '';
+  if(closeBtn) closeBtn.style.display = 'none';
+  if(mobileBtn) mobileBtn.style.display = '';
+  if(input) input.value = '';
+}
+
+function onSearchType(val) {
+  const closeBtn = document.getElementById('searchCloseBtn');
+  if(closeBtn) closeBtn.style.display = val.length > 0 ? 'flex' : 'none';
+}
+
+async function doSearch() {
+  const q = (document.getElementById('searchInput').value||'').trim().toLowerCase();
+  if(!q || q.length < 2){ toast('Kam se kam 2 characters likhein', 'error'); return; }
+  closeSearchBar();
+  showPage('search');
+  document.getElementById('searchResultTitle').textContent = `"${q}" ke results`;
+  document.getElementById('searchResultsContent').innerHTML = buildSkeletonGrid(4);
+  try {
+    // Load all recent posts and filter client-side (no Firestore full-text)
+    const snap = await db.collection('posts').orderBy('createdAt','desc').limit(200).get();
+    const posts = snap.docs
+      .map(d=>({id:d.id,...d.data()}))
+      .filter(p=>{
+        const title = (p.title||'').toLowerCase();
+        const content = (p.content||'').toLowerCase();
+        const cat = (p.category||'').toLowerCase();
+        const author = (p.authorName||'').toLowerCase();
+        return title.includes(q)||content.includes(q)||cat.includes(q)||author.includes(q);
+      });
+    posts.forEach(p=>window.postsCache[p.id]=p);
+    document.getElementById('searchResultCount').textContent =
+      posts.length ? `${posts.length} result${posts.length!==1?'s':''} mila` : '';
+    document.getElementById('searchResultsContent').innerHTML = posts.length
+      ? `<div class="news-grid" id="searchGrid">${posts.map(p=>buildNewsCard(p)).join('')}</div>`
+      : `<div style="text-align:center;padding:60px 20px;color:var(--text3);">
+           <div style="font-size:40px;margin-bottom:14px;">🔍</div>
+           <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text2);margin-bottom:8px;">Koi result nahi mila</h3>
+           <p style="font-size:13px;">"${escHtml(q)}" ke liye koi khabar nahi mili. Kuch aur try karo.</p>
+         </div>`;
+    if(posts.length) setTimeout(initCardAnimations, 80);
+  } catch(err) {
+    document.getElementById('searchResultsContent').innerHTML =
+      `<p style="color:var(--red);padding:20px;">Error: ${escHtml(err.message)}</p>`;
+  }
+}
+
+/* ---- Builders ---- */
+function buildHeroSection(posts) {
+  if(!posts.length) return '';
+  const main = posts[0];
+  const sides = posts.slice(1, 3);
+
+  const mainCard = `
+    <div class="featured-main" id="heroMain" onclick="openPostDetail('${main.id}')">
+      ${main.imageUrl ? `<img src="${escHtml(main.imageUrl)}" alt="${escHtml(main.title)}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">` : ''}
+      <div class="overlay"></div>
+      <div class="info">
+        <span class="channel-badge">${main.category ? escHtml(main.category.charAt(0).toUpperCase()+main.category.slice(1)) : 'Featured'}</span>
+        <h2>${escHtml(main.title)}</h2>
+      </div>
+      <div class="hero-dots" id="heroDots">
+        ${posts.map((_,i) => `<span class="hero-dot ${i===0?'active':''}" onclick="event.stopPropagation();goToHeroSlide(${i})"></span>`).join('')}
+      </div>
+    </div>`;
+
+  const sidePosts = sides.map(p => `
+    <div class="news-card side" onclick="openPostDetail('${p.id}')">
+      <div class="card-body" style="padding:8px;">
+        <div class="card-meta"><span class="card-channel">Latest</span><span class="card-time">${timeAgo(p.createdAt)}</span></div>
+        <div class="card-title" style="font-size:13px;-webkit-line-clamp:2;">${escHtml(p.title)}</div>
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="featured-section">
+      <div class="featured-grid">
+        ${mainCard}
+        <div class="featured-side">${sidePosts}</div>
+      </div>
+    </div>`;
+}
+
+let heroSlides = [];
+let heroIndex = 0;
+let heroTimer = null;
+
+function initHeroRotate(slides) {
+  clearInterval(heroTimer);
+  const main = document.getElementById('heroMain');
+  if(!main) return;
+  heroSlides = slides || Object.values(window.postsCache).slice(0, 3);
+  if(heroSlides.length < 2) return;
+  heroTimer = setInterval(() => {
+    goToHeroSlide((heroIndex + 1) % heroSlides.length);
+  }, 5000);
+}
+
+function goToHeroSlide(i) {
+  heroIndex = i;
+  const p = heroSlides[i];
+  if(!p) return;
+  const main = document.getElementById('heroMain');
+  if(!main) return;
+  const info = main.querySelector('.info');
+  const img  = main.querySelector('img');
+
+  main.classList.add('hero-transitioning');
+  setTimeout(() => {
+    if(info) {
+      const h2 = info.querySelector('h2');
+      const badge = info.querySelector('.channel-badge');
+      if(h2) h2.textContent = p.title || '';
+      if(badge) badge.textContent = p.category ? p.category.charAt(0).toUpperCase()+p.category.slice(1) : 'Featured';
+    }
+    if(img && p.imageUrl) {
+      img.src = p.imageUrl;
+      img.style.display = 'block';
+    } else if(img && !p.imageUrl) {
+      img.style.display = 'none';
+    }
+    main.onclick = () => openPostDetail(p.id);
+    main.classList.remove('hero-transitioning');
+  }, 220);
+
+  document.querySelectorAll('.hero-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+}
+
+function buildNewsCard(p, manage=false) {
+  const liked = currentUser && (p.likes||[]).includes(currentUser?.uid);
+  const saved = isArticleSaved(p.id);
+  const catLabel = p.category ? p.category.charAt(0).toUpperCase() + p.category.slice(1) : 'KWT News';
+  const catChip = p.category ? `<span class="cat-chip">${escHtml(catLabel)}</span>` : '';
+  const likeCount = (p.likes||[]).length;
+  return `<div class="news-card" onclick="openPostDetail('${p.id}')">
+    ${p.imageUrl
+      ? `<div class="card-img-full"><img src="${escHtml(p.imageUrl)}" alt="${escHtml(p.title)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
+      : p.videoUrl
+        ? `<div class="card-img-full" style="position:relative;background:var(--surface3);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;">
+            <div style="width:44px;height:44px;background:rgba(201,168,76,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <span style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.6);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:1px;">▶ VIDEO</span>
+          </div>`
+        : ''}
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-channel">${escHtml(catLabel)}</span>
+        ${catChip}
+        <span class="card-time">${timeAgo(p.createdAt)}</span>
+        ${p.authorId ? `<span class="kwt-verified" style="font-size:7px;padding:1px 5px;">✓</span>` : ''}
+      </div>
+      <div class="card-title">${escHtml(p.title)}</div>
+      <div class="card-excerpt">${escHtml((p.content||'').substring(0,90))}…</div>
+    </div>
+    <div class="card-actions" onclick="event.stopPropagation()">
+      <button class="card-action ${liked?'liked':''}" onclick="toggleLikeCard('${p.id}',this)" id="like-btn-${p.id}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="${liked?'currentColor':'none'}" stroke="${liked?'var(--red)':'currentColor'}" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        ${likeCount}
+      </button>
+      <button class="card-action" onclick="openPostDetail('${p.id}',true)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        ${p.commentCount||0}
+      </button>
+      <button class="card-action" onclick="showShareSheet('${p.id}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
+      <button class="card-action" style="opacity:0.6;cursor:default;gap:3px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        ${p.views||0}
+      </button>
+      <button class="card-action ${saved?'saved':''}" id="save-btn-${p.id}" onclick="toggleSavedArticle('${p.id}',this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      ${manage ? `
+        <div class="card-action-spacer"></div>
+        <button class="card-action" onclick="editPost('${p.id}')" title="Edit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="card-action" style="color:var(--red);" onclick="confirmDeletePost('${p.id}')" title="Delete">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>` : ''}
+    </div>
+  </div>`;
+}
+
+function buildSkeletonGrid(n) {
+  return `<div class="news-grid">${Array(n).fill('').map(() => `
+    <div class="skeleton-card">
+      <div class="skeleton skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton skeleton-line short"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line medium"></div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function openPostDetail(id, scrollToComments=false) {
+  const p = window.postsCache[id];
+  if(!p) return;
+  const liked = currentUser && (p.likes||[]).includes(currentUser?.uid);
+  const saved = isArticleSaved(id);
+  const wordCount = (p.content||'').split(/\s+/).length;
+  const readMins = Math.max(1, Math.round(wordCount / 200));
+  const catChip = p.category ? `<span class="cat-chip" style="margin-left:8px;">${p.category}</span>` : '';
+
+  // Build related articles - same category first, then others
+  const allPosts = Object.values(window.postsCache).filter(x => x.id !== id);
+  const sameCategory = allPosts.filter(x => x.category && x.category === p.category).slice(0,3);
+  const others = allPosts.filter(x => x.category !== p.category).slice(0, 5 - sameCategory.length);
+  const related = [...sameCategory, ...others].slice(0,5);
+  const relatedHtml = related.length ? `
+    <div class="related-articles">
+      <h3>More Like This</h3>
+      <div class="related-scroll">
+        ${related.map(r => `
+          <div class="related-card" onclick="closeModal('postModal');setTimeout(()=>openPostDetail('${r.id}'),120)">
+            <div class="related-card-channel">${escHtml(r.category ? r.category.charAt(0).toUpperCase()+r.category.slice(1) : 'KWT News')}</div>
+            <div class="related-card-title">${escHtml(r.title)}</div>
+            <div class="related-card-time">${timeAgo(r.createdAt)}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // TL;DR (first 120 chars as summary)
+  const tldr = (p.content||'').substring(0, 150);
+
+  document.getElementById('postModalMeta').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;">KWT News</div>
+      ${p.category ? `<span class="cat-chip">${escHtml(p.category.charAt(0).toUpperCase()+p.category.slice(1))}</span>` : ''}
+    </div>`;
+
+  document.getElementById('postModalBody').innerHTML = `
+    ${p.imageUrl ? `<div class="post-detail-img"><img src="${escHtml(p.imageUrl)}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` :
+      p.videoUrl ? `<div class="post-detail-img" style="aspect-ratio:16/9;overflow:hidden;">${buildVideoEmbed(p.videoUrl)}</div>` : ''}
+    <h2 class="post-detail-title">${escHtml(p.title)}</h2>
+    <div class="post-detail-meta">
+      <div class="author-avatar-sm">${p.authorName ? p.authorName.charAt(0).toUpperCase() : '?'}</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;">${escHtml(p.authorName || 'KWT Contributor')}</div>
+        <div style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:8px;">
+          <span>${timeAgo(p.createdAt)}</span>
+          <span class="read-time-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${readMins} min read
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="tldr-box">
+      <div class="tldr-label">TL;DR</div>
+      <div class="tldr-text">${escHtml(tldr)}…</div>
+    </div>
+    <div class="post-detail-content">${escHtml(p.content).replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</div>
+    ${relatedHtml}
+    <div class="article-engage-bar">
+      <button class="btn btn-outline ${liked?'liked':''}" id="modal-like-btn-${id}" onclick="toggleLikeCard('${p.id}',this);event.stopPropagation()" style="${liked?'color:var(--red);border-color:var(--red);':''}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="${liked?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        ${(p.likes||[]).length} Like${(p.likes||[]).length !== 1 ? 's' : ''}
+      </button>
+      <button class="btn btn-outline" onclick="showShareSheet('${p.id}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="btn btn-outline ${saved?'saved':''}" id="modal-save-btn-${id}" onclick="toggleSavedArticle('${p.id}',this)" style="${saved?'color:var(--gold);border-color:var(--gold);':''}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        ${saved ? 'Saved' : 'Save'}
+      </button>
+    </div>
+    <!-- Comment Section -->
+    <div class="comment-section" id="commentSection">
+      <div class="section-header" style="margin-top:24px;">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Comments
+        </h3>
+      </div>
+      ${currentUser ? `
+      <div class="comment-input-wrap">
+        <div class="author-avatar-sm" style="flex-shrink:0;">${currentUserData?.name?currentUserData.name.charAt(0).toUpperCase():'?'}</div>
+        <div style="flex:1;">
+          <textarea class="form-control" id="commentInput-${id}" placeholder="Write a comment… (Ctrl+Enter to post)" style="min-height:70px;resize:none;" onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();submitComment('${id}');}"></textarea>
+          <button class="btn btn-gold" style="margin-top:8px;" onclick="submitComment('${id}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Post Comment
+          </button>
+        </div>
+      </div>` : `
+      <div style="text-align:center;padding:20px;color:var(--text3);font-size:13px;">
+        <button class="btn btn-outline" onclick="closeModal('postModal');openModal('authModal')">Login to comment</button>
+      </div>`}
+      <div id="commentsList-${id}" style="margin-top:16px;">
+        <div class="page-loader"><div class="loader"></div></div>
+      </div>
+    </div>`;
+  openModal('postModal');
+  // Load comments
+  loadComments(id);
+  // Increment view count silently - don't crash if it fails
+  try {
+    db.collection('posts').doc(id).update({ views: firebase.firestore.FieldValue.increment(1) }).catch(()=>{});
+    window.postsCache[id] = { ...window.postsCache[id], views: (window.postsCache[id].views||0)+1 };
+  } catch(e) {}
+  if(scrollToComments) {
+    setTimeout(() => {
+      const cs = document.getElementById('commentSection');
+      if(cs) cs.scrollIntoView({ behavior:'smooth' });
+    }, 300);
+  }
+}
+
+function showShareSheet(id) {
+  const p = window.postsCache[id];
+  if(!p) return;
+  const url = window.location.href;
+  const text = encodeURIComponent((p.title||'') + ' – KWT News');
+  const encodedUrl = encodeURIComponent(url);
+
+  document.getElementById('shareGrid').innerHTML = `
+    <div class="share-option" onclick="window.open('https://api.whatsapp.com/send?text=${text}%20${encodedUrl}','_blank')">
+      <span class="share-icon">💬</span>WhatsApp
+    </div>
+    <div class="share-option" onclick="window.open('https://twitter.com/intent/tweet?text=${text}&url=${encodedUrl}','_blank')">
+      <span class="share-icon">𝕏</span>Twitter / X
+    </div>
+    <div class="share-option" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}','_blank')">
+      <span class="share-icon">📘</span>Facebook
+    </div>
+    <div class="share-option" onclick="copyToClipboard('${url}')">
+      <span class="share-icon">🔗</span>Copy Link
+    </div>
+    <div class="share-option" onclick="nativeShare('${id}')">
+      <span class="share-icon">📤</span>More...
+    </div>`;
+  openModal('shareModal');
+}
+
+function nativeShare(id) {
+  const p = window.postsCache[id];
+  if(p && navigator.share) {
+    navigator.share({ title: p.title, text: p.content.substring(0,120) + '…', url: window.location.href });
+  } else {
+    copyToClipboard(window.location.href);
+  }
+}
+
+function copyToClipboard(text) {
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => toast('Link copied!','success'));
+  } else {
+    toast('Link copied!','success');
+  }
+  closeModal('shareModal');
+}
+
+/* ---- Comments ---- */
+async function loadComments(postId) {
+  const container = document.getElementById('commentsList-' + postId);
+  if(!container || !db) return;
+  try {
+    const snap = await db.collection('posts').doc(postId).collection('comments')
+      .orderBy('createdAt','asc').limit(50).get();
+    if(snap.empty) {
+      container.innerHTML = '<p style="color:var(--text3);font-size:12px;padding:8px 0;">No comments yet. Be the first!</p>';
+      return;
+    }
+    container.innerHTML = snap.docs.map(d => {
+      const c = { id: d.id, ...d.data() };
+      const isOwn = currentUser && c.authorId === currentUser.uid;
+      return `<div class="comment-item" id="comment-${c.id}">
+        <div class="comment-avatar">${c.authorName ? c.authorName.charAt(0).toUpperCase() : '?'}</div>
+        <div class="comment-body">
+          <div>
+            <span class="comment-author">${escHtml(c.authorName || 'User')}</span>
+            <span class="comment-time">${timeAgo(c.createdAt)}</span>
+            ${isOwn ? `<button class="comment-delete-btn" onclick="deleteComment('${postId}','${c.id}')">✕</button>` : ''}
+          </div>
+          <div class="comment-text">${escHtml(c.text)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    if(container) container.innerHTML = `<p style="color:var(--red);font-size:12px;">Error loading comments.</p>`;
+  }
+}
+
+async function submitComment(postId) {
+  if(!currentUser) { openModal('authModal'); return; }
+  const inp = document.getElementById('commentInput-' + postId);
+  const text = (inp?.value || '').trim();
+  if(!text) { toast('Comment khali nahi hona chahiye', 'error'); return; }
+  try {
+    await db.collection('posts').doc(postId).collection('comments').add({
+      text,
+      authorId: currentUser.uid,
+      authorName: currentUserData?.name || currentUser.email.split('@')[0],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // Update commentCount
+    await db.collection('posts').doc(postId).update({
+      commentCount: firebase.firestore.FieldValue.increment(1)
+    });
+    if(window.postsCache[postId]) {
+      window.postsCache[postId].commentCount = (window.postsCache[postId].commentCount || 0) + 1;
+    }
+    inp.value = '';
+    toast('Comment posted ✓', 'success');
+    loadComments(postId);
+  } catch(e) { toast('Error posting comment: ' + e.message, 'error'); }
+}
+
+async function deleteComment(postId, commentId) {
+  try {
+    await db.collection('posts').doc(postId).collection('comments').doc(commentId).delete();
+    await db.collection('posts').doc(postId).update({
+      commentCount: firebase.firestore.FieldValue.increment(-1)
+    });
+    const el = document.getElementById('comment-' + commentId);
+    if(el) el.remove();
+    toast('Comment deleted', 'success');
+  } catch(e) { toast('Error deleting comment', 'error'); }
+}
+
+function sharePost(id) {
+  showShareSheet(id);
+}
+
+
+/* ---- Category Page ---- */
+async function loadCategoryPage(cat) {
+  const label = cat.charAt(0).toUpperCase() + cat.slice(1);
+  // Show page-general for category pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-general');
+  if(pg) pg.classList.add('active');
+  document.getElementById('newspapersSubnav').style.display = 'none';
+  document.getElementById('generalContent').innerHTML = buildSkeletonGrid(6);
+
+  // hide/show create bars
+  const bar = document.getElementById('createPostBar');
+  const guestBar = document.getElementById('createPostBarGuest');
+  if(bar) bar.style.display = 'none';
+  if(guestBar) guestBar.style.display = 'none';
+
+  try {
+    const snap = await db.collection('posts')
+      .where('category','==',cat)
+      .orderBy('createdAt','desc')
+      .limit(30).get();
+    const posts = snap.docs.map(d => { const p={id:d.id,...d.data()}; window.postsCache[d.id]=p; return p; });
+    if(!posts.length) {
+      document.getElementById('generalContent').innerHTML = `
+        <div style="text-align:center;padding:60px 20px;color:var(--text3);">
+          <div style="font-size:48px;margin-bottom:16px;">📰</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text2);margin-bottom:8px;">${escHtml(label)} — Koi story nahi</h3>
+          <p style="font-size:13px;margin-bottom:18px;">Is category mein abhi koi khabar nahi hai. Pehli story post karo!</p>
+          <button class="btn btn-gold" style="padding:12px 24px;" onclick="currentUser?openModal('createPostModal'):openModal('authModal')">✏️ Post Karo</button>
+        </div>`;
+      return;
+    }
+    document.getElementById('generalContent').innerHTML = `
+      <div class="section-header">
+        <h2 class="section-title">${escHtml(label)}</h2>
+        <span style="font-size:11px;color:var(--text3);">${posts.length} stor${posts.length!==1?'ies':'y'}</span>
+      </div>
+      <div class="news-grid">${posts.map(p=>buildNewsCard(p)).join('')}</div>`;
+    setTimeout(initCardAnimations, 80);
+  } catch(e) {
+    document.getElementById('generalContent').innerHTML = `<p style="color:var(--red);padding:20px;font-size:13px;">Error: ${escHtml(e.message)}</p>`;
+  }
+  window.scrollTo(0,0);
+}
+
+/* ---- Saved Articles ---- */
+async function loadSaved() {
+  const pg = document.getElementById('page-saved');
+  pg.innerHTML = '<div class="page-loader"><div class="loader"></div></div>';
+
+  let savedIds = getSavedArticles();
+
+  // If logged in, also fetch from Firestore for latest sync
+  if(currentUser && db) {
+    try {
+      const doc = await db.collection('users').doc(currentUser.uid).get();
+      const fsaved = doc.exists && doc.data().savedArticles ? doc.data().savedArticles : [];
+      savedIds = [...new Set([...savedIds, ...fsaved])];
+      localStorage.setItem(SAVED_KEY, JSON.stringify(savedIds));
+    } catch {}
+  }
+
+  if(!savedIds.length) {
+    pg.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--text3);">
+      <div style="font-size:40px;margin-bottom:16px;">🔖</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text2);margin-bottom:8px;">No saved articles</h3>
+      <p style="font-size:13px;">Tap the bookmark icon on any article to save it.</p></div>`;
+    return;
+  }
+
+  const posts = savedIds.map(id => window.postsCache[id]).filter(Boolean);
+  const missing = savedIds.filter(id => !window.postsCache[id]);
+  if(missing.length && db) {
+    try {
+      const docs = await Promise.all(missing.map(id => db.collection('posts').doc(id).get()));
+      docs.forEach(d => { if(d.exists) window.postsCache[d.id]={id:d.id,...d.data()}; });
+    } catch {}
+  }
+  renderSavedPage(savedIds);
+}
+
+function renderSavedPage(ids) {
+  const savedIds = ids || getSavedArticles();
+  const posts = savedIds.map(id => window.postsCache[id]).filter(Boolean);
+  document.getElementById('page-saved').innerHTML = `
+    <div class="section-header">
+      <h2 class="section-title">🔖 Saved Articles</h2>
+      <span style="font-size:11px;color:var(--text3);">${posts.length} saved</span>
+    </div>
+    <div class="news-grid">${posts.map(p=>buildNewsCard(p)).join('')}</div>`;
+  initCardAnimations();
+}
+
+/* ---- Card Animations (IntersectionObserver) ---- */
+function initCardAnimations() {
+  const cards = document.querySelectorAll('.news-grid .news-card:not(.card-animated)');
+  if(!cards.length) return;
+  // Mark ready first (sets opacity:0)
+  cards.forEach(card => card.classList.add('anim-ready'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if(entry.isIntersecting) {
+        const delay = Math.min(idx * 55, 400);
+        setTimeout(() => {
+          entry.target.classList.remove('anim-ready');
+          entry.target.classList.add('card-animated');
+        }, delay);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin:'20px 0px 0px 0px', threshold:0.01 });
+  cards.forEach(card => obs.observe(card));
+}
+
+/* ---- Utilities ---- */
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function timeAgo(ts) {
+  if(!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+  if(diff < 60) return 'just now';
+  if(diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  if(diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  if(diff < 604800) return `${Math.floor(diff/86400)}d ago`;
+  return d.toLocaleDateString('en-KW',{month:'short',day:'numeric'});
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.btn, .card-action, .bottom-nav-item, .bottom-nav-fab, .channel-tab');
+  if(!btn) return;
+  const r = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
+  r.className = 'ripple-effect';
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 520);
+}, true);
+
+let toastTimer;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+/* ---- buildVideoEmbed ---- */
+function buildVideoEmbed(url) {
+  if(!url) return '';
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if(yt) return `<iframe width="100%" height="100%" style="border:none;border-radius:var(--radius);" src="https://www.youtube.com/embed/${yt[1]}" allowfullscreen></iframe>`;
+  const vm = url.match(/vimeo\.com\/(\d+)/);
+  if(vm) return `<iframe width="100%" height="100%" style="border:none;border-radius:var(--radius);" src="https://player.vimeo.com/video/${vm[1]}" allowfullscreen></iframe>`;
+  if(url.match(/\.(mp4|webm|ogg)(\?|$)/i)) return `<video src="${escHtml(url)}" controls playsinline style="width:100%;height:100%;background:#000;border-radius:var(--radius);"></video>`;
+  return `<a href="${escHtml(url)}" target="_blank" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gold);font-size:13px;text-decoration:underline;">▶ Watch Video</a>`;
+}
+
+/* ---- Save / Bookmark ---- */
+const SAVED_KEY = 'kwt_saved_articles';
+function getSavedArticles() {
+  try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; }
+}
+function isArticleSaved(id) { return getSavedArticles().includes(id); }
+function toggleSavedArticle(id, btn) {
+  let saved = getSavedArticles();
+  const nowSaved = !saved.includes(id);
+  if(nowSaved) saved.push(id);
+  else saved = saved.filter(x => x !== id);
+  try { localStorage.setItem(SAVED_KEY, JSON.stringify(saved)); } catch {}
+
+  // If logged in, also sync to Firestore
+  if(currentUser && db) {
+    const ref = db.collection('users').doc(currentUser.uid);
+    if(nowSaved) ref.update({ savedArticles: firebase.firestore.FieldValue.arrayUnion(id) }).catch(()=>{});
+    else         ref.update({ savedArticles: firebase.firestore.FieldValue.arrayRemove(id) }).catch(()=>{});
+  }
+
+  // Update all save buttons for this post
+  document.querySelectorAll(`#save-btn-${id}, #modal-save-btn-${id}`).forEach(b => {
+    b.className = b.className.replace(/\bsaved\b/,'').trim() + (nowSaved ? ' saved' : '');
+    const svg = b.querySelector('svg');
+    if(svg) svg.setAttribute('fill', nowSaved ? 'currentColor' : 'none');
+    if(b.id && b.id.startsWith('modal-save')) {
+      b.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="${nowSaved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> ${nowSaved ? 'Saved' : 'Save'}`;
+      b.style.cssText = nowSaved ? 'color:var(--gold);border-color:var(--gold);' : '';
+    }
+  });
+
+  // Update saved badge count in sidebar
+  const badge = document.getElementById('savedCountBadge');
+  if(badge) { const c = getSavedArticles().length; badge.textContent = c > 0 ? c : ''; }
+
+  toast(nowSaved ? 'Saved ✓' : 'Removed from saved', nowSaved ? 'success' : '');
+}
+
+/* ---- Theme toggle ---- */
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  // Update sidebar button emoji
+  document.querySelectorAll('[onclick*="toggleTheme"]').forEach(btn => {
+    btn.innerHTML = btn.innerHTML.replace(/[🌙☀️]/u, isLight ? '☀️' : '🌙');
+  });
+  try { localStorage.setItem('kwt_theme', isLight ? 'light' : 'dark'); } catch {}
+}
+
+/* ---- Global error handler ---- */
+window.addEventListener('unhandledrejection', e => {
+  console.error('Unhandled promise rejection:', e.reason);
+  // Only show toast for Firebase / network errors, not all internal ones
+  if(e.reason && e.reason.code && e.reason.code.startsWith('firestore/')) {
+    toast('Firestore error: ' + e.reason.message, 'error');
+  }
+});
+
+/* ---- Scroll behaviors ---- */
+let lastScrollY = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  const btt = document.getElementById('backToTop');
+  if(btt) btt.classList.toggle('visible', y > 300);
+  const prog = document.getElementById('readingProgress');
+  if(prog){
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = docH > 0 ? (y/docH*100)+'%' : '0%';
+  }
+  lastScrollY = y;
+},{ passive:true });
+
+/* ---- Init ---- */
+window.addEventListener('load', () => {
+  // Restore theme
+  try {
+    if(localStorage.getItem('kwt_theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  } catch {}
+
+  // Set initial active channel tab to home
+  const homeTab = document.querySelector('#channelNav [data-cat="home"]');
+  if(homeTab) homeTab.classList.add('active');
+
+  // Set initial bottom nav active
+  setBottomNav('home');
+  // Delay indicator init so layout is calculated correctly
+  setTimeout(() => setBottomNav('home'), 100);
+
+  // Show guest UI by default before Firebase auth resolves
+  document.getElementById('guestActions').style.display = 'flex';
+  document.getElementById('userActions').style.display = 'none';
+
+  // Initialize saved badge count
+  const badge = document.getElementById('savedCountBadge');
+  if(badge){ const c = getSavedArticles().length; badge.textContent = c > 0 ? c : ''; }
+
+  // Close any dropdowns/panels on outside click
+  document.addEventListener('click', e => {
+    const notifPanel = document.getElementById('notifPanel');
+    if(notifPanel && notifPanel.classList.contains('open')) {
+      if(!e.target.closest('#notifBtn') && !e.target.closest('#notifPanel')) {
+        notifPanel.classList.remove('open');
+      }
+    }
+  });
+
+  // Init Firebase safely
+  if(initFirebase()) {
+    setupAuthListener();
+    loadHome();
+  }
+});
+
+</script>
+</body>
+  </html>
