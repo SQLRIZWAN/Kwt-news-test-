@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0A1628"/>
+<meta name="description" content="KWT News - Kuwait's Premier Digital News Platform"/>
+<meta property="og:title" content="KWT News | Kuwait's Premier Digital News Platform"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://kwtnews.com"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@kwtnews_com"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="KWT News"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet"/>
+<title>KWT News | Kuwait's Premier Digital News Platform</title>
+<style>
+/* ═══════════════════════════════════
+   KWT NEWS — COMPLETE DESIGN SYSTEM
+   ═══════════════════════════════════ */
+:root{
+  --navy:#0A1628;--navy-mid:#0F2040;--navy-light:#16213E;
+  --gold:#F5A623;--gold-dark:#D4891A;--gold-light:#FFD166;
+  --red:#E63946;--green:#2DC653;
+  --bg:#F0F2F5;--bg-card:#FFFFFF;--text:#1A202C;--text-muted:#6B7280;
+  --border:#E5E7EB;--input-bg:#F9FAFB;
+  --shadow:0 2px 12px rgba(0,0,0,.08);--shadow-lg:0 8px 32px rgba(0,0,0,.14);
+}
+[data-theme="dark"]{
+  --bg:#0D1117;--bg-card:#161B22;--text:#E6EDF3;--text-muted:#8B949E;
+  --border:#21262D;--input-bg:#0D1117;
+  --shadow:0 2px 12px rgba(0,0,0,.4);--shadow-lg:0 8px 32px rgba(0,0,0,.6);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s}
+[dir="rtl"]{font-family:'Noto Sans Arabic','DM Sans',sans-serif}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+input,textarea,select{font-family:inherit}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;font-weight:700;line-height:1.25}
+
+/* LAYOUT */
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+@media(min-width:640px){.wrap{padding:0 24px}}
+@media(min-width:1024px){.wrap{padding:0 32px}}
+.main-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:1024px){.main-grid{grid-template-columns:1fr 320px}}
+
+/* CARDS */
+.card{background:var(--bg-card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:rgba(245,166,35,.2)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:50px;font-weight:600;font-size:.875rem;transition:all .2s;cursor:pointer;font-family:inherit;border:none}
+.btn-gold{background:var(--gold);color:var(--navy);box-shadow:0 4px 14px rgba(245,166,35,.3)}
+.btn-gold:hover{background:var(--gold-dark);transform:translateY(-1px)}
+.btn-outline{border:2px solid var(--gold)!important;color:var(--gold);background:none}
+.btn-outline:hover{background:var(--gold);color:var(--navy)}
+.btn-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:all .2s}
+.btn-icon:hover{background:rgba(255,255,255,.12);color:#fff}
+.btn-icon svg{width:18px;height:18px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.b-kuwait{background:rgba(37,99,235,.15);color:#60A5FA}
+.b-world{background:rgba(139,92,246,.15);color:#A78BFA}
+.b-breaking{background:rgba(230,57,70,.15);color:var(--red);animation:pulse 1.5s infinite}
+.b-business{background:rgba(245,166,35,.15);color:var(--gold)}
+.b-sports{background:rgba(45,198,83,.15);color:var(--green)}
+.b-tech{background:rgba(6,182,212,.15);color:#22D3EE}
+
+/* INPUTS */
+.input{width:100%;padding:11px 16px;border-radius:12px;background:var(--input-bg);border:1.5px solid var(--border);color:var(--text);font-size:.9rem;outline:none;transition:border .2s,box-shadow .2s}
+.input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,.15)}
+.input::placeholder{color:var(--text-muted)}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ani{animation:fadeIn .4s ease both}
+
+/* SKELETON */
+.sk{border-radius:8px;background:linear-gradient(90deg,var(--border) 25%,var(--bg) 50%,var(--border) 75%);background-size:400px 100%;animation:shimmer 1.6s infinite}
+
+/* ── TICKER ── */
+#ticker{background:var(--red);height:36px;display:flex;align-items:center;overflow:hidden;position:relative;z-index:101}
+.tick-lbl{background:rgba(0,0,0,.3);padding:0 14px;height:100%;display:flex;align-items:center;gap:6px;flex-shrink:0;font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+.tick-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1.4s infinite}
+.tick-track{overflow:hidden;flex:1;height:100%;display:flex;align-items:center}
+.tick-inner{white-space:nowrap;animation:ticker 38s linear infinite;font-size:.82rem;font-weight:500;color:rgba(255,255,255,.95);padding:0 20px}
+.tick-sep{margin:0 18px;opacity:.4}
+
+/* ── HEADER ── */
+#header{position:sticky;top:0;z-index:100;background:var(--navy);height:64px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);transition:box-shadow .3s}
+#header.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.5)}
+.h-inner{display:flex;align-items:center;gap:8px;height:100%;width:100%}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0;transition:opacity .2s}
+.logo:hover{opacity:.9}
+.logo-badge{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;color:var(--navy);box-shadow:0 4px 12px rgba(245,166,35,.35);position:relative}
+.logo-badge::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent);border-radius:10px}
+.logo-live{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink 1.2s infinite;z-index:1}
+.logo-txt{display:flex;flex-direction:column;line-height:1}
+.logo-kwt{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#fff;letter-spacing:.06em}
+.logo-news{font-size:.58rem;font-weight:600;color:var(--gold);letter-spacing:.3em;text-transform:uppercase}
+
+/* Nav Tabs */
+.nav-tabs{display:none;gap:2px;margin-left:10px}
+@media(min-width:768px){.nav-tabs{display:flex}}
+.ntab{padding:7px 16px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.5);transition:all .2s;cursor:pointer;position:relative}
+.ntab:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.07)}
+.ntab.active{color:var(--gold);background:rgba(245,166,35,.08)}
+.ntab.active::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--gold);border-radius:2px 2px 0 0}
+
+/* Header Right */
+.h-right{display:flex;align-items:center;gap:3px;margin-left:auto}
+.notif-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--navy)}
+.signin-btn{display:none;padding:8px 18px;border-radius:50px;background:var(--gold);color:var(--navy);font-weight:700;font-size:.82rem;transition:all .2s;border:none;cursor:pointer;font-family:inherit}
+.signin-btn:hover{background:var(--gold-dark);transform:translateY(-1px)}
+@media(min-width:480px){.signin-btn{display:block}}
+
+/* Theme Toggle */
+.theme-sw{width:50px;height:26px;border-radius:50px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);position:relative;cursor:pointer;transition:background .3s;flex-shrink:0}
+[data-theme="light"] .theme-sw{background:rgba(245,166,35,.2);border-color:var(--gold)}
+.theme-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .3s;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+[data-theme="light"] .theme-thumb{transform:translateX(24px)}
+
+/* Hamburger */
+.ham{display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:8px}
+.ham span{width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px;transition:all .3s;display:block}
+.ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+@media(min-width:768px){.ham{display:none}}
+
+/* Mobile Nav */
+#mob-nav{display:none;position:fixed;inset:0;z-index:99;padding-top:100px}
+#mob-nav.open{display:block}
+.mob-bg{position:absolute;inset:0;background:rgba(10,22,40,.97);backdrop-filter:blur(12px)}
+.mob-content{position:relative;z-index:1;padding:20px;display:flex;flex-direction:column;gap:5px;animation:fadeIn .3s ease}
+.mob-tab{padding:14px 18px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:rgba(255,255,255,.65);cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+.mob-tab:hover,.mob-tab.active{color:var(--gold);background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.2)}
+
+/* ── HEADER AD ── */
+.head-ad{background:var(--bg-card);border-bottom:1px solid var(--border);padding:8px 0;text-align:center}
+.ad-lbl{font-size:.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.ad-banner{display:inline-flex;align-items:center;justify-content:center;width:min(728px,100%);height:66px;background:linear-gradient(135deg,rgba(245,166,35,.05),rgba(10,22,40,.03));border:1px dashed var(--border);border-radius:10px;color:var(--text-muted);font-size:.78rem}
+
+/* ── PAGE BANNER ── */
+.pg-banner{padding:16px 20px;border-radius:14px;background:linear-gradient(135deg,var(--navy-mid),var(--navy));border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.pg-banner h1{color:#fff;font-size:1.15rem;margin-bottom:2px}
+.pg-banner p{font-size:.8rem;color:rgba(255,255,255,.45)}
+.pg-emoji{font-size:1.9rem}
+
+/* ── NEWS CARD ── */
+.nc{background:var(--bg-card);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all .3s cubic-bezier(.16,1,.3,1);animation:fadeIn .4s ease both}
+.nc:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:rgba(245,166,35,.2)}
+.nc-head{display:flex;align-items:center;justify-content:space-between;padding:13px 15px 9px}
+.src-info{display:flex;align-items:center;gap:9px}
+.src-av{width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;flex-shrink:0;overflow:hidden;border:2px solid rgba(245,166,35,.2)}
+.src-av img{width:100%;height:100%;object-fit:cover}
+.src-name{font-weight:700;font-size:.85rem}
+.src-time{font-size:.72rem;color:var(--text-muted);display:flex;align-items:center;gap:3px;margin-top:1px}
+.src-time svg{width:11px;height:11px}
+.nc-meta-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nc-media{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--border);cursor:pointer}
+.nc-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.nc:hover .nc-media img{transform:scale(1.04)}
+.nc-body{padding:13px 15px 4px;cursor:pointer}
+.nc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;line-height:1.35;margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .2s}
+.nc:hover .nc-title{color:var(--gold)}
+.nc-desc{font-size:.83rem;color:var(--text-muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nc-stats{display:flex;align-items:center;justify-content:space-between;padding:8px 15px;border-top:1px solid var(--border);font-size:.71rem;color:var(--text-muted);flex-wrap:wrap;gap:4px}
+.stat{display:flex;align-items:center;gap:3px}
+.stat svg{width:11px;height:11px}
+.eng-bar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border)}
+.eng-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 4px;font-size:.77rem;font-weight:600;color:var(--text-muted);transition:all .2s;cursor:pointer}
+.eng-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.eng-btn svg{width:15px;height:15px;flex-shrink:0}
+.eng-btn span{display:none}
+@media(min-width:420px){.eng-btn span{display:inline}}
+.eng-btn.liked{color:var(--red)}
+.eng-btn.liked svg{fill:var(--red)}
+.eng-btn.saved{color:var(--gold)}
+.eng-btn.saved svg{fill:var(--gold)}
+
+/* COMMENTS */
+.cmts{border-top:1px solid var(--border);padding:14px;display:none;flex-direction:column;gap:10px}
+.cmts.open{display:flex}
+.cmt-row{display:flex;gap:8px;align-items:flex-start}
+.cmt-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:var(--navy);display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:800;font-size:.72rem;overflow:hidden}
+.cmt-av img{width:100%;height:100%;object-fit:cover}
+.cmt-box{flex:1;background:var(--input-bg);border:1.5px solid var(--border);border-radius:18px;padding:8px 13px;font-size:.82rem;color:var(--text);outline:none;resize:none;transition:border .2s;font-family:inherit;line-height:1.5;min-height:36px}
+.cmt-box:focus{border-color:var(--gold)}
+.cmt-item{display:flex;gap:8px;animation:fadeIn .3s ease}
+.cmt-bubble{background:var(--input-bg);border-radius:12px 12px 12px 3px;padding:9px 13px;flex:1}
+.cmt-user{font-weight:700;font-size:.78rem;color:var(--gold);margin-bottom:2px}
+.cmt-text{font-size:.82rem;line-height:1.5}
+.cmt-acts{display:flex;gap:10px;margin-top:5px}
+.cmt-act{font-size:.71rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:color .2s}
+.cmt-act:hover{color:var(--gold)}
+.cmt-time{font-size:.69rem;color:var(--text-muted);margin-left:auto}
+
+/* IN-FEED AD */
+.infeed-ad{border-radius:14px;border:1.5px dashed var(--border);padding:18px;text-align:center;background:linear-gradient(135deg,rgba(245,166,35,.03),transparent);position:relative}
+.infeed-ad-tag{position:absolute;top:9px;left:11px;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);font-weight:600}
+.infeed-ad-inner{height:90px;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--text-muted)}
+
+/* LOAD MORE */
+.load-more{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:14px;border:1.5px solid var(--border);font-weight:600;font-size:.84rem;color:var(--text-muted);cursor:pointer;transition:all .2s;background:var(--bg-card);margin-top:14px;width:100%}
+.load-more:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.sb-card{background:var(--bg-card);border-radius:14px;border:1px solid var(--border);padding:14px;box-shadow:var(--shadow)}
+.sb-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;padding-bottom:9px;margin-bottom:10px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:6px}
+.sb-title svg{width:14px;height:14px;color:var(--gold)}
+.sb-item{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .2s;align-items:flex-start}
+.sb-item:last-child{border-bottom:none}
+.sb-item:hover .si-title{color:var(--gold)}
+.si-thumb{width:60px;height:50px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--border);overflow:hidden}
+.si-thumb img{width:100%;height:100%;object-fit:cover}
+.si-title{font-size:.79rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .2s}
+.si-meta{font-size:.69rem;color:var(--text-muted);margin-top:3px;display:flex;align-items:center;gap:3px}
+.trend-item{display:flex;gap:10px;align-items:flex-start;padding:7px 0;cursor:pointer;border-bottom:1px solid var(--border)}
+.trend-item:last-child{border-bottom:none}
+.trend-item:hover .ti-title{color:var(--gold)}
+.t-rank{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.82rem}
+.r1{background:rgba(245,166,35,.15);color:var(--gold)}
+.r2{background:rgba(148,163,184,.12);color:#94A3B8}
+.r3{background:rgba(205,127,50,.12);color:#CD7F32}
+.r4{background:var(--input-bg);color:var(--text-muted);font-size:.73rem}
+.ti-title{font-size:.79rem;font-weight:600;line-height:1.3;transition:color .2s}
+.ti-meta{font-size:.69rem;color:var(--text-muted);margin-top:3px;display:flex;align-items:center;gap:3px}
+.sb-ad{border-radius:12px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;height:220px;background:linear-gradient(135deg,rgba(245,166,35,.04),rgba(10,22,40,.04));color:var(--text-muted);font-size:.76rem;gap:5px;cursor:pointer;transition:all .2s;position:relative}
+.sb-ad:hover{border-color:var(--gold)}
+.sb-ad-lbl{position:absolute;top:7px;left:10px;font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);font-weight:600}
+.soc-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.soc-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 6px;border-radius:11px;font-size:.77rem;font-weight:700;cursor:pointer;transition:all .2s;border:none;color:#fff}
+.soc-x{background:#000}
+.soc-x:hover{background:#222;transform:translateY(-1px)}
+.soc-ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)}
+.soc-ig:hover{opacity:.9;transform:translateY(-1px)}
+.pwa-card{border:2px solid rgba(245,166,35,.2);background:linear-gradient(135deg,rgba(245,166,35,.04),transparent)}
+
+/* ── ARTICLE PAGE ── */
+.art-page{display:none}
+.art-page.open{display:block;animation:fadeIn .3s ease}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:50px;background:var(--bg-card);border:1px solid var(--border);font-size:.81rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .2s;margin-bottom:14px}
+.back-btn:hover{color:var(--gold);border-color:var(--gold)}
+
+/* ── PROFILE PAGE ── */
+.prof-page{display:none}
+.prof-page.open{display:block;animation:fadeIn .3s ease}
+.prof-hero{background:linear-gradient(135deg,var(--navy-mid),var(--navy));border-radius:14px;padding:24px;display:flex;align-items:center;gap:18px;margin-bottom:16px;border:1px solid rgba(255,255,255,.06)}
+.prof-av{width:72px;height:72px;border-radius:50%;border:3px solid var(--gold);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--gold);font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:var(--navy)}
+.prof-av img{width:100%;height:100%;object-fit:cover}
+.prof-tabs{display:flex;gap:4px;background:var(--bg-card);border-radius:12px;padding:4px;margin-bottom:14px;border:1px solid var(--border)}
+.p-tab{flex:1;padding:8px;border-radius:9px;text-align:center;font-size:.79rem;font-weight:700;color:var(--text-muted);cursor:pointer;transition:all .2s}
+.p-tab.active{background:var(--navy);color:var(--gold);box-shadow:var(--shadow)}
+.empty-st{text-align:center;padding:44px 20px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border)}
+.empty-emoji{font-size:2.3rem;margin-bottom:10px}
+
+/* ── ADMIN ── */
+.adm{display:none;min-height:100vh}
+.adm.open{display:flex}
+.adm-sb{width:230px;background:var(--navy);min-height:100vh;display:flex;flex-direction:column;flex-shrink:0}
+@media(max-width:768px){.adm-sb{display:none}}
+.adm-sb-logo{padding:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.adm-nav{flex:1;padding:10px 7px;display:flex;flex-direction:column;gap:2px}
+.adm-ni{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:11px;font-size:.82rem;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.adm-ni:hover,.adm-ni.active{color:var(--gold);background:rgba(245,166,35,.08)}
+.adm-ni.active{border-left:3px solid var(--gold);padding-left:9px}
+.adm-ni svg{width:16px;height:16px}
+.adm-main{flex:1;background:var(--bg);overflow:auto}
+.adm-top{position:sticky;top:0;z-index:10;background:var(--bg-card);border-bottom:1px solid var(--border);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.adm-top-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem}
+.adm-body{padding:20px}
+.stats-g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+@media(min-width:640px){.stats-g{grid-template-columns:repeat(4,1fr)}}
+.stat-c{background:var(--bg-card);border-radius:12px;border:1px solid var(--border);padding:16px;box-shadow:var(--shadow)}
+.stat-v{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;margin:5px 0 3px}
+.stat-l{font-size:.73rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)}
+.stat-ch{font-size:.71rem;font-weight:700;padding:2px 7px;border-radius:50px;display:inline-block;margin-top:3px}
+.ch-up{background:rgba(45,198,83,.12);color:var(--green)}
+.ch-dn{background:rgba(230,57,70,.12);color:var(--red)}
+.tbl-wrap{background:var(--bg-card);border-radius:14px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.atbl{width:100%;border-collapse:collapse}
+.atbl th{padding:11px 15px;text-align:left;font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);background:var(--input-bg);border-bottom:1px solid var(--border)}
+.atbl td{padding:11px 15px;font-size:.83rem;border-bottom:1px solid var(--border)}
+.atbl tr:last-child td{border-bottom:none}
+.atbl tr:hover td{background:rgba(255,255,255,.02)}
+.tbl-ttl{font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;max-width:240px}
+.act-btns{display:flex;gap:4px}
+.tbl-btn{padding:5px 9px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:inherit}
+.tbl-edit{background:rgba(37,99,235,.1);color:#60A5FA}
+.tbl-edit:hover{background:rgba(37,99,235,.2)}
+.tbl-del{background:rgba(230,57,70,.1);color:var(--red)}
+.tbl-del:hover{background:rgba(230,57,70,.2)}
+.ed-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.ed-lbl{font-size:.76rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;display:block}
+.ed-inp{width:100%;padding:10px 13px;border-radius:11px;background:var(--input-bg);border:1.5px solid var(--border);color:var(--text);font-size:.88rem;outline:none;transition:border .2s;font-family:inherit;margin-bottom:12px}
+.ed-inp:focus{border-color:var(--gold)}
+.ed-ta{width:100%;padding:11px 13px;border-radius:11px;background:var(--input-bg);border:1.5px solid var(--border);color:var(--text);font-size:.86rem;outline:none;font-family:inherit;line-height:1.6;resize:vertical;margin-bottom:12px;transition:border .2s}
+.ed-ta:focus{border-color:var(--gold)}
+.brk-tog{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:11px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;margin-bottom:12px}
+.brk-tog.on{border-color:var(--red);background:rgba(230,57,70,.05)}
+.sw{width:44px;height:24px;border-radius:50px;background:var(--border);position:relative;transition:background .3s}
+.sw.on{background:var(--red)}
+.sw-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .3s}
+.sw.on .sw-thumb{transform:translateX(20px)}
+.up-area{border:2px dashed var(--border);border-radius:11px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.up-area:hover{border-color:var(--gold);background:rgba(245,166,35,.03)}
+.radio-g{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.r-item{display:flex;align-items:center;gap:8px;cursor:pointer}
+.r-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:border .2s}
+.r-item.sel .r-dot{border-color:var(--gold)}
+.r-inner{width:7px;height:7px;border-radius:50%;background:var(--gold);display:none}
+.r-item.sel .r-inner{display:block}
+.ed-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:900px){.ed-grid{grid-template-columns:1fr 260px}}
+
+/* ── MODALS ── */
+.modal-ov{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:none;place-items:center;padding:16px}
+.modal-ov.open{display:grid}
+.modal-box{background:var(--bg-card);border-radius:22px;width:100%;max-width:410px;padding:28px;border:1px solid var(--border);animation:scaleIn .3s cubic-bezier(.16,1,.3,1);position:relative;max-height:90vh;overflow-y:auto}
+.modal-x{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);background:var(--input-bg);cursor:pointer;transition:all .2s}
+.modal-x:hover{color:var(--text);background:var(--border)}
+.modal-x svg{width:15px;height:15px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--input-bg);border-radius:11px;padding:4px;gap:3px;margin-bottom:18px}
+.auth-tab{padding:8px;border-radius:8px;text-align:center;font-weight:600;font-size:.81rem;cursor:pointer;color:var(--text-muted);transition:all .2s}
+.auth-tab.active{background:var(--bg-card);color:var(--text);box-shadow:var(--shadow)}
+.soc-login{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:11px;border-radius:13px;border:1.5px solid var(--border);font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;margin-bottom:9px;background:var(--bg-card);color:var(--text);font-family:inherit}
+.soc-login:hover{border-color:var(--gold);background:rgba(245,166,35,.04)}
+.apple-l{background:#000!important;color:#fff!important;border-color:#000!important}
+[data-theme="light"] .apple-l{background:#1a1a1a!important;border-color:#1a1a1a!important}
+.apple-l:hover{background:#222!important;border-color:#222!important}
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--text-muted);font-size:.76rem;font-weight:600}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.f-field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.f-lbl{font-size:.8rem;font-weight:600;color:var(--text-muted)}
+.f-icon{position:relative}
+.f-icon svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--text-muted);pointer-events:none}
+.f-icon .input{padding-left:38px}
+.f-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-muted)}
+.f-eye svg{width:15px;height:15px}
+.fgt-link{font-size:.77rem;color:var(--gold);cursor:pointer;text-align:right;margin-top:-7px;margin-bottom:10px;font-weight:600}
+.fgt-link:hover{text-decoration:underline}
+.sub-btn{width:100%;padding:12px;border-radius:13px;background:var(--gold);color:var(--navy);font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;border:none;font-family:inherit;margin-top:3px}
+.sub-btn:hover{background:var(--gold-dark);transform:translateY(-1px)}
+.sub-btn:disabled{opacity:.6;cursor:wait}
+.modal-ft{font-size:.74rem;color:var(--text-muted);text-align:center;margin-top:14px}
+.modal-ft a{color:var(--gold)}
+
+/* Share Modal */
+.sh-prev{display:flex;gap:11px;background:var(--input-bg);border-radius:11px;padding:11px;margin-bottom:18px}
+.sh-prev-img{width:60px;height:52px;border-radius:7px;object-fit:cover;flex-shrink:0;background:var(--border)}
+.sh-prev-ttl{font-size:.8rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sh-prev-dom{font-size:.69rem;color:var(--text-muted);margin-top:3px}
+.sh-plats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px}
+.sh-plat{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.sh-plat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;transition:transform .2s;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.sh-plat:hover .sh-plat-icon{transform:scale(1.1)}
+.sh-plat-lbl{font-size:.63rem;font-weight:600;color:var(--text-muted);text-align:center}
+.cp-row{display:flex;gap:7px;background:var(--input-bg);border-radius:11px;padding:9px 13px;align-items:center}
+.cp-url{flex:1;font-size:.77rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cp-btn{flex-shrink:0;padding:6px 13px;border-radius:7px;background:var(--gold);color:var(--navy);font-size:.77rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;border:none;font-family:inherit;white-space:nowrap}
+.cp-btn:hover{background:var(--gold-dark)}
+
+/* DROPDOWN PANELS */
+.dp{position:absolute;right:0;top:calc(100% + 8px);width:300px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-lg);z-index:200;animation:fadeDown .25s ease;overflow:hidden}
+.dp-head{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;border-bottom:1px solid var(--border)}
+.dp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:6px}
+.dp-x{color:var(--text-muted);cursor:pointer;transition:color .2s}
+.dp-x:hover{color:var(--text)}
+.dp-x svg{width:15px;height:15px}
+.notif-item{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;position:relative}
+.notif-item:hover{background:rgba(255,255,255,.03)}
+.notif-item:last-child{border-bottom:none}
+.notif-item.unread::after{content:'';position:absolute;right:13px;top:13px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.notif-emoji{font-size:1.25rem;flex-shrink:0;margin-top:1px}
+.notif-txt{font-size:.79rem;font-weight:500;line-height:1.35}
+.notif-time{font-size:.69rem;color:var(--text-muted);margin-top:2px}
+.dp-ft{padding:9px;text-align:center}
+.dp-ft-btn{font-size:.77rem;font-weight:600;color:var(--gold);cursor:pointer}
+.dp-ft-btn:hover{text-decoration:underline}
+.lang-item{display:flex;align-items:center;gap:9px;padding:10px 14px;cursor:pointer;transition:background .2s;font-size:.84rem;font-weight:500;border-bottom:1px solid var(--border)}
+.lang-item:last-child{border-bottom:none}
+.lang-item:hover{background:rgba(255,255,255,.04);color:var(--gold)}
+.lang-flag{font-size:1.15rem}
+
+/* SEARCH OVERLAY */
+#srch-ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);display:none;padding-top:80px}
+#srch-ov.open{display:block;animation:fadeIn .2s ease}
+.srch-wrap{max-width:620px;margin:0 auto;padding:0 16px}
+.srch-box{display:flex;align-items:center;gap:11px;background:var(--bg-card);border:2px solid var(--gold);border-radius:14px;padding:11px 16px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.srch-box svg{width:19px;height:19px;color:var(--gold);flex-shrink:0}
+.srch-box input{flex:1;background:none;border:none;outline:none;font-size:1rem;color:var(--text);font-family:inherit}
+.srch-box input::placeholder{color:var(--text-muted)}
+.srch-close{color:var(--text-muted);cursor:pointer;padding:3px;transition:color .2s}
+.srch-close:hover{color:var(--text)}
+.srch-results{background:var(--bg-card);border-radius:12px;margin-top:9px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-lg)}
+.sr-item{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:rgba(255,255,255,.04)}
+.sr-ttl{font-size:.86rem;font-weight:600;margin-bottom:2px}
+.sr-meta{font-size:.72rem;color:var(--text-muted)}
+
+/* TOAST */
+#toast-c{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.toast{padding:11px 17px;border-radius:13px;background:var(--bg-card);border:1px solid var(--border);box-shadow:var(--shadow-lg);font-size:.83rem;font-weight:600;color:var(--text);display:flex;align-items:center;gap:9px;pointer-events:all;animation:fadeDown .3s ease;max-width:300px}
+.toast.ok{border-left:3px solid var(--green)}
+.toast.err{border-left:3px solid var(--red)}
+.toast.inf{border-left:3px solid var(--gold)}
+.toast svg{width:16px;height:16px;flex-shrink:0}
+.toast.ok svg{color:var(--green)}.toast.err svg{color:var(--red)}.toast.inf svg{color:var(--gold)}
+.t-out{animation:fadeIn .3s ease reverse forwards}
+
+/* FOOTER */
+#footer{background:var(--navy);color:rgba(255,255,255,.88);margin-top:40px;padding:36px 0 22px;display:none}
+.ft-grid{display:grid;grid-template-columns:1fr;gap:24px;margin-bottom:28px}
+@media(min-width:640px){.ft-grid{grid-template-columns:1.5fr 1fr 1fr}}
+@media(min-width:1024px){.ft-grid{grid-template-columns:2fr 1fr 1fr 1fr}}
+.ft-brand p{font-size:.81rem;color:rgba(255,255,255,.45);line-height:1.65;margin:9px 0 14px}
+.ft-soc{display:flex;gap:7px}
+.ft-soc-btn{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:all .2s;cursor:pointer}
+.ft-soc-btn:hover{background:rgba(245,166,35,.2);transform:translateY(-2px)}
+.ft-soc-btn svg{width:15px;height:15px;color:rgba(255,255,255,.65)}
+.ft-col h4{font-family:'Syne',sans-serif;font-size:.76rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.ft-col ul li{font-size:.8rem;color:rgba(255,255,255,.45);cursor:pointer;transition:color .2s}
+.ft-col ul li:hover{color:var(--gold)}
+.ft-bot{border-top:1px solid rgba(255,255,255,.08);padding-top:18px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;justify-content:space-between;font-size:.74rem;color:rgba(255,255,255,.3)}
+.ft-langs{display:flex;gap:4px;flex-wrap:wrap}
+.ft-lang{padding:3px 9px;border-radius:50px;background:rgba(255,255,255,.06);font-size:.7rem;font-weight:600;cursor:pointer;transition:all .2s}
+.ft-lang:hover{background:rgba(245,166,35,.15);color:var(--gold)}
+
+/* USER MENU */
+.user-menu{width:210px}
+
+/* UTILS */
+.hidden{display:none!important}
+.rel{position:relative}
+.spinner{width:19px;height:19px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+</style>
+</head>
+<body>
+
+<!-- TOASTS -->
+<div id="toast-c"></div>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="tick-lbl"><span class="tick-dot"></span>BREAKING</div>
+  <div class="tick-track">
+    <div class="tick-inner">
+      🔴 Kuwait announces KD 5 Billion Economic Development Plan for 2025
+      <span class="tick-sep">•</span>
+      Oil prices surge above $92 amid Middle East supply concerns
+      <span class="tick-sep">•</span>
+      National Assembly approves landmark housing reform bill
+      <span class="tick-sep">•</span>
+      New metro line approved connecting Kuwait City to Jahra Governorate
+      <span class="tick-sep">•</span>
+      Kuwait wins Gulf Cup semi-final against Saudi Arabia 2-1
+      <span class="tick-sep">•</span>
+      Boursa Kuwait hits all-time record high in Thursday trading
+      <span class="tick-sep">•</span>
+      Kuwait signs major trade agreement with European Union
+      <span class="tick-sep">•</span>
+      🔴 Kuwait announces KD 5 Billion Economic Development Plan
+      <span class="tick-sep">•</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="wrap h-inner">
+    <!-- Logo -->
+    <div class="logo" onclick="nav('home')">
+      <div class="logo-badge">K<span class="logo-live"></span></div>
+      <div class="logo-txt"><span class="logo-kwt">KWT</span><span class="logo-news">NEWS</span></div>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="nav-tabs">
+      <div class="ntab active" data-p="home" onclick="nav('home')">Home</div>
+      <div class="ntab" data-p="kuwait" onclick="nav('kuwait')">Kuwait</div>
+      <div class="ntab" data-p="world" onclick="nav('world')">World</div>
+    </nav>
+
+    <!-- Controls -->
+    <div class="h-right">
+      <!-- Search -->
+      <button class="btn-icon" onclick="toggleSearch()" title="Search (Ctrl+K)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+
+      <!-- Language -->
+      <div class="rel">
+        <button class="btn-icon" onclick="toggleLang()" title="Language">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </button>
+        <div id="lang-dp" class="dp hidden">
+          <div class="dp-head"><span class="dp-title">🌐 Language</span><span class="dp-x" onclick="toggleLang()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></div>
+          <div id="lang-list"></div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="rel">
+        <button class="btn-icon rel" onclick="toggleNotif()" title="Notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <div id="notif-dp" class="dp hidden">
+          <div class="dp-head">
+            <span class="dp-title">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              Notifications
+              <span class="badge b-breaking" style="font-size:.58rem;padding:2px 6px">2 New</span>
+            </span>
+            <span class="dp-x" onclick="toggleNotif()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+          </div>
+          <div id="notif-list"></div>
+          <div class="dp-ft"><span class="dp-ft-btn">View all notifications</span></div>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="theme-sw" onclick="toggleTheme()" title="Toggle dark/light">
+        <div class="theme-thumb" id="th-thumb"><span id="th-icon">🌙</span></div>
+      </div>
+
+      <!-- Auth -->
+      <div id="auth-area">
+        <button class="signin-btn" onclick="openAuth()">Sign In</button>
+        <div id="user-wrap" class="rel hidden">
+          <button onclick="toggleUserMenu()" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:50px;transition:background .2s" onmouseenter="this.style.background='rgba(255,255,255,.1)'" onmouseleave="this.style.background='none'">
+            <div id="u-av-head" class="src-av" style="width:32px;height:32px;border-color:rgba(245,166,35,.5);font-size:.78rem"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2" width="13" height="13"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="user-menu" class="dp user-menu hidden">
+            <div style="padding:12px 14px;border-bottom:1px solid var(--border)">
+              <div id="u-menu-name" style="font-weight:700;font-size:.85rem"></div>
+              <div id="u-menu-email" style="font-size:.72rem;color:var(--text-muted)"></div>
+            </div>
+            <div style="padding:5px">
+              <div class="adm-ni" onclick="nav('profile');toggleUserMenu()" style="color:var(--text-muted);padding:8px 11px">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                My Profile
+              </div>
+              <div class="adm-ni" id="adm-link" onclick="nav('admin');toggleUserMenu()" style="color:var(--gold);padding:8px 11px;display:none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Admin Panel
+              </div>
+              <div class="adm-ni" onclick="signOut()" style="color:#f87171;padding:8px 11px">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign Out
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hamburger -->
+      <div class="ham" id="ham" onclick="toggleMobNav()" style="display:flex">
+        <span></span><span></span><span></span>
+      </div>
+      <style>@media(min-width:768px){.ham{display:none!important}}</style>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div id="mob-nav">
+  <div class="mob-bg" onclick="toggleMobNav()"></div>
+  <div class="mob-content">
+    <div class="mob-tab active" onclick="nav('home');toggleMobNav()">🏠 Home</div>
+    <div class="mob-tab" onclick="nav('kuwait');toggleMobNav()">🇰🇼 Kuwait News</div>
+    <div class="mob-tab" onclick="nav('world');toggleMobNav()">🌍 World News</div>
+    <div class="mob-tab" onclick="nav('profile');toggleMobNav()">👤 Profile</div>
+    <div class="mob-tab" id="mob-adm" onclick="nav('admin');toggleMobNav()" style="display:none">⚙️ Admin Panel</div>
+    <div style="margin-top:14px">
+      <button id="mob-auth-btn" onclick="openAuth();toggleMobNav()" class="btn btn-gold" style="width:100%;justify-content:center">Sign In / Register</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ NEWS SECTION ══════════════ -->
+<div id="news-sec">
+  <div class="head-ad"><div class="ad-lbl">Advertisement</div><div class="ad-banner">📢 Your Ad Here — 728×90 Leaderboard · kwtnews.com/advertise</div></div>
+  <div class="wrap" style="padding-top:18px;padding-bottom:40px">
+    <div class="main-grid">
+      <div>
+        <div id="pg-banner" class="pg-banner hidden"></div>
+        <div class="feed" id="feed" style="display:flex;flex-direction:column;gap:14px"></div>
+        <button class="load-more" onclick="loadMore()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          Load More News
+        </button>
+      </div>
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ARTICLE PAGE ══════════════ -->
+<div id="art-pg" class="art-page">
+  <div class="wrap" style="padding-top:18px;padding-bottom:40px">
+    <div class="main-grid">
+      <div>
+        <button class="back-btn" onclick="nav(window._pp||'home')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back
+        </button>
+        <div id="art-content"></div>
+      </div>
+      <aside class="sidebar" id="art-sidebar"></aside>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PROFILE PAGE ══════════════ -->
+<div id="prof-pg" class="prof-page">
+  <div class="wrap" style="padding:18px 0 40px">
+    <div id="prof-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN PAGE ══════════════ -->
+<div id="adm-pg" class="adm">
+  <aside class="adm-sb">
+    <div class="adm-sb-logo">
+      <div class="logo"><div class="logo-badge" style="width:34px;height:34px;font-size:1.15rem">K</div><div class="logo-txt"><span class="logo-kwt" style="font-size:.95rem">KWT</span><span class="logo-news">ADMIN</span></div></div>
+    </div>
+    <nav class="adm-nav">
+      <div class="adm-ni active" onclick="admSec('dash')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+      <div class="adm-ni" onclick="admSec('articles')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Articles</div>
+      <div class="adm-ni" onclick="admSec('users')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Users</div>
+      <div class="adm-ni" onclick="admSec('ads')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Ads</div>
+      <div class="adm-ni" onclick="admSec('analytics')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</div>
+      <div class="adm-ni" onclick="admSec('push')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Push Alerts</div>
+      <div class="adm-ni" style="margin-top:auto" onclick="nav('home')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Back to Site</div>
+    </nav>
+  </aside>
+  <div class="adm-main">
+    <div class="adm-top">
+      <div class="adm-top-title" id="adm-title">Dashboard</div>
+      <button class="btn btn-gold" onclick="admSec('editor')" style="font-size:.78rem;padding:7px 15px">+ New Article</button>
+    </div>
+    <div class="adm-body" id="adm-body"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="logo" style="margin-bottom:10px">
+          <div class="logo-badge" style="background:rgba(245,166,35,.15);width:36px;height:36px;font-size:1.1rem">K</div>
+          <div class="logo-txt"><span class="logo-kwt" style="font-size:1rem">KWT</span><span class="logo-news">NEWS</span></div>
+        </div>
+        <p>Kuwait's premier digital news platform. Real-time updates, in-depth analysis, and breaking news from Kuwait and the world.</p>
+        <div class="ft-soc">
+          <a href="https://twitter.com/kwtnews_com" target="_blank" class="ft-soc-btn"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.754l7.73-8.835L1.254 2.25H8.08l4.713 5.775 5.45-5.775z"/></svg></a>
+          <a href="https://instagram.com/kwtnews_com" target="_blank" class="ft-soc-btn"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          <a href="mailto:kwtnews.com@gmail.com" class="ft-soc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        </div>
+      </div>
+      <div class="ft-col"><h4>News</h4><ul><li onclick="nav('home')">Home</li><li onclick="nav('kuwait')">Kuwait News</li><li onclick="nav('world')">World News</li><li>Business</li><li>Sports</li><li>Technology</li></ul></div>
+      <div class="ft-col"><h4>Company</h4><ul><li>About Us</li><li>Contact Us</li><li>Advertise</li><li>Careers</li><li>RSS Feed</li></ul></div>
+      <div class="ft-col">
+        <h4>Legal</h4><ul><li>Privacy Policy</li><li>Terms of Service</li><li>Cookie Policy</li></ul>
+        <h4 style="margin-top:14px">Language</h4>
+        <div class="ft-langs">
+          <span class="ft-lang" onclick="setLang('en','ltr')">EN</span>
+          <span class="ft-lang" onclick="setLang('ar','rtl')">AR</span>
+          <span class="ft-lang" onclick="setLang('ur','rtl')">UR</span>
+          <span class="ft-lang" onclick="setLang('hi','ltr')">HI</span>
+          <span class="ft-lang" onclick="setLang('fr','ltr')">FR</span>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <span>© <span id="ft-yr"></span> KWT News · All rights reserved</span>
+      <span>Made with ❤️ for Kuwait 🇰🇼</span>
+      <span>kwtnews.com@gmail.com</span>
+    </div>
+  </div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="modal-ov" id="auth-modal">
+  <div class="modal-box">
+    <span class="modal-x" onclick="closeAuth()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+    <h2 style="font-size:1.4rem;margin-bottom:3px" id="auth-ttl">Welcome Back</h2>
+    <p style="font-size:.83rem;color:var(--text-muted);margin-bottom:20px" id="auth-sub">Sign in to your KWT News account</p>
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="authTab('login')">Sign In</div>
+      <div class="auth-tab" onclick="authTab('register')">Register</div>
+    </div>
+    <button class="soc-login" onclick="signInGoogle()">
+      <svg viewBox="0 0 48 48" width="20" height="20"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg>
+      Continue with Google
+    </button>
+    <button class="soc-login apple-l" onclick="signInApple()">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Continue with Apple
+    </button>
+    <div class="divider">or</div>
+    <form onsubmit="handleEmailAuth(event)" id="auth-form">
+      <div class="f-field" id="name-f" style="display:none">
+        <label class="f-lbl">Full Name</label>
+        <div class="f-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input class="input" type="text" id="a-name" placeholder="Your full name"/>
+        </div>
+      </div>
+      <div class="f-field">
+        <label class="f-lbl">Email Address</label>
+        <div class="f-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input class="input" type="email" id="a-email" placeholder="you@example.com" required/>
+        </div>
+      </div>
+      <div class="f-field" id="pw-f">
+        <label class="f-lbl">Password</label>
+        <div class="f-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input class="input" type="password" id="a-pw" placeholder="Password (min 6 chars)" minlength="6"/>
+          <span class="f-eye" onclick="togglePw()"><svg id="eye-ic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        </div>
+      </div>
+      <div class="fgt-link" id="fgt-lnk" onclick="pwReset()">Forgot password?</div>
+      <button type="submit" class="sub-btn" id="a-sub">Sign In</button>
+    </form>
+    <p class="modal-ft">By continuing you agree to our <a href="#">Privacy Policy</a> & <a href="#">Terms</a></p>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal-ov" id="share-modal">
+  <div class="modal-box" style="max-width:400px;padding:22px">
+    <span class="modal-x" onclick="closeShare()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.05rem;margin-bottom:14px">Share Article</h3>
+    <div class="sh-prev" id="sh-prev"></div>
+    <div class="sh-plats" id="sh-plats"></div>
+    <div class="cp-row">
+      <span class="cp-url" id="sh-url"></span>
+      <button class="cp-btn" onclick="copyLink()" id="cp-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div id="srch-ov">
+  <div class="srch-wrap">
+    <div class="srch-box">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="srch-inp" placeholder="Search KWT News..." autocomplete="off" oninput="doSearch(this.value)"/>
+      <span class="srch-close" onclick="toggleSearch()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>
+    </div>
+    <div id="srch-res" class="srch-results hidden"></div>
+  </div>
+</div>
+
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   KWT NEWS — COMPLETE SPA ENGINE
+   Firebase · Auth · Firestore · Real-time Feed
+   Admin Panel · Dark Mode · RTL · PWA · Comments
+   ═══════════════════════════════════════════════════ */
+
+// ── Firebase ────────────────────────────────────────
+firebase.initializeApp({
+  apiKey:"AIzaSyDLRqQ8WRohNDWz_6UgafI7Kn2f8U0KL3c",
+  authDomain:"kwt-news.firebaseapp.com",
+  projectId:"kwt-news",
+  storageBucket:"kwt-news.firebasestorage.app",
+  messagingSenderId:"604704031845",
+  appId:"1:604704031845:web:b835af9ab1872ddd1d728c",
+  measurementId:"G-J161YE3FDP"
+});
+const auth = firebase.auth();
+const db   = firebase.firestore();
+const storage = firebase.storage();
+
+// ── App State ────────────────────────────────────────
+let CU = null, CP = null;        // currentUser, currentProfile
+let liked = new Set(), saved = new Set();
+let curCat = 'all', curPage = 'home';
+let localCmts = {};
+let deferredPWA = null;
+let _shareUrl = '';
+
+// ── Mock Data ────────────────────────────────────────
+const IMGS = [
+  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+  'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',
+  'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
+  'https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=800&q=80',
+  'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80',
+  'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80',
+  'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=800&q=80',
+  'https://images.unsplash.com/photo-1467692963-bfe8b5a29de7?w=800&q=80',
+];
+const ARTICLES = [
+  {id:'a1',title:'Kuwait Announces KD 5 Billion Economic Development Plan for 2025',desc:'The State of Kuwait has unveiled an ambitious economic development blueprint worth KD 5 billion, targeting infrastructure, technology, and renewable energy sectors across all six governorates.',cat:'kuwait',src:'KUNA',views:24850,likes:1240,cmts:89,breaking:true,ago:'12 min ago',img:IMGS[0],tags:['economy','development','kuwait']},
+  {id:'a2',title:'Global Oil Prices Surge Amid Middle East Supply Concerns',desc:'Brent Crude oil rose above $92 per barrel amid growing concerns over regional supply disruptions. OPEC+ nations are monitoring the situation closely.',cat:'world',src:'Arab Times',views:18420,likes:876,cmts:43,ago:'28 min ago',img:IMGS[1],tags:['oil','opec','markets']},
+  {id:'a3',title:'Kuwait National Assembly Approves Landmark Housing Reform Bill',desc:'Members of the National Assembly voted 48-2 in favor of a sweeping housing reform bill that will accelerate allocation of government housing units.',cat:'kuwait',src:'Kuwait Times',views:15680,likes:1105,cmts:62,ago:'1 hour ago',img:IMGS[2],tags:['parliament','housing','reform']},
+  {id:'a4',title:'New Metro Line to Connect Kuwait City to Jahra Governorate',desc:"Kuwait's Ministry of Public Works has officially approved construction of a new metro line linking Kuwait City to Jahra Governorate, with 24 stations along the 42km route.",cat:'kuwait',src:'Al Qabas',views:12300,likes:987,cmts:55,ago:'2 hours ago',img:IMGS[3],tags:['metro','transport','infrastructure']},
+  {id:'a5',title:'Climate Summit 2025: World Leaders Pledge Carbon Neutrality by 2045',desc:'At the landmark Climate Action Summit in Geneva, 145 world leaders signed a historic agreement committing their nations to full carbon neutrality by 2045.',cat:'world',src:'Gulf News',views:29100,likes:2340,cmts:178,ago:'3 hours ago',img:IMGS[4],tags:['climate','environment']},
+  {id:'a6',title:'Kuwait Stock Exchange Breaks Record as Technology Stocks Surge',desc:'The Kuwait Stock Exchange (Boursa Kuwait) closed at an all-time high on Thursday, with technology and financial sector stocks leading a broad market rally.',cat:'kuwait',src:'KNA',views:9870,likes:445,cmts:31,ago:'4 hours ago',img:IMGS[5],tags:['stocks','finance']},
+  {id:'a7',title:'Kuwait Wins Gulf Cup Semi-Final Against Saudi Arabia in Thrilling Match',desc:'The Kuwait national football team secured a dramatic 2-1 victory over Saudi Arabia in the Gulf Cup semi-finals, booking their place in the final.',cat:'kuwait',src:'Al Qabas',views:44200,likes:3560,cmts:412,ago:'6 hours ago',img:IMGS[6],tags:['football','sport','gulf-cup']},
+  {id:'a8',title:'AI Technology Reshapes Global Newsrooms: KWT News Leading the Change',desc:'Artificial intelligence is transforming how news organizations operate. KWT News is at the forefront of this digital revolution in the Arab world.',cat:'world',src:'Kuwait Times',views:8750,likes:678,cmts:47,ago:'8 hours ago',img:IMGS[7],tags:['technology','ai','media']},
+];
+const NOTIFS = [
+  {emoji:'🔴',txt:'Breaking: Kuwait announces KD 5B development plan',time:'2 min ago',unread:true},
+  {emoji:'📈',txt:'Oil prices hit $92 amid supply concerns',time:'18 min ago',unread:true},
+  {emoji:'🏟️',txt:'Kuwait wins Gulf Cup semi-finals vs Saudi Arabia',time:'1h ago',unread:false},
+  {emoji:'🏛️',txt:'National Assembly passes housing reform bill',time:'2h ago',unread:false},
+  {emoji:'🚇',txt:'New metro line approved for Kuwait City',time:'3h ago',unread:false},
+];
+const LANGS = [
+  {c:'en',l:'English',f:'🇺🇸',d:'ltr'},{c:'ar',l:'العربية',f:'🇰🇼',d:'rtl'},
+  {c:'ur',l:'اردو',f:'🇵🇰',d:'rtl'},{c:'hi',l:'हिंदी',f:'🇮🇳',d:'ltr'},
+  {c:'fr',l:'Français',f:'🇫🇷',d:'ltr'},{c:'es',l:'Español',f:'🇪🇸',d:'ltr'},
+  {c:'zh',l:'中文',f:'🇨🇳',d:'ltr'},{c:'de',l:'Deutsch',f:'🇩🇪',d:'ltr'},
+];
+const SHARE_PLATS = [
+  {id:'wa',name:'WhatsApp',bg:'#25D366',ic:'<svg viewBox="0 0 24 24" fill="white" width="21" height="21"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>'},
+  {id:'fb',name:'Facebook',bg:'#1877F2',ic:'<svg viewBox="0 0 24 24" fill="white" width="21" height="21"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>'},
+  {id:'tw',name:'X',bg:'#000',ic:'<svg viewBox="0 0 24 24" fill="white" width="17" height="17"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.754l7.73-8.835L1.254 2.25H8.08l4.713 5.775 5.45-5.775z"/></svg>'},
+  {id:'tg',name:'Telegram',bg:'#0088cc',ic:'<svg viewBox="0 0 24 24" fill="white" width="21" height="21"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>'},
+  {id:'li',name:'LinkedIn',bg:'#0A66C2',ic:'<svg viewBox="0 0 24 24" fill="white" width="19" height="19"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>'},
+];
+
+// ── Init ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('ft-yr').textContent = new Date().getFullYear();
+  restoreTheme();
+  restoreLang();
+  initAuth();
+  renderLangs();
+  renderNotifs();
+  nav('home');
+  setupScrollHeader();
+  setupClickOutside();
+  setupPWA();
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){closeAuth();closeShare();if(document.getElementById('srch-ov').classList.contains('open'))toggleSearch();}
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();toggleSearch();}
+  });
+});
+
+// ── Scroll Header ────────────────────────────────────
+function setupScrollHeader(){
+  window.addEventListener('scroll',()=>{
+    document.getElementById('header').classList.toggle('scrolled',window.scrollY>8);
+  },{passive:true});
+}
+
+// ── Click Outside ────────────────────────────────────
+function setupClickOutside(){
+  document.addEventListener('click',e=>{
+    ['lang-dp','notif-dp','user-menu'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&!el.closest('.rel')?.contains(e.target))el.classList.add('hidden');
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════
+function nav(page,data){
+  window._pp = curPage;
+  curPage = page;
+
+  const sections=['news-sec','art-pg','prof-pg','adm-pg','footer'];
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(id==='adm-pg'){el.style.display='none';el.classList.remove('open');}
+    else if(id==='art-pg'||id==='prof-pg'){el.style.display='none';el.classList.remove('open');}
+    else el.style.display='none';
+  });
+
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.toggle('active',t.dataset.p===page||(page==='home'&&t.dataset.p==='home')));
+
+  if(['home','kuwait','world'].includes(page)){
+    curCat = page==='home'?'all':page;
+    document.getElementById('news-sec').style.display='block';
+    document.getElementById('footer').style.display='block';
+    renderFeed();renderSidebar('sidebar');updateBanner(page);
+    window.scrollTo({top:0,behavior:'smooth'});
+    document.title = page==='home'?'KWT News | Breaking News':page==='kuwait'?'Kuwait News | KWT News':'World News | KWT News';
+  } else if(page==='article'){
+    document.getElementById('art-pg').style.display='block';
+    document.getElementById('art-pg').classList.add('open');
+    document.getElementById('footer').style.display='block';
+    renderArticle(data);renderSidebar('art-sidebar');
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else if(page==='profile'){
+    if(!CU){openAuth();return;}
+    document.getElementById('prof-pg').style.display='block';
+    document.getElementById('prof-pg').classList.add('open');
+    document.getElementById('footer').style.display='block';
+    renderProfile();window.scrollTo({top:0,behavior:'smooth'});
+  } else if(page==='admin'){
+    if(!CU){openAuth();return;}
+    document.getElementById('adm-pg').style.display='flex';
+    document.getElementById('adm-pg').classList.add('open');
+    admSec('dash');window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function updateBanner(page){
+  const b=document.getElementById('pg-banner');
+  if(page==='home'){b.classList.add('hidden');return;}
+  b.classList.remove('hidden');
+  const d={kuwait:{e:'🇰🇼',t:'Kuwait News',s:'Latest updates from the State of Kuwait'},world:{e:'🌍',t:'World News',s:'International news and global events'}}[page];
+  b.innerHTML=`<span class="pg-emoji">${d.e}</span><div><h1>${d.t}</h1><p>${d.s}</p></div>`;
+}
+
+// ═══════════════════════════════════════════════════
+//  FIREBASE AUTH
+// ═══════════════════════════════════════════════════
+function initAuth(){
+  auth.onAuthStateChanged(async u=>{
+    CU=u;
+    if(u){
+      CP={displayName:u.displayName||'Anonymous',email:u.email,photoURL:u.photoURL,role:'user'};
+      updateAuthUI(true);
+      try{
+        const doc=await db.collection('users').doc(u.uid).get();
+        if(doc.exists){const d=doc.data();liked=new Set(d.liked||[]);saved=new Set(d.bookmarks||[]);}
+        await db.collection('users').doc(u.uid).set({uid:u.uid,email:u.email,displayName:u.displayName||'Anonymous',photoURL:u.photoURL||null,role:'user',updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      }catch(e){}
+    } else {
+      CP=null;updateAuthUI(false);
+    }
+  });
+}
+
+function updateAuthUI(in_){
+  const sb=document.querySelector('.signin-btn');
+  const uw=document.getElementById('user-wrap');
+  const mab=document.getElementById('mob-auth-btn');
+  if(in_){
+    sb&&(sb.style.display='none');uw&&uw.classList.remove('hidden');mab&&(mab.style.display='none');
+    const av=document.getElementById('u-av-head');
+    av.innerHTML=CU.photoURL?`<img src="${CU.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(CU.displayName||CU.email||'U')[0].toUpperCase();
+    document.getElementById('u-menu-name').textContent=CU.displayName||'KWT User';
+    document.getElementById('u-menu-email').textContent=CU.email;
+  } else {
+    sb&&(sb.style.display='');uw&&uw.classList.add('hidden');mab&&(mab.style.display='');
+  }
+}
+
+async function signInGoogle(){
+  try{
+    const p=new firebase.auth.GoogleAuthProvider();
+    p.setCustomParameters({prompt:'select_account'});
+    await auth.signInWithPopup(p);
+    closeAuth();toast('ok','✅ Welcome to KWT News!');
+  }catch(e){if(e.code!=='auth/popup-closed-by-user')toast('err',authErr(e.code));}
+}
+async function signInApple(){
+  try{
+    await auth.signInWithPopup(new firebase.auth.OAuthProvider('apple.com'));
+    closeAuth();toast('ok','✅ Welcome!');
+  }catch(e){if(e.code!=='auth/popup-closed-by-user')toast('err',authErr(e.code));}
+}
+
+let aMode='login';
+function authTab(m){
+  aMode=m;
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&m==='login')||(i===1&&m==='register')));
+  document.getElementById('name-f').style.display=m==='register'?'flex':'none';
+  document.getElementById('fgt-lnk').style.display=m==='login'?'block':'none';
+  document.getElementById('a-sub').textContent=m==='login'?'Sign In':'Create Account';
+  document.getElementById('auth-ttl').textContent=m==='login'?'Welcome Back':'Join KWT News';
+  document.getElementById('auth-sub').textContent=m==='login'?'Sign in to your account':'Create your free account';
+}
+
+async function handleEmailAuth(e){
+  e.preventDefault();
+  const email=document.getElementById('a-email').value;
+  const pw=document.getElementById('a-pw').value;
+  const btn=document.getElementById('a-sub');
+  btn.disabled=true;btn.innerHTML='<div class="spinner" style="border-top-color:var(--navy);border-color:rgba(10,22,40,.3);margin:0 auto;width:17px;height:17px"></div>';
+  try{
+    if(aMode==='login'){await auth.signInWithEmailAndPassword(email,pw);}
+    else{const n=document.getElementById('a-name').value;const c=await auth.createUserWithEmailAndPassword(email,pw);await c.user.updateProfile({displayName:n});}
+    closeAuth();toast('ok',`✅ Welcome${aMode==='register'?' to KWT News!':' back!'}`);
+  }catch(e){toast('err',authErr(e.code));}
+  finally{btn.disabled=false;btn.textContent=aMode==='login'?'Sign In':'Create Account';}
+}
+
+async function pwReset(){
+  const email=document.getElementById('a-email').value;
+  if(!email){toast('err','Enter your email first');return;}
+  try{await auth.sendPasswordResetEmail(email);toast('ok','📧 Reset email sent!');}
+  catch(e){toast('err',authErr(e.code));}
+}
+
+async function signOut(){
+  await auth.signOut();liked.clear();saved.clear();
+  toast('inf','Signed out');nav('home');
+}
+
+function authErr(c){
+  return({'auth/user-not-found':'No account with this email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Email already in use','auth/invalid-email':'Invalid email','auth/weak-password':'Password min 6 chars','auth/too-many-requests':'Too many attempts, try later'}[c]||'Authentication failed');
+}
+function togglePw(){const i=document.getElementById('a-pw');i.type=i.type==='password'?'text':'password';}
+
+// ═══════════════════════════════════════════════════
+//  FEED
+// ═══════════════════════════════════════════════════
+function getArticles(){return curCat==='all'?ARTICLES:ARTICLES.filter(a=>a.cat===curCat);}
+
+function renderFeed(){
+  const feed=document.getElementById('feed');
+  const arts=getArticles();
+  feed.innerHTML='';
+  if(!arts.length){feed.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text-muted)"><div style="font-size:3rem;margin-bottom:10px">📰</div><p>No articles in this category</p></div>';return;}
+  arts.forEach((a,i)=>{
+    if(i>0&&i%5===4)feed.appendChild(makeInFeedAd());
+    const el=makeCard(a,i);feed.appendChild(el);
+  });
+  // Try subscribe to Firestore
+  db.collection('articles').where('status','==','published').orderBy('publishedAt','desc').limit(20)
+    .onSnapshot(snap=>{
+      if(snap.empty)return;
+    },()=>{});
+}
+
+function badge(cat){
+  const m={kuwait:'b-kuwait',world:'b-world',business:'b-business',sports:'b-sports',technology:'b-tech'};
+  return cat?`<span class="badge ${m[cat]||'b-kuwait'}">${cat}</span>`:'';
+}
+function fnum(n){if(!n)return'0';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return''+n;}
+
+function makeCard(a,idx){
+  const div=document.createElement('div');
+  div.className='nc ani';div.style.animationDelay=`${idx*55}ms`;
+  const lk=liked.has(a.id),sv=saved.has(a.id);
+  div.innerHTML=`
+    <div class="nc-head">
+      <div class="src-info">
+        <div class="src-av">${(a.src||'K')[0]}</div>
+        <div>
+          <div class="src-name">${a.src||'KWT News'}</div>
+          <div class="src-time"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${a.ago||'1 hr ago'}</div>
+        </div>
+      </div>
+      <div class="nc-meta-r">
+        ${a.breaking?'<span class="badge b-breaking">🔴 Breaking</span>':''}
+        ${badge(a.cat)}
+      </div>
+    </div>
+    ${a.img?`<div class="nc-media" onclick="nav('article','${a.id}')"><img src="${a.img}" alt="${a.title}" loading="lazy" onerror="this.parentElement.style.display='none'"/></div>`:''}
+    <div class="nc-body" onclick="nav('article','${a.id}')">
+      <h2 class="nc-title">${a.title}</h2>
+      <p class="nc-desc">${a.desc}</p>
+    </div>
+    <div class="nc-stats">
+      <div style="display:flex;gap:10px">
+        <span class="stat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>${fnum(a.views)}</span>
+        ${a.likes>0?`<span class="stat" style="${lk?'color:var(--red)':''}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${lk?'var(--red)':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>${fnum(a.likes)}</span>`:''}
+      </div>
+      <span>${a.cmts>0?a.cmts+' comments':''}</span>
+    </div>
+    <div class="eng-bar">
+      <button class="eng-btn ${lk?'liked':''}" id="lb-${a.id}" onclick="doLike('${a.id}',this)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${lk?'var(--red)':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>${lk?'Liked':'Like'}</span>
+      </button>
+      <button class="eng-btn" onclick="toggleCmts('${a.id}')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Comment</span>
+      </button>
+      <button class="eng-btn" onclick="openShare('${a.id}')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span>Share</span>
+      </button>
+      <button class="eng-btn ${sv?'saved':''}" id="sb-${a.id}" onclick="doSave('${a.id}',this)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${sv?'var(--gold)':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span>${sv?'Saved':'Save'}</span>
+      </button>
+    </div>
+    <div class="cmts" id="cmts-${a.id}"></div>
+  `;
+  return div;
+}
+
+function makeInFeedAd(){
+  const d=document.createElement('div');
+  d.className='infeed-ad';
+  d.innerHTML='<span class="infeed-ad-tag">Sponsored</span><div class="infeed-ad-inner">📢 300×250 In-Feed Advertisement</div>';
+  return d;
+}
+
+function loadMore(){toast('inf','📰 Loading more...');setTimeout(()=>toast('ok','All latest news loaded!'),1200);}
+
+// ── Engagement ────────────────────────────────────────
+function doLike(id,btn){
+  if(!CU){openAuth();return;}
+  const was=liked.has(id);
+  was?liked.delete(id):liked.add(id);
+  btn.className=`eng-btn ${liked.has(id)?'liked':''}`;
+  btn.querySelector('svg').setAttribute('fill',liked.has(id)?'var(--red)':'none');
+  btn.querySelector('span').textContent=liked.has(id)?'Liked':'Like';
+  liked.has(id)?toast('ok','❤️ Liked!'):toast('inf','💔 Like removed');
+  if(liked.has(id))btn.animate([{transform:'scale(1)'},{transform:'scale(1.35)'},{transform:'scale(1)'}],{duration:280,easing:'ease'});
+  if(CU){
+    db.collection('users').doc(CU.uid).set({liked:[...liked]},{merge:true}).catch(()=>{});
+    db.collection('likes').doc(`${id}_${CU.uid}`)[liked.has(id)?'set':'delete']({articleId:id,userId:CU.uid,likedAt:firebase.firestore.FieldValue.serverTimestamp()}).catch(()=>{});
+    db.collection('articles').doc(id).update({likes:firebase.firestore.FieldValue.increment(liked.has(id)?1:-1)}).catch(()=>{});
+  }
+}
+
+function doSave(id,btn){
+  if(!CU){openAuth();return;}
+  const was=saved.has(id);
+  was?saved.delete(id):saved.add(id);
+  btn.className=`eng-btn ${saved.has(id)?'saved':''}`;
+  btn.querySelector('svg').setAttribute('fill',saved.has(id)?'var(--gold)':'none');
+  btn.querySelector('span').textContent=saved.has(id)?'Saved':'Save';
+  saved.has(id)?toast('ok','🔖 Saved!'):toast('inf','Removed from saved');
+  if(CU)db.collection('users').doc(CU.uid).set({bookmarks:[...saved]},{merge:true}).catch(()=>{});
+}
+
+// ── Comments ──────────────────────────────────────────
+function toggleCmts(id){
+  const sec=document.getElementById(`cmts-${id}`);
+  const wasOpen=sec.classList.contains('open');
+  sec.classList.toggle('open');
+  if(!wasOpen)renderCmts(id,sec);
+}
+function renderCmts(id,c){
+  const av=CU?(CU.photoURL?`<div class="cmt-av"><img src="${CU.photoURL}" alt=""></div>`:`<div class="cmt-av">${(CU.displayName||'U')[0].toUpperCase()}</div>`):'<div class="cmt-av">?</div>';
+  c.innerHTML=`
+    <div class="cmt-row">
+      ${av}
+      <textarea class="cmt-box" id="ci-${id}" placeholder="${CU?'Write a comment...':'Sign in to comment...'}" ${!CU?'readonly onclick="openAuth()"':''} rows="1" oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\'"></textarea>
+      ${CU?`<button onclick="postCmt('${id}')" class="btn btn-gold" style="padding:7px 13px;font-size:.77rem">Post</button>`:''}
+    </div>
+    <div id="cl-${id}" style="display:flex;flex-direction:column;gap:8px"><div style="text-align:center;padding:14px;color:var(--text-muted);font-size:.82rem">💬 Be the first to comment!</div></div>
+  `;
+  // Subscribe Firestore comments
+  db.collection('comments').where('articleId','==',id).where('parentId','==',null).orderBy('createdAt','desc').limit(20)
+    .onSnapshot(snap=>{
+      const list=document.getElementById(`cl-${id}`);
+      if(!list)return;
+      const cmts=snap.docs.map(d=>({id:d.id,...d.data()}));
+      if(cmts.length>0)list.innerHTML=cmts.map(cmtHTML).join('');
+    },()=>{});
+}
+function cmtHTML(c){
+  const n=c.userName||'Anonymous';
+  const av=c.userPhoto?`<div class="cmt-av"><img src="${c.userPhoto}" alt=""></div>`:`<div class="cmt-av">${n[0].toUpperCase()}</div>`;
+  return`<div class="cmt-item">${av}<div style="flex:1"><div class="cmt-bubble"><div class="cmt-user">${n}</div><div class="cmt-text">${c.content}</div></div><div class="cmt-acts"><span class="cmt-act">Like</span><span class="cmt-act">Reply</span><span class="cmt-time">${c.timeAgo||'Just now'}</span></div></div></div>`;
+}
+async function postCmt(id){
+  if(!CU){openAuth();return;}
+  const inp=document.getElementById(`ci-${id}`);
+  const txt=inp?.value?.trim();if(!txt)return;
+  const cmt={articleId:id,content:txt,userId:CU.uid,userName:CU.displayName||'Anonymous',userPhoto:CU.photoURL||null,parentId:null,timeAgo:'Just now',createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  const list=document.getElementById(`cl-${id}`);
+  if(list){const el=list.innerHTML.includes('Be the first')?'':'';list.insertAdjacentHTML('afterbegin',cmtHTML(cmt));}
+  inp.value='';inp.style.height='auto';
+  toast('ok','💬 Comment posted!');
+  try{await db.collection('comments').add(cmt);}catch(e){}
+}
+
+// ═══════════════════════════════════════════════════
+//  SIDEBAR
+// ═══════════════════════════════════════════════════
+function renderSidebar(cid){
+  const sb=document.getElementById(cid);if(!sb)return;
+  const latest=ARTICLES.slice(0,5).map(a=>`
+    <div class="sb-item" onclick="nav('article','${a.id}')">
+      <div class="si-thumb"><img src="${a.img}" alt="" loading="lazy"/></div>
+      <div><div class="si-title">${a.title}</div><div class="si-meta">${a.ago}</div></div>
+    </div>`).join('');
+  const trending=[...ARTICLES].sort((a,b)=>b.views-a.views).slice(0,5).map((a,i)=>`
+    <div class="trend-item" onclick="nav('article','${a.id}')">
+      <div class="t-rank ${['r1','r2','r3','r4','r4'][i]}">${i+1}</div>
+      <div><div class="ti-title">${a.title}</div><div class="ti-meta">${fnum(a.views)} views</div></div>
+    </div>`).join('');
+  sb.innerHTML=`
+    <div class="sb-card">
+      <div class="sb-title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Latest News</div>
+      ${latest}
+      <div style="margin-top:8px;text-align:center"><span style="font-size:.77rem;color:var(--gold);cursor:pointer;font-weight:600" onclick="nav('home')">View All →</span></div>
+    </div>
+    <div class="sb-ad"><span class="sb-ad-lbl">Advertisement</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26" style="opacity:.3"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span style="font-size:.76rem;opacity:.55">300×250 Sidebar Ad</span></div>
+    <div class="sb-card">
+      <div class="sb-title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Trending Now</div>
+      ${trending}
+    </div>
+    <div class="sb-card">
+      <div class="sb-title">📲 Follow Us</div>
+      <div class="soc-btns">
+        <a href="https://twitter.com/kwtnews_com" target="_blank" class="soc-btn soc-x"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.754l7.73-8.835L1.254 2.25H8.08l4.713 5.775 5.45-5.775z"/></svg>@kwtnews_com</a>
+        <a href="https://instagram.com/kwtnews_com" target="_blank" class="soc-btn soc-ig"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>@kwtnews_com</a>
+      </div>
+    </div>
+    <div class="sb-card pwa-card" id="pwa-p" style="display:none">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--navy);flex-shrink:0">K</div>
+        <div><p style="font-weight:700;font-size:.85rem;margin-bottom:4px">Install KWT News App</p><p style="font-size:.76rem;color:var(--text-muted);margin-bottom:10px">Breaking alerts & offline reading!</p><button class="btn btn-gold" style="font-size:.76rem;padding:7px 14px" onclick="installPWA()">+ Add to Home Screen</button></div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════
+//  ARTICLE DETAIL
+// ═══════════════════════════════════════════════════
+function renderArticle(id){
+  const a=ARTICLES.find(x=>x.id===id)||ARTICLES[0];
+  if(!a)return;
+  document.title=`${a.title} | KWT News`;
+  const lk=liked.has(a.id),sv=saved.has(a.id);
+  document.getElementById('art-content').innerHTML=`
+    <div style="margin-bottom:16px">
+      <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px">
+        ${a.breaking?'<span class="badge b-breaking">🔴 Breaking</span>':''}
+        ${badge(a.cat)}
+        ${(a.tags||[]).map(t=>`<span style="font-size:.71rem;color:var(--text-muted)">#${t}</span>`).join('')}
+      </div>
+      <h1 style="font-size:1.6rem;line-height:1.25;margin-bottom:14px">${a.title}</h1>
+    </div>
+    <div style="background:var(--bg-card);border-radius:14px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)">
+      ${a.img?`<div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden"><img src="${a.img}" alt="${a.title}" style="width:100%;height:100%;object-fit:cover"/></div>`:''}
+      <div style="padding:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:9px">
+            <div class="src-av">${(a.src||'K')[0]}</div>
+            <div><div style="font-weight:700;font-size:.87rem">${a.src||'KWT News'}</div><div style="font-size:.72rem;color:var(--text-muted)">${a.ago}</div></div>
+          </div>
+          <div style="font-size:.74rem;color:var(--text-muted);display:flex;align-items:center;gap:4px">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            ${fnum(a.views)} views
+          </div>
+        </div>
+        <div style="font-size:.93rem;line-height:1.8;color:var(--text-muted);margin-bottom:18px">
+          <p style="margin-bottom:12px;font-weight:500;color:var(--text);font-size:.98rem">${a.desc}</p>
+          <p style="margin-bottom:12px">Kuwait has long been at the forefront of economic development in the Gulf region. This latest announcement underscores the nation's commitment to long-term prosperity and modernization across all sectors.</p>
+          <h2 style="color:var(--text);font-size:1.05rem;margin:18px 0 10px">Key Highlights</h2>
+          <p style="margin-bottom:12px">The comprehensive plan covers six major sectors including renewable energy, digital infrastructure, healthcare modernization, education reform, transportation, and housing. Officials confirmed implementation begins Q1 2025.</p>
+          <p>International partners from Europe, Asia, and North America have expressed strong interest, with several memoranda of understanding already signed during the announcement ceremony at Bayan Palace.</p>
+        </div>
+        <div style="margin:18px 0;padding:14px;border:1px dashed var(--border);border-radius:11px;text-align:center;background:rgba(245,166,35,.03)">
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:4px">Advertisement</div>
+          <div style="height:55px;display:flex;align-items:center;justify-content:center;font-size:.77rem;color:var(--text-muted)">468×60 In-Article Ad</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+          ${(a.tags||[]).map(t=>`<span style="padding:3px 10px;background:var(--input-bg);border-radius:50px;font-size:.73rem;font-weight:600;color:var(--text-muted);border:1px solid var(--border)">#${t}</span>`).join('')}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;padding-top:14px;border-top:1px solid var(--border)">
+          <button class="eng-btn ${lk?'liked':''}" id="art-lk-${a.id}" onclick="doLike('${a.id}',this);syncArtBtn('${a.id}')" style="border:1px solid var(--border);border-radius:50px;padding:8px 16px">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${lk?'var(--red)':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            ${lk?'Liked':'Like'} ${a.likes>0?`(${fnum(a.likes)})`:''}
+          </button>
+          <button class="eng-btn" onclick="openShare('${a.id}')" style="border:1px solid var(--border);border-radius:50px;padding:8px 16px">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
+          <button class="eng-btn ${sv?'saved':''}" id="art-sv-${a.id}" onclick="doSave('${a.id}',this)" style="border:1px solid var(--border);border-radius:50px;padding:8px 16px">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${sv?'var(--gold)':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            ${sv?'Saved':'Save'}
+          </button>
+          <button class="eng-btn" onclick="toast('inf','Report submitted. Thank you!')" style="border:1px solid var(--border);border-radius:50px;padding:8px 16px;margin-left:auto">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            Report
+          </button>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg-card);border-radius:14px;border:1px solid var(--border);margin-top:14px;box-shadow:var(--shadow)">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-weight:700;display:flex;align-items:center;gap:7px">
+        💬 Comments ${a.cmts>0?`<span style="font-size:.81rem;font-weight:500;color:var(--text-muted)">(${a.cmts})</span>`:''}
+      </div>
+      <div style="padding:14px">
+        <div class="cmt-row" style="margin-bottom:14px">
+          ${CU?(CU.photoURL?`<div class="cmt-av"><img src="${CU.photoURL}" alt=""></div>`:`<div class="cmt-av">${(CU.displayName||'U')[0].toUpperCase()}</div>`):'<div class="cmt-av">?</div>'}
+          <textarea class="cmt-box" id="ci-art-${a.id}" placeholder="${CU?'Write a comment...':'Sign in to comment...'}" ${!CU?'readonly onclick="openAuth()"':''}></textarea>
+          ${CU?`<button onclick="postCmt('${a.id}')" class="btn btn-gold" style="padding:8px 15px;font-size:.79rem">Post</button>`:''}
+        </div>
+        <div id="cl-${a.id}" style="display:flex;flex-direction:column;gap:9px"><div style="text-align:center;padding:18px;color:var(--text-muted);font-size:.82rem">💬 Be the first to comment!</div></div>
+      </div>
+    </div>
+  `;
+  // Try increment view
+  db.collection('articles').doc(a.id).update({views:firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
+  // Subscribe comments
+  db.collection('comments').where('articleId','==',a.id).where('parentId','==',null).orderBy('createdAt','desc').limit(20)
+    .onSnapshot(snap=>{
+      const list=document.getElementById(`cl-${a.id}`);if(!list)return;
+      const cmts=snap.docs.map(d=>({id:d.id,...d.data()}));
+      if(cmts.length>0)list.innerHTML=cmts.map(cmtHTML).join('');
+    },()=>{});
+}
+
+// ═══════════════════════════════════════════════════
+//  SHARE
+// ═══════════════════════════════════════════════════
+function openShare(id){
+  const a=ARTICLES.find(x=>x.id===id)||ARTICLES[0];
+  const url=`https://kwtnews.com/news/${a.id}`;
+  const txt=`📰 ${a.title}\n\n${(a.desc||'').slice(0,100)}...\n\n🔗 Read More: ${url}\nVia: KWT News`;
+  _shareUrl=url;
+  document.getElementById('sh-prev').innerHTML=`${a.img?`<img src="${a.img}" class="sh-prev-img" alt=""/>`:''}<div><div class="sh-prev-ttl">${a.title}</div><div class="sh-prev-dom">kwtnews.com</div></div>`;
+  document.getElementById('sh-plats').innerHTML=SHARE_PLATS.map(p=>`
+    <div class="sh-plat" onclick="shareOn('${p.id}','${encodeURIComponent(txt)}','${encodeURIComponent(url)}')">
+      <div class="sh-plat-icon" style="background:${p.bg}">${p.ic}</div>
+      <div class="sh-plat-lbl">${p.name}</div>
+    </div>`).join('');
+  document.getElementById('sh-url').textContent=url;
+  document.getElementById('share-modal').classList.add('open');
+}
+function shareOn(p,txt,url){
+  const u={wa:`https://wa.me/?text=${txt}`,fb:`https://www.facebook.com/sharer/sharer.php?u=${url}`,tw:`https://twitter.com/intent/tweet?text=${txt}&via=kwtnews_com`,tg:`https://t.me/share/url?url=${url}&text=${txt}`,li:`https://www.linkedin.com/sharing/share-offsite/?url=${url}`}[p];
+  if(u)window.open(u,'_blank','width=600,height=500');
+}
+async function copyLink(){
+  try{await navigator.clipboard.writeText(_shareUrl);}
+  catch{const t=document.createElement('textarea');t.value=_shareUrl;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);}
+  const btn=document.getElementById('cp-btn');
+  btn.textContent='✅ Copied!';btn.style.background='var(--green)';
+  toast('ok','🔗 Link copied!');
+  setTimeout(()=>{btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';btn.style.background='';},2000);
+}
+function closeShare(){document.getElementById('share-modal').classList.remove('open');}
+
+// ═══════════════════════════════════════════════════
+//  PROFILE
+// ═══════════════════════════════════════════════════
+let pTab='bookmarks';
+function renderProfile(){
+  if(!CU)return;
+  const n=CU.displayName||'KWT User';
+  const av=CU.photoURL?`<div class="prof-av"><img src="${CU.photoURL}" alt=""></div>`:`<div class="prof-av">${n[0].toUpperCase()}</div>`;
+  document.getElementById('prof-content').innerHTML=`
+    <div class="prof-hero">
+      ${av}
+      <div>
+        <h1 style="font-size:1.35rem;color:#fff;margin-bottom:3px">${n}</h1>
+        <p style="font-size:.81rem;color:rgba(255,255,255,.45)">${CU.email}</p>
+        <p style="font-size:.73rem;color:rgba(255,255,255,.3);margin-top:5px">Member since ${new Date(CU.metadata?.creationTime).toLocaleDateString('en-US',{month:'long',year:'numeric'})}</p>
+      </div>
+    </div>
+    <div class="prof-tabs">
+      <div class="p-tab ${pTab==='bookmarks'?'active':''}" onclick="switchPTab('bookmarks')">🔖 Saved</div>
+      <div class="p-tab ${pTab==='liked'?'active':''}" onclick="switchPTab('liked')">❤️ Liked</div>
+      <div class="p-tab ${pTab==='comments'?'active':''}" onclick="switchPTab('comments')">💬 Comments</div>
+    </div>
+    <div id="ptab-content"></div>
+  `;
+  renderPTab();
+}
+function switchPTab(t){
+  pTab=t;
+  document.querySelectorAll('.p-tab').forEach((el,i)=>el.classList.toggle('active',['bookmarks','liked','comments'][i]===t));
+  renderPTab();
+}
+function renderPTab(){
+  const c=document.getElementById('ptab-content');if(!c)return;
+  const arts=pTab==='bookmarks'?ARTICLES.filter(a=>saved.has(a.id)):pTab==='liked'?ARTICLES.filter(a=>liked.has(a.id)):[];
+  if(pTab==='comments'){c.innerHTML='<div class="empty-st"><div class="empty-emoji">💬</div><p style="color:var(--text-muted);font-size:.85rem">No comments yet.<br>Join discussions on articles.</p></div>';return;}
+  if(!arts.length){c.innerHTML=`<div class="empty-st"><div class="empty-emoji">${pTab==='bookmarks'?'🔖':'❤️'}</div><p style="color:var(--text-muted);font-size:.85rem">${pTab==='bookmarks'?'No saved articles yet.<br>Tap bookmark to save.':'No liked articles yet.'}</p></div>`;return;}
+  c.innerHTML=arts.map(a=>`<div class="nc ani" style="margin-bottom:10px;cursor:pointer" onclick="nav('article','${a.id}')"><div style="display:flex;gap:11px;padding:13px">${a.img?`<img src="${a.img}" style="width:76px;height:58px;object-fit:cover;border-radius:8px;flex-shrink:0" loading="lazy"/>`:''}<div><div style="font-weight:700;font-size:.87rem;line-height:1.3;margin-bottom:3px">${a.title}</div><div style="font-size:.73rem;color:var(--text-muted)">${a.src} · ${a.ago}</div></div></div></div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════════════════
+let admActive='dash';
+function admSec(sec){
+  admActive=sec;
+  document.querySelectorAll('.adm-ni').forEach((el,i)=>{
+    el.classList.toggle('active',['dash','articles','users','ads','analytics','push'][i]===sec);
+  });
+  const titles={dash:'Dashboard',articles:'Articles',users:'Users',ads:'Advertisements',analytics:'Analytics',push:'Push Notifications',editor:'Article Editor'};
+  document.getElementById('adm-title').textContent=titles[sec]||sec;
+  const body=document.getElementById('adm-body');
+  if(sec==='dash')body.innerHTML=admDash();
+  else if(sec==='articles')body.innerHTML=admArticles();
+  else if(sec==='editor')body.innerHTML=admEditor();
+  else if(sec==='analytics')body.innerHTML=admAnalytics();
+  else if(sec==='push')body.innerHTML=admPush();
+  else if(sec==='users')body.innerHTML=admUsers();
+  else if(sec==='ads')body.innerHTML=admAds();
+}
+
+function admDash(){
+  const stats=[{e:'📰',l:'Total Articles',v:'1,247',c:'+12 this week',up:true},{e:'👁️',l:'Total Views',v:'2.4M',c:'+8.3%',up:true},{e:'👥',l:'Active Users',v:'18,432',c:'+5.1%',up:true},{e:'💰',l:'Ad Revenue',v:'KD 4,280',c:'+2.4%',up:true}];
+  return`<div class="stats-g">${stats.map(s=>`<div class="stat-c"><div style="font-size:1.25rem">${s.e}</div><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div><div class="stat-ch ${s.up?'ch-up':'ch-dn'}">${s.c}</div></div>`).join('')}</div>
+  <div class="tbl-wrap" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem">Recent Articles</div><button class="tbl-btn tbl-edit" onclick="admSec('articles')">View All</button></div>
+    <table class="atbl"><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Views</th><th>Actions</th></tr></thead><tbody>
+    ${ARTICLES.slice(0,4).map(a=>`<tr><td><div class="tbl-ttl">${a.title}</div><div style="font-size:.71rem;color:var(--text-muted)">${a.src}</div></td><td>${badge(a.cat)}</td><td><span class="badge" style="background:rgba(45,198,83,.12);color:var(--green)">Published</span></td><td style="color:var(--text-muted)">${fnum(a.views)}</td><td><div class="act-btns"><button class="tbl-btn tbl-edit" onclick="admSec('editor')">Edit</button><button class="tbl-btn tbl-del" onclick="toast('err','Deleted')">Del</button></div></td></tr>`).join('')}
+    </tbody></table>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+    <div class="ed-card">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px">🔔 Recent Activity <span class="badge b-breaking" style="font-size:.59rem">3 pending</span></div>
+      ${['New comment awaiting moderation on "Kuwait Budget Plan"','User reported comment on "Oil Prices" article','5 new user registrations today'].map((t,i)=>`<div style="display:flex;align-items:center;gap:9px;padding:9px;background:var(--input-bg);border-radius:9px;margin-bottom:7px"><div style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:${i===0?'var(--red)':i===1?'#f59e0b':'var(--green)'}"></div><span style="font-size:.79rem;flex:1">${t}</span><button class="tbl-btn tbl-edit" style="font-size:.69rem">View</button></div>`).join('')}
+    </div>
+    <div class="ed-card">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:10px">⚡ Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-gold" onclick="admSec('editor')" style="justify-content:center">+ Create New Article</button>
+        <button class="btn btn-outline" onclick="admSec('push')" style="justify-content:center">🔔 Send Breaking Alert</button>
+        <button onclick="admSec('analytics')" style="border:1px solid var(--border);border-radius:11px;padding:10px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.84rem;color:var(--text-muted);cursor:pointer;transition:all .2s" onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)'">📊 View Analytics Report</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function admArticles(){
+  return`<div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+    <div style="flex:1;min-width:180px;position:relative"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--text-muted)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="input" type="search" placeholder="Search articles..." style="padding-left:35px"/></div>
+    <select class="input" style="width:auto;padding:11px 14px"><option>All Categories</option><option>Kuwait</option><option>World</option><option>Business</option></select>
+  </div>
+  <div class="tbl-wrap">
+    <table class="atbl"><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Views</th><th>Date</th><th>Actions</th></tr></thead>
+    <tbody>${ARTICLES.map(a=>`<tr><td><div class="tbl-ttl">${a.title}</div><div style="font-size:.71rem;color:var(--text-muted)">${a.src}</div></td><td>${badge(a.cat)}</td><td><span class="badge" style="background:rgba(45,198,83,.12);color:var(--green)">Published</span></td><td style="color:var(--text-muted)">${fnum(a.views)}</td><td style="color:var(--text-muted);font-size:.77rem">${a.ago}</td><td><div class="act-btns"><button class="tbl-btn tbl-edit" onclick="admSec('editor')">✏️</button><button class="tbl-btn tbl-del" onclick="toast('err','Deleted')">🗑️</button></div></td></tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+function admEditor(){
+  return`<div class="ed-grid">
+    <div>
+      <div class="ed-card">
+        <div class="brk-tog" id="brk-t" onclick="this.classList.toggle('on');document.getElementById('brk-sw').classList.toggle('on')">
+          <div style="display:flex;align-items:center;gap:9px"><span style="font-size:1.15rem">🔴</span><div><div style="font-weight:700;font-size:.85rem">Breaking News</div><div style="font-size:.74rem;color:var(--text-muted)">Mark as urgent breaking alert</div></div></div>
+          <div class="sw" id="brk-sw"><div class="sw-thumb"></div></div>
+        </div>
+        <label class="ed-lbl">Headline *</label>
+        <textarea class="ed-inp" id="ed-ttl" placeholder="Enter news headline..." rows="2" style="font-size:.98rem;font-weight:700"></textarea>
+        <label class="ed-lbl">Short Description</label>
+        <textarea class="ed-ta" id="ed-dsc" placeholder="Brief 2-3 sentence summary..." rows="3"></textarea>
+        <label class="ed-lbl">Full Article Content (HTML supported)</label>
+        <textarea class="ed-ta" id="ed-cnt" placeholder="Write the full article here..." rows="10" style="font-family:monospace;font-size:.83rem"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <div class="ed-card">
+        <label class="ed-lbl">Publish Status</label>
+        <div class="radio-g">
+          ${[['draft','📝 Draft'],['published','🌐 Published'],['scheduled','⏰ Scheduled']].map(([v,l])=>`<div class="r-item ${v==='draft'?'sel':''}" onclick="this.closest('.radio-g').querySelectorAll('.r-item').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"><div class="r-dot"><div class="r-inner"></div></div><span style="font-size:.83rem;font-weight:600">${l}</span></div>`).join('')}
+        </div>
+        <div style="display:flex;gap:7px;margin-top:6px">
+          <button class="btn btn-gold" style="flex:1;justify-content:center;padding:10px" onclick="admPublish()">🌐 Publish</button>
+          <button class="btn btn-outline" style="flex:1;justify-content:center;padding:10px" onclick="toast('inf','💾 Draft saved!')">💾 Draft</button>
+        </div>
+      </div>
+      <div class="ed-card">
+        <label class="ed-lbl">Category *</label>
+        <select class="ed-inp" id="ed-cat" style="margin-bottom:9px">${['kuwait','world','business','sports','technology','entertainment','health','politics'].map(c=>`<option value="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('')}</select>
+        <label class="ed-lbl">News Source</label>
+        <input class="ed-inp" id="ed-src" placeholder="e.g. KUNA, Arab Times..." value="KWT News"/>
+      </div>
+      <div class="ed-card">
+        <label class="ed-lbl">Featured Image</label>
+        <div class="up-area" id="up-a" onclick="document.getElementById('img-f').click()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px;color:var(--text-muted);margin:0 auto 7px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:2px">Click to upload via Cloudinary</div>
+          <div style="font-size:.7rem;color:var(--text-muted)">JPG, PNG, WebP · Max 10MB</div>
+        </div>
+        <input type="file" id="img-f" accept="image/*" style="display:none" onchange="handleUpload(this)"/>
+        <input class="ed-inp" id="ed-img" placeholder="Or paste image URL..."/>
+        <label class="ed-lbl" style="margin-top:7px">YouTube Video ID</label>
+        <input class="ed-inp" id="ed-yt" placeholder="e.g. dQw4w9WgXcQ"/>
+      </div>
+      <div class="ed-card">
+        <label class="ed-lbl">Tags</label>
+        <div style="display:flex;gap:6px">
+          <input class="ed-inp" id="ed-tag" placeholder="Add tag..." style="margin-bottom:0" onkeydown="if(event.key==='Enter'){event.preventDefault();addAdmTag()}"/>
+          <button onclick="addAdmTag()" class="btn btn-gold" style="padding:9px 13px;font-size:.8rem;flex-shrink:0">Add</button>
+        </div>
+        <div id="tag-l" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px"></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function admAnalytics(){
+  return`<div class="stats-g" style="margin-bottom:14px">
+    ${[{l:'Page Views Today',v:'84,291',c:'+12.4%'},{l:'Unique Visitors',v:'23,847',c:'+8.1%'},{l:'Avg Session',v:'4m 32s',c:'+0.3m'},{l:'Bounce Rate',v:'38.4%',c:'-2.1%'}].map(s=>`<div class="stat-c"><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div><div class="stat-ch ch-up">${s.c} vs yesterday</div></div>`).join('')}
+  </div>
+  <div class="ed-card">
+    <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:14px">📊 Top Articles This Week</div>
+    ${ARTICLES.slice(0,5).map((a,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><div style="width:22px;height:22px;border-radius:6px;background:rgba(245,166,35,.15);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.76rem;flex-shrink:0">${i+1}</div><div style="flex:1;min-width:0"><div style="font-size:.81rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.title}</div></div><div style="font-size:.79rem;font-weight:700;color:var(--gold);flex-shrink:0">${fnum(a.views)}</div></div>`).join('')}
+  </div>`;
+}
+
+function admPush(){
+  return`<div class="ed-card" style="max-width:560px">
+    <h2 style="font-size:1.05rem;margin-bottom:3px">🔔 Send Push Notification</h2>
+    <p style="font-size:.81rem;color:var(--text-muted);margin-bottom:18px">Send a breaking news alert to all FCM subscribers.</p>
+    <label class="ed-lbl">Title *</label>
+    <input class="ed-inp" id="push-t" placeholder="Breaking News: ..."/>
+    <label class="ed-lbl">Message *</label>
+    <textarea class="ed-ta" id="push-b" placeholder="Short message (max 120 chars)..." rows="3" maxlength="120"></textarea>
+    <label class="ed-lbl">Link URL (optional)</label>
+    <input class="ed-inp" id="push-u" placeholder="https://kwtnews.com/news/article-id"/>
+    <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="sendPush()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Send to All Subscribers
+    </button>
+    <div style="margin-top:12px;padding:11px;background:var(--input-bg);border-radius:9px;font-size:.76rem;color:var(--text-muted)">💡 <strong style="color:var(--text)">Note:</strong> Push notifications require Firebase Cloud Messaging setup and user permission.</div>
+  </div>`;
+}
+
+function admUsers(){
+  return`<div class="tbl-wrap">
+    <table class="atbl"><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+    <tbody>${[{n:'Ahmad Al-Kuwaiti',e:'ahmad@example.com',r:'user',j:'Jan 2025'},{n:'Sara Mohammed',e:'sara@example.com',r:'editor',j:'Dec 2024'},{n:'Admin User',e:'kwtnews.com@gmail.com',r:'admin',j:'Nov 2024'}].map(u=>`<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="src-av" style="width:30px;height:30px;font-size:.76rem">${u.n[0]}</div><span style="font-weight:600;font-size:.83rem">${u.n}</span></div></td><td style="font-size:.81rem;color:var(--text-muted)">${u.e}</td><td><span class="badge ${u.r==='admin'?'b-breaking':u.r==='editor'?'b-business':'b-kuwait'}">${u.r}</span></td><td style="font-size:.77rem;color:var(--text-muted)">${u.j}</td><td><div class="act-btns"><button class="tbl-btn tbl-edit" onclick="toast('inf','Role updated')">Edit</button><button class="tbl-btn tbl-del" onclick="toast('err','User banned')">Ban</button></div></td></tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+function admAds(){
+  return`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn btn-gold" onclick="toast('ok','Ad slot created!')">+ Add New Ad</button></div>
+  <div class="tbl-wrap">
+    <table class="atbl"><thead><tr><th>Ad Name</th><th>Placement</th><th>Status</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Actions</th></tr></thead>
+    <tbody>${[{n:'Header Leaderboard',p:'Header',s:'Active',i:'124K',c:'892',r:'0.72%'},{n:'Sidebar Rectangle',p:'Sidebar',s:'Active',i:'98K',c:'1.2K',r:'1.22%'},{n:'In-Feed Banner',p:'In-Feed',s:'Active',i:'56K',c:'445',r:'0.79%'},{n:'Footer Banner',p:'Footer',s:'Paused',i:'23K',c:'88',r:'0.38%'}].map(a=>`<tr><td style="font-weight:600;font-size:.83rem">${a.n}</td><td><span class="badge b-tech">${a.p}</span></td><td><span class="badge ${a.s==='Active'?'b-sports':'b-world'}">${a.s}</span></td><td style="color:var(--text-muted)">${a.i}</td><td style="color:var(--text-muted)">${a.c}</td><td style="font-weight:700;color:var(--gold)">${a.r}</td><td><div class="act-btns"><button class="tbl-btn tbl-edit" onclick="toast('inf','Ad updated')">Edit</button><button class="tbl-btn tbl-del" onclick="toast('err','Ad removed')">Del</button></div></td></tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+// Admin helpers
+const admTags=[];
+function addAdmTag(){
+  const inp=document.getElementById('ed-tag');if(!inp)return;
+  const tag=inp.value.trim().toLowerCase().replace(/\s+/g,'-');
+  if(!tag||admTags.includes(tag))return;
+  admTags.push(tag);inp.value='';
+  const tl=document.getElementById('tag-l');if(tl)tl.innerHTML=admTags.map(t=>`<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 9px;background:rgba(245,166,35,.1);color:var(--gold);border-radius:50px;font-size:.73rem;font-weight:600">#${t}<span onclick="admRmTag('${t}')" style="cursor:pointer;opacity:.7">×</span></span>`).join('');
+}
+function admRmTag(t){admTags.splice(admTags.indexOf(t),1);addAdmTag();}
+
+async function handleUpload(inp){
+  const file=inp.files[0];if(!file)return;
+  const a=document.getElementById('up-a');
+  a.innerHTML='<div style="font-size:.79rem;color:var(--text-muted)">Uploading to Cloudinary...</div>';
+  const fd=new FormData();fd.append('file',file);fd.append('upload_preset','Kwt news');
+  try{
+    const r=await fetch('https://api.cloudinary.com/v1_1/duqq5vfcx/image/upload',{method:'POST',body:fd});
+    const d=await r.json();
+    const imgEl=document.getElementById('ed-img');if(imgEl)imgEl.value=d.secure_url;
+    a.innerHTML=`<img src="${d.secure_url}" style="max-height:100px;border-radius:8px;object-fit:cover"/>`;
+    toast('ok','✅ Image uploaded to Cloudinary!');
+  }catch{a.innerHTML='<div style="color:var(--red);font-size:.8rem">Upload failed. Paste URL instead.</div>';toast('err','Upload failed');}
+}
+
+async function admPublish(){
+  const ttl=document.getElementById('ed-ttl')?.value?.trim();
+  if(!ttl){toast('err','Title is required');return;}
+  const article={title:ttl,description:document.getElementById('ed-dsc')?.value?.trim(),content:document.getElementById('ed-cnt')?.value?.trim(),category:document.getElementById('ed-cat')?.value||'kuwait',source:document.getElementById('ed-src')?.value||'KWT News',imageUrl:document.getElementById('ed-img')?.value?.trim()||'',youtubeId:document.getElementById('ed-yt')?.value?.trim()||'',tags:[...admTags],status:'published',views:0,likes:0,commentsCount:0,searchKeywords:ttl.toLowerCase().split(' ').filter(w=>w.length>2),publishedAt:firebase.firestore.FieldValue.serverTimestamp(),createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  try{const ref=await db.collection('articles').add(article);toast('ok',`✅ Published! ID: ${ref.id}`);setTimeout(()=>admSec('articles'),1500);}
+  catch{toast('err','Failed. Check Firestore rules.');}
+}
+
+function sendPush(){
+  const t=document.getElementById('push-t')?.value?.trim();
+  const b=document.getElementById('push-b')?.value?.trim();
+  if(!t||!b){toast('err','Title and message required');return;}
+  toast('ok',`🔔 Alert sent: "${t}"`);
+}
+
+// ═══════════════════════════════════════════════════
+//  UI HELPERS
+// ═══════════════════════════════════════════════════
+function toggleMobNav(){
+  document.getElementById('mob-nav').classList.toggle('open');
+  document.getElementById('ham').classList.toggle('open');
+  document.body.style.overflow=document.getElementById('mob-nav').classList.contains('open')?'hidden':'';
+}
+function toggleTheme(){
+  const h=document.documentElement;const d=h.dataset.theme==='dark';
+  h.dataset.theme=d?'light':'dark';
+  document.getElementById('th-icon').textContent=d?'☀️':'🌙';
+  localStorage.setItem('kwt-theme',h.dataset.theme);
+}
+function restoreTheme(){
+  const s=localStorage.getItem('kwt-theme');
+  if(s){document.documentElement.dataset.theme=s;document.addEventListener('DOMContentLoaded',()=>{const i=document.getElementById('th-icon');if(i)i.textContent=s==='light'?'☀️':'🌙';});}
+}
+function toggleNotif(){document.getElementById('lang-dp').classList.add('hidden');document.getElementById('user-menu').classList.add('hidden');document.getElementById('notif-dp').classList.toggle('hidden');}
+function toggleLang(){document.getElementById('notif-dp').classList.add('hidden');document.getElementById('user-menu').classList.add('hidden');document.getElementById('lang-dp').classList.toggle('hidden');}
+function toggleUserMenu(){document.getElementById('notif-dp').classList.add('hidden');document.getElementById('lang-dp').classList.add('hidden');document.getElementById('user-menu').classList.toggle('hidden');}
+function toggleSearch(){
+  const ov=document.getElementById('srch-ov');ov.classList.toggle('open');
+  if(ov.classList.contains('open')){document.getElementById('srch-inp').focus();document.body.style.overflow='hidden';}
+  else{document.body.style.overflow='';document.getElementById('srch-res').classList.add('hidden');}
+}
+function doSearch(q){
+  const r=document.getElementById('srch-res');
+  if(q.length<2){r.classList.add('hidden');return;}
+  const m=ARTICLES.filter(a=>a.title.toLowerCase().includes(q.toLowerCase())||a.desc.toLowerCase().includes(q.toLowerCase())).slice(0,5);
+  if(!m.length){r.classList.add('hidden');return;}
+  r.classList.remove('hidden');
+  r.innerHTML=m.map(a=>`<div class="sr-item" onclick="nav('article','${a.id}');toggleSearch()"><div class="sr-ttl">${a.title}</div><div class="sr-meta">${a.cat} · ${a.src} · ${a.ago}</div></div>`).join('');
+}
+function renderNotifs(){document.getElementById('notif-list').innerHTML=NOTIFS.map(n=>`<div class="notif-item ${n.unread?'unread':''}"><span class="notif-emoji">${n.emoji}</span><div><div class="notif-txt">${n.txt}</div><div class="notif-time">${n.time}</div></div></div>`).join('');}
+function renderLangs(){document.getElementById('lang-list').innerHTML=LANGS.map(l=>`<div class="lang-item" onclick="setLang('${l.c}','${l.d}');toggleLang()"><span class="lang-flag">${l.f}</span><span>${l.l}</span></div>`).join('');}
+function setLang(c,d){document.documentElement.lang=c;document.documentElement.dir=d;localStorage.setItem('kwt-lang',JSON.stringify({c,d}));toast('ok','🌐 Language changed');}
+function restoreLang(){try{const s=JSON.parse(localStorage.getItem('kwt-lang'));if(s){document.documentElement.lang=s.c;document.documentElement.dir=s.d;}}catch{}}
+function openAuth(){document.getElementById('auth-modal').classList.add('open');}
+function closeAuth(){document.getElementById('auth-modal').classList.remove('open');}
+function syncArtBtn(id){}
+
+// TOAST
+const TIC={ok:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',err:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',inf:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'};
+function toast(type,msg){
+  const c=document.getElementById('toast-c');
+  const t=document.createElement('div');t.className=`toast ${type}`;
+  t.innerHTML=`${TIC[type]||''}<span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.classList.add('t-out');setTimeout(()=>t.remove(),280);},3500);
+}
+
+// PWA
+function setupPWA(){
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();deferredPWA=e;
+    document.querySelectorAll('#pwa-p').forEach(el=>el.style.display='block');
+  });
+}
+function installPWA(){
+  if(deferredPWA){deferredPWA.prompt();deferredPWA.userChoice.then(r=>{deferredPWA=null;if(r.outcome==='accepted')toast('ok','✅ KWT News app installed!')});}
+  else toast('inf','Open in browser → Add to Home Screen');
+}
+
+// Service Worker
+if('serviceWorker'in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
