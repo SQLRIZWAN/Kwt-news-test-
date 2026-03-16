@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0A1628">
+    <meta name="description" content="KWT News - Your trusted source for Kuwait and World news. Real-time updates, breaking news, and in-depth coverage.">
+    <meta name="keywords" content="KWT News, Kuwait News, World News, Breaking News, Kuwait, Middle East">
+    <meta name="author" content="KWT News">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kwtnews.com">
+    <meta property="og:title" content="KWT News - Kuwait & World News">
+    <meta property="og:description" content="Your trusted source for real-time Kuwait and international news coverage.">
+    <meta property="og:image" content="https://kwtnews.com/og-image.jpg">
+    <meta property="og:site_name" content="KWT News">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kwtnews.com">
+    <meta property="twitter:title" content="KWT News - Kuwait & World News">
+    <meta property="twitter:description" content="Your trusted source for real-time Kuwait and international news coverage.">
+    <meta property="twitter:image" content="https://kwtnews.com/twitter-image.jpg">
+    <meta name="twitter:site" content="@kwtnews_com">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsMediaOrganization",
+        "name": "KWT News",
+        "url": "https://kwtnews.com",
+        "logo": "https://kwtnews.com/logo.png",
+        "sameAs": [
+            "https://twitter.com/kwtnews_com",
+            "https://instagram.com/kwtnews_com"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "kwtnews.com@gmail.com",
+            "contactType": "customer service"
+        }
+    }
+    </script>
+    
+    <title>KWT News - Kuwait & World News</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiS1dUIE5ld3MiLCJzaG9ydF9uYW1lIjoiS1dUIE5ld3MiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBBMTYyOCIsInRoZW1lX2NvbG9yIjoiIzBBMTYyOCIsImljb25zIjpbeyJzcmMiOiIvaWNvbi0xOTIueG1sIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+    
+    <!-- i18next -->
+    <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.16/dist/umd/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-i18next@13.5.0/dist/umd/react-i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-browser-languagedetector@7.2.0/dist/umd/i18nextBrowserLanguageDetector.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0A1628',
+                        accent: '#F5A623',
+                        dark: {
+                            bg: '#1A1A2E',
+                            card: '#16213E',
+                            text: '#EAEAEA'
+                        },
+                        light: {
+                            bg: '#F4F4F4',
+                            card: '#FFFFFF',
+                            text: '#1A1A2E'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        arabic: ['Noto Naskh Arabic', 'serif'],
+                        hindi: ['Noto Sans Devanagari', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F5A623;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d48f1f;
+        }
+        
+        /* RTL Support */
+        [dir="rtl"] .rtl-flip {
+            transform: scaleX(-1);
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Line clamp utilities */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Loading skeleton animation */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .skeleton {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
+            background-size: 1000px 100%;
+        }
+        .dark .skeleton {
+            background: linear-gradient(to right, #2a2a3e 4%, #3a3a4e 25%, #2a2a3e 36%);
+            background-size: 1000px 100%;
+        }
+        
+        /* Toast notification */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .toast-enter {
+            animation: slideIn 0.3s ease-out;
+        }
+        .toast-exit {
+            animation: fadeOut 0.3s ease-out;
+        }
+        
+        /* PWA Install Button */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background: linear-gradient(135deg, #0A1628 0%, #1A1A2E 100%);
+            border: 1px solid #F5A623;
+            border-radius: 12px;
+            padding: 16px 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none;
+        }
+        .install-prompt.show {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="root"></div>
+    
+    <!-- Install Prompt -->
+    <div id="install-prompt" class="install-prompt">
+        <div class="text-white">
+            <div class="font-bold text-accent">Add KWT News to Home Screen</div>
+            <div class="text-sm text-gray-300">Get instant access to breaking news</div>
+        </div>
+        <button onclick="installPWA()" class="bg-accent text-primary px-4 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-colors">
+            Install
+        </button>
+        <button onclick="dismissInstall()" class="text-gray-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useContext, createContext, useCallback, useMemo, useRef } = React;
+        const { createRoot } = ReactDOM;
+        
+        // ==========================================
+        // FIREBASE CONFIGURATION & INITIALIZATION
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDLRqQ8WRohNDWz_6UgafI7Kn2f8U0KL3c",
+            authDomain: "kwt-news.firebaseapp.com",
+            databaseURL: "https://kwt-news-default-rtdb.firebaseio.com",
+            projectId: "kwt-news",
+            storageBucket: "kwt-news.firebasestorage.app",
+            messagingSenderId: "604704031845",
+            appId: "1:604704031845:web:b835af9ab1872ddd1d728c",
+            measurementId: "G-J161YE3FDP"
+        };
+        
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const analytics = firebase.analytics();
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const messaging = firebase.messaging();
+        
+        // Cloudinary Configuration
+        const CLOUDINARY_CONFIG = {
+            cloudName: 'duqq5vfcx',
+            uploadPreset: 'Kwt news',
+            uploadUrl: 'https://api.cloudinary.com/v1_1/duqq5vfcx/image/upload'
+        };
+        
+        // ==========================================
+        // I18N CONFIGURATION
+        // ==========================================
+        const resources = {
+            en: {
+                translation: {
+                    home: 'Home',
+                    kuwait: 'Kuwait',
+                    world: 'World',
+                    search: 'Search news...',
+                    login: 'Login',
+                    logout: 'Logout',
+                    profile: 'Profile',
+                    saved: 'Saved News',
+                    liked: 'Liked Posts',
+                    comments: 'Comments',
+                    share: 'Share',
+                    readMore: 'Read More',
+                    breakingNews: 'Breaking News',
+                    trending: 'Trending',
+                    latest: 'Latest News',
+                    advertisement: 'Advertisement',
+                    loadMore: 'Load More',
+                    noResults: 'No news found',
+                    installApp: 'Add to Home Screen',
+                    darkMode: 'Dark Mode',
+                    lightMode: 'Light Mode',
+                    language: 'Language',
+                    notifications: 'Notifications',
+                    markAllRead: 'Mark all as read',
+                    ago: 'ago',
+                    hours: 'hours',
+                    minutes: 'minutes',
+                    days: 'days',
+                    justNow: 'Just now',
+                    views: 'views',
+                    likes: 'likes',
+                    reply: 'Reply',
+                    report: 'Report',
+                    delete: 'Delete',
+                    edit: 'Edit',
+                    cancel: 'Cancel',
+                    save: 'Save',
+                    post: 'Post',
+                    writeComment: 'Write a comment...',
+                    loginToComment: 'Login to comment',
+                    shareVia: 'Share via',
+                    copyLink: 'Copy Link',
+                    linkCopied: 'Link copied to clipboard!',
+                    breaking: 'BREAKING',
+                    sponsored: 'Sponsored',
+                    followUs: 'Follow Us',
+                    aboutUs: 'About Us',
+                    contact: 'Contact',
+                    privacy: 'Privacy Policy',
+                    terms: 'Terms of Service',
+                    copyright: '© 2026 KWT News. All rights reserved. Domain reserved 2017.',
+                    emailUs: 'kwtnews.com@gmail.com'
+                }
+            },
+            ar: {
+                translation: {
+                    home: 'الرئيسية',
+                    kuwait: 'الكويت',
+                    world: 'العالم',
+                    search: 'البحث في الأخبار...',
+                    login: 'تسجيل الدخول',
+                    logout: 'تسجيل الخروج',
+                    profile: 'الملف الشخصي',
+                    saved: 'الأخبار المحفوظة',
+                    liked: 'المنشورات المفضلة',
+                    comments: 'التعليقات',
+                    share: 'مشاركة',
+                    readMore: 'اقرأ المزيد',
+                    breakingNews: 'خبر عاجل',
+                    trending: 'الأكثر تداولاً',
+                    latest: 'آخر الأخبار',
+                    advertisement: 'إعلان',
+                    loadMore: 'تحميل المزيد',
+                    noResults: 'لم يتم العثور على أخبار',
+                    installApp: 'أضف إلى الشاشة الرئيسية',
+                    darkMode: 'الوضع الداكن',
+                    lightMode: 'الوضع الفاتح',
+                    language: 'اللغة',
+                    notifications: 'الإشعارات',
+                    markAllRead: 'تحديد الكل كمقروء',
+                    ago: 'منذ',
+                    hours: 'ساعات',
+                    minutes: 'دقائق',
+                    days: 'أيام',
+                    justNow: 'الآن',
+                    views: 'مشاهدات',
+                    likes: 'إعجابات',
+                    reply: 'رد',
+                    report: 'إبلاغ',
+                    delete: 'حذف',
+                    edit: 'تعديل',
+                    cancel: 'إلغاء',
+                    save: 'حفظ',
+                    post: 'نشر',
+                    writeComment: 'اكتب تعليقاً...',
+                    loginToComment: 'سجل الدخول للتعليق',
+                    shareVia: 'مشاركة عبر',
+                    copyLink: 'نسخ الرابط',
+                    linkCopied: 'تم نسخ الرابط!',
+                    breaking: 'عاجل',
+                    sponsored: 'إعلان',
+                    followUs: 'تابعنا',
+                    aboutUs: 'من نحن',
+                    contact: 'اتصل بنا',
+                    privacy: 'سياسة الخصوصية',
+                    terms: 'شروط الخدمة',
+                    copyright: '© 2026 KWT News. جميع الحقوق محفوظة.',
+                    emailUs: 'kwtnews.com@gmail.com'
+                }
+            },
+            ur: {
+                translation: {
+                    home: 'ہوم',
+                    kuwait: 'کویت',
+                    world: 'دنیا',
+                    search: 'خبریں تلاش کریں...',
+                    login: 'لاگ ان',
+                    logout: 'لاگ آؤٹ',
+                    profile: 'پروفائل',
+                    saved: 'محفوظ شدہ خبریں',
+                    liked: 'پسندیدہ پوسٹس',
+                    comments: 'تبصرے',
+                    share: 'شیئر',
+                    readMore: 'مزید پڑھیں',
+                    breakingNews: 'بریکنگ نیوز',
+                    trending: 'ٹرینڈنگ',
+                    latest: 'تازہ ترین',
+                    advertisement: 'اشتہار',
+                    loadMore: 'مزید لوڈ کریں',
+                    noResults: 'کوئی خبر نہیں ملی',
+                    installApp: 'ہوم اسکرین پر شامل کریں',
+                    darkMode: 'ڈارک موڈ',
+                    lightMode: 'لائٹ موڈ',
+                    language: 'زبان',
+                    notifications: 'نوٹیفکیشنز',
+                    markAllRead: 'سب پڑھا ہوا نشان زد کریں',
+                    ago: 'پہلے',
+                    hours: 'گھنٹے',
+                    minutes: 'منٹ',
+                    days: 'دن',
+                    justNow: 'ابھی',
+                    views: 'دیکھے گئے',
+                    likes: 'لائکس',
+                    reply: 'جواب',
+                    report: 'رپورٹ',
+                    delete: 'حذف',
+                    edit: 'ترمیم',
+                    cancel: 'منسوخ',
+                    save: 'محفوظ',
+                    post: 'پوسٹ',
+                    writeComment: 'تبصرہ لکھیں...',
+                    loginToComment: 'تبصرہ کرنے کے لیے لاگ ان کریں',
+                    shareVia: 'کے ذریعے شیئر',
+                    copyLink: 'لنک کاپی کریں',
+                    linkCopied: 'لنک کاپی ہو گیا!',
+                    breaking: 'بریکنگ',
+                    sponsored: 'تعاون یافتہ',
+                    followUs: 'ہمیں فالو کریں',
+                    aboutUs: 'ہمارے بارے میں',
+                    contact: 'رابطہ',
+                    privacy: 'پرائیویسی پالیسی',
+                    terms: 'شرائط و ضوابط',
+                    copyright: '© 2026 KWT News. جملہ حقوق محفوظ ہیں۔',
+                    emailUs: 'kwtnews.com@gmail.com'
+                }
+            }
+        };
+        
+        i18next.use(i18nextBrowserLanguageDetector).init({
+            resources,
+            fallbackLng: 'en',
+            interpolation: { escapeValue: false }
+        });
+        
+        const { useTranslation, initReactI18next } = ReactI18next;
+        initReactI18next.init(i18next);
+        
+        // ==========================================
+        // CONTEXT PROVIDERS
+        // ==========================================
+        const ThemeContext = createContext();
+        const AuthContext = createContext();
+        const LanguageContext = createContext();
+        const NotificationContext = createContext();
+        
+        // Theme Provider
+        const ThemeProvider = ({ children }) => {
+            const [isDark, setIsDark] = useState(() => {
+                if (typeof window !== 'undefined') {
+                    const saved = localStorage.getItem('theme');
+                    return saved === 'dark';
+                }
+                return false;
+            });
+            
+            useEffect(() => {
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            }, [isDark]);
+            
+            const toggleTheme = () => setIsDark(!isDark);
+            
+            return (
+                <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+                    {children}
+                </ThemeContext.Provider>
+            );
+        };
+        
+        // Auth Provider
+        const AuthProvider = ({ children }) => {
+            const [user, setUser] = useState(null);
+            const [loading, setLoading] = useState(true);
+            
+            useEffect(() => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    setUser(user);
+                    setLoading(false);
+                });
+                return () => unsubscribe();
+            }, []);
+            
+            const loginWithGoogle = async () => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                try {
+                    await auth.signInWithPopup(provider);
+                } catch (error) {
+                    console.error('Google login error:', error);
+                }
+            };
+            
+            const loginWithApple = async () => {
+                const provider = new firebase.auth.OAuthProvider('apple.com');
+                try {
+                    await auth.signInWithPopup(provider);
+                } catch (error) {
+                    console.error('Apple login error:', error);
+                }
+            };
+            
+            const loginWithEmail = async (email, password) => {
+                try {
+                    await auth.signInWithEmailAndPassword(email, password);
+                } catch (error) {
+                    throw error;
+                }
+            };
+            
+            const registerWithEmail = async (email, password, displayName) => {
+                try {
+                    const { user } = await auth.createUserWithEmailAndPassword(email, password);
+                    await user.updateProfile({ displayName });
+                    await db.collection('users').doc(user.uid).set({
+                        email,
+                        displayName,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        savedPosts: [],
+                        likedPosts: [],
+                        interests: []
+                    });
+                } catch (error) {
+                    throw error;
+                }
+            };
+            
+            const logout = async () => {
+                try {
+                    await auth.signOut();
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            };
+            
+            return (
+                <AuthContext.Provider value={{ 
+                    user, 
+                    loading, 
+                    loginWithGoogle, 
+                    loginWithApple,
+                    loginWithEmail,
+                    registerWithEmail,
+                    logout 
+                }}>
+                    {children}
+                </AuthContext.Provider>
+            );
+        };
+        
+        // Language Provider
+        const LanguageProvider = ({ children }) => {
+            const { i18n } = useTranslation();
+            const [currentLang, setCurrentLang] = useState(i18n.language);
+            
+            const changeLanguage = (lang) => {
+                i18n.changeLanguage(lang);
+                setCurrentLang(lang);
+                document.documentElement.dir = ['ar', 'ur'].includes(lang) ? 'rtl' : 'ltr';
+                document.documentElement.lang = lang;
+                localStorage.setItem('language', lang);
+            };
+            
+            useEffect(() => {
+                const savedLang = localStorage.getItem('language');
+                if (savedLang) changeLanguage(savedLang);
+            }, []);
+            
+            return (
+                <LanguageContext.Provider value={{ currentLang, changeLanguage }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+        
+        // Notification Provider
+        const NotificationProvider = ({ children }) => {
+            const [notifications, setNotifications] = useState([]);
+            const [unreadCount, setUnreadCount] = useState(0);
+            
+            const addNotification = (notification) => {
+                const id = Date.now();
+                setNotifications(prev => [{ id, ...notification }, ...prev]);
+                if (!notification.read) setUnreadCount(prev => prev + 1);
+                
+                setTimeout(() => {
+                    removeNotification(id);
+                }, 5000);
+            };
+            
+            const removeNotification = (id) => {
+                setNotifications(prev => prev.filter(n => n.id !== id));
+            };
+            
+            const markAllAsRead = () => {
+                setUnreadCount(0);
+                setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+            };
+            
+            return (
+                <NotificationContext.Provider value={{ 
+                    notifications, 
+                    unreadCount, 
+                    addNotification, 
+                    removeNotification,
+                    markAllAsRead
+                }}>
+                    {children}
+                </NotificationContext.Provider>
+            );
+        };
+        
+        // ==========================================
+        // CUSTOM HOOKS
+        // ==========================================
+        const useTheme = () => useContext(ThemeContext);
+        const useAuth = () => useContext(AuthContext);
+        const useLanguage = () => useContext(LanguageContext);
+        const useNotifications = () => useContext(NotificationContext);
+        
+        // Real-time news hook
+        const useNews = (category = 'all', limit = 20) => {
+            const [news, setNews] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [hasMore, setHasMore] = useState(true);
+            
+            useEffect(() => {
+                setLoading(true);
+                let query = db.collection('news')
+                    .orderBy('timestamp', 'desc')
+                    .limit(limit);
+                
+                if (category !== 'all') {
+                    query = query.where('category', '==', category);
+                }
+                
+                const unsubscribe = query.onSnapshot((snapshot) => {
+                    const newsData = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        timestamp: doc.data().timestamp?.toDate()
+                    }));
+                    setNews(newsData);
+                    setLoading(false);
+                    setHasMore(snapshot.docs.length === limit);
+                }, (error) => {
+                    console.error('News fetch error:', error);
+                    setLoading(false);
+                });
+                
+                return () => unsubscribe();
+            }, [category, limit]);
+            
+            const loadMore = async () => {
+                const lastDoc = news[news.length - 1];
+                let query = db.collection('news')
+                    .orderBy('timestamp', 'desc')
+                    .startAfter(lastDoc?.timestamp)
+                    .limit(limit);
+                
+                if (category !== 'all') {
+                    query = query.where('category', '==', category);
+                }
+                
+                const snapshot = await query.get();
+                const newNews = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    timestamp: doc.data().timestamp?.toDate()
+                }));
+                
+                setNews(prev => [...prev, ...newNews]);
+                setHasMore(snapshot.docs.length === limit);
+            };
+            
+            return { news, loading, hasMore, loadMore };
+        };
+        
+        // ==========================================
+        // UTILITY COMPONENTS
+        // ==========================================
+        
+        // SVG Logo Component
+        const Logo = ({ className = "h-10 w-auto" }) => (
+            <div className="flex items-center gap-2">
+                <svg className="h-9 w-9 flex-shrink-0" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="36" height="36" rx="8" fill="#F5A623"/>
+                    <text x="18" y="24" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="13" fontWeight="800" fill="#0A1628">KWT</text>
+                </svg>
+                <div className="flex flex-col leading-tight">
+                    <span style={{fontFamily:'Inter,sans-serif',fontWeight:800,fontSize:'16px',letterSpacing:'0.02em',color:'currentColor',lineHeight:'1.1'}}>KWT NEWS</span>
+                    <span style={{fontFamily:'Inter,sans-serif',fontWeight:400,fontSize:'10px',color:'#F5A623',lineHeight:'1.1',opacity:0.9}}>kwtnews.com</span>
+                </div>
+            </div>
+        );
+        
+        // Time Ago Component
+        const TimeAgo = ({ date }) => {
+            const { t } = useTranslation();
+            
+            const getTimeAgo = (date) => {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                let interval = seconds / 31536000;
+                if (interval > 1) return Math.floor(interval) + ' ' + t('days');
+                interval = seconds / 2592000;
+                if (interval > 1) return Math.floor(interval) + ' ' + t('days');
+                interval = seconds / 86400;
+                if (interval > 1) return Math.floor(interval) + ' ' + t('days');
+                interval = seconds / 3600;
+                if (interval > 1) return Math.floor(interval) + ' ' + t('hours');
+                interval = seconds / 60;
+                if (interval > 1) return Math.floor(interval) + ' ' + t('minutes');
+                return t('justNow');
+            };
+            
+            return <span>{getTimeAgo(date)} {t('ago')}</span>;
+        };
+        
+        // Toast Notification
+        const Toast = ({ message, type = 'success', onClose }) => (
+            <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-6 py-4 rounded-lg shadow-lg toast-enter ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-accent'
+            } text-white`}>
+                <span className="font-medium">{message}</span>
+                <button onClick={onClose} className="ml-2 hover:opacity-80">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        );
+        
+        // Loading Skeleton
+        const NewsCardSkeleton = () => (
+            <div className="bg-light-card dark:bg-dark-card rounded-xl overflow-hidden shadow-lg mb-6">
+                <div className="h-48 skeleton"></div>
+                <div className="p-4 space-y-3">
+                    <div className="h-4 skeleton rounded w-3/4"></div>
+                    <div className="h-6 skeleton rounded w-full"></div>
+                    <div className="h-4 skeleton rounded w-5/6"></div>
+                    <div className="flex gap-4 pt-2">
+                        <div className="h-8 skeleton rounded w-20"></div>
+                        <div className="h-8 skeleton rounded w-20"></div>
+                        <div className="h-8 skeleton rounded w-20"></div>
+                    </div>
+                </div>
+            </div>
+        );
+        
+        // ==========================================
+        // MAIN COMPONENTS
+        // ==========================================
+        
+        // Header Component
+        const Header = ({ activeTab, setActiveTab, searchQuery, setSearchQuery }) => {
+            const { t } = useTranslation();
+            const { isDark, toggleTheme } = useTheme();
+            const { user, logout } = useAuth();
+            const { currentLang, changeLanguage } = useLanguage();
+            const { unreadCount } = useNotifications();
+            const [showLangMenu, setShowLangMenu] = useState(false);
+            const [showUserMenu, setShowUserMenu] = useState(false);
+            const [showNotifMenu, setShowNotifMenu] = useState(false);
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            
+            const languages = [
+                { code: 'en', name: 'English', flag: '🇺🇸' },
+                { code: 'ar', name: 'العربية', flag: '🇰🇼' },
+                { code: 'ur', name: 'اردو', flag: '🇵🇰' },
+                { code: 'hi', name: 'हिंदी', flag: '🇮🇳' },
+                { code: 'fr', name: 'Français', flag: '🇫🇷' }
+            ];
+            
+            const tabs = [
+                { id: 'all', label: t('home') },
+                { id: 'kuwait', label: t('kuwait') },
+                { id: 'world', label: t('world') }
+            ];
+            
+            return (
+                <header className="sticky top-0 z-40 bg-primary text-white shadow-lg">
+                    {/* Top Bar */}
+                    <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+                        {/* Logo */}
+                        <div className="flex items-center gap-3">
+                            <button 
+                                className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                            </button>
+                            <a href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                                <Logo />
+                            </a>
+                        </div>
+                        
+                        {/* Right Actions */}
+                        <div className="flex items-center gap-1.5">
+                            <div className="relative">
+                                <button 
+                                    onClick={() => { setShowLangMenu(!showLangMenu); setShowNotifMenu(false); }}
+                                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                    title={t('language')}
+                                >
+                                    <span className="text-xl">🌐</span>
+                                </button>
+                                {showLangMenu && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setShowLangMenu(false)}></div>
+                                        <div className="absolute right-0 top-full mt-2 z-50 bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden" style={{width:'280px'}}>
+                                            <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                                <div>
+                                                    <h3 className="font-bold text-base">🌐 {t('language')}</h3>
+                                                    <p className="text-xs text-gray-500 mt-0.5">Choose your preferred language</p>
+                                                </div>
+                                                <button onClick={() => setShowLangMenu(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            </div>
+                                            <div className="py-2">
+                                                {languages.map(lang => (
+                                                    <button
+                                                        key={lang.code}
+                                                        onClick={() => {
+                                                            changeLanguage(lang.code);
+                                                            setShowLangMenu(false);
+                                                        }}
+                                                        className={`w-full px-5 py-3 text-left flex items-center gap-3 transition-colors ${
+                                                            currentLang === lang.code 
+                                                                ? 'bg-accent/10 text-accent font-semibold' 
+                                                                : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                                                        }`}
+                                                    >
+                                                        <span className="text-lg">{lang.flag}</span>
+                                                        <span className="flex-1 text-sm">{lang.name}</span>
+                                                        {currentLang === lang.code && (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                        )}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                            
+                            {/* Notifications */}
+                            <div className="relative">
+                                <button 
+                                    onClick={() => { setShowNotifMenu(!showNotifMenu); setShowLangMenu(false); }}
+                                    className="p-2 hover:bg-white/10 rounded-full transition-colors relative"
+                                    title={t('notifications')}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+                                    {unreadCount > 0 && (
+                                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                                    )}
+                                </button>
+                                {showNotifMenu && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setShowNotifMenu(false)}></div>
+                                        <div className="absolute right-0 top-full mt-2 w-80 bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+                                            <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                                                <h3 className="font-bold">{t('notifications')}</h3>
+                                                <div className="flex items-center gap-2">
+                                                    <button className="text-xs text-accent hover:underline">{t('markAllRead')}</button>
+                                                    <button onClick={() => setShowNotifMenu(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="max-h-64 overflow-y-auto py-2">
+                                                <div className="px-4 py-3 text-center text-gray-500 text-sm">
+                                                    No new notifications
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                            
+                            {/* Theme Toggle */}
+                            <button 
+                                onClick={toggleTheme}
+                                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                title={isDark ? t('lightMode') : t('darkMode')}
+                            >
+                                {isDark ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                                )}
+                            </button>
+                            
+                            {/* User Menu */}
+                            <div className="relative">
+                                {user ? (
+                                    <button 
+                                        onClick={() => setShowUserMenu(!showUserMenu)}
+                                        className="flex items-center gap-2 p-1 pr-3 rounded-full hover:bg-white/10 transition-colors"
+                                    >
+                                        <img 
+                                            src={user.photoURL || 'https://via.placeholder.com/32'} 
+                                            alt={user.displayName}
+                                            className="w-8 h-8 rounded-full border-2 border-accent"
+                                        />
+                                        <span className="hidden md:block text-sm font-medium max-w-[100px] truncate">
+                                            {user.displayName || user.email}
+                                        </span>
+                                    </button>
+                                ) : (
+                                    <button 
+                                        onClick={() => setShowUserMenu(!showUserMenu)}
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-accent/20 hover:bg-accent/30 rounded-full transition-colors border border-accent/30"
+                                        title={t('login')}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                        <span className="text-sm font-medium">{t('login')}</span>
+                                    </button>
+                                )}
+                                
+                                {/* Logged-in user dropdown */}
+                                {showUserMenu && user && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)}></div>
+                                        <div className="absolute right-0 top-full mt-2 w-64 bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+                                            {/* User Header */}
+                                            <div className="px-4 py-4 bg-gradient-to-br from-primary to-blue-900 text-white">
+                                                <div className="flex items-center gap-3">
+                                                    <img 
+                                                        src={user.photoURL || 'https://via.placeholder.com/48'} 
+                                                        alt={user.displayName}
+                                                        className="w-12 h-12 rounded-full border-2 border-accent"
+                                                    />
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="font-bold truncate">{user.displayName || 'User'}</p>
+                                                        <p className="text-xs text-gray-300 truncate">{user.email}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="py-2">
+                                                <button className="w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                                    {t('profile')}
+                                                </button>
+                                                <button className="w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                                                    {t('saved')}
+                                                </button>
+                                                <button className="w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                                    {t('liked')}
+                                                </button>
+                                                <hr className="my-1 border-gray-200 dark:border-gray-700" />
+                                                <button 
+                                                    onClick={() => { logout(); setShowUserMenu(false); }}
+                                                    className="w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-500 text-sm"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                                    {t('logout')}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Login Modal Overlay - Full Screen Centered */}
+                    {showUserMenu && !user && (
+                        <div 
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                            style={{backgroundColor:'rgba(0,0,0,0.6)', backdropFilter:'blur(4px)'}}
+                            onClick={() => setShowUserMenu(false)}
+                        >
+                            <div 
+                                className="w-full max-w-sm bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl overflow-hidden"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {/* Modal Header */}
+                                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-br from-primary to-blue-900">
+                                    <div className="flex items-center gap-3">
+                                        <Logo />
+                                    </div>
+                                    <button 
+                                        onClick={() => setShowUserMenu(false)}
+                                        className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+                                </div>
+                                <LoginModal onClose={() => setShowUserMenu(false)} />
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* Mobile Menu */}
+                    {mobileMenuOpen && (
+                        <div className="lg:hidden border-t border-white/10 bg-primary">
+                            <div className="container mx-auto px-4 py-3 space-y-1">
+                                <nav className="flex flex-col gap-1">
+                                    {tabs.map(tab => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => {
+                                                navigateTab(tab.id);
+                                                setMobileMenuOpen(false);
+                                            }}
+                                            className={`px-4 py-3 rounded-xl text-left font-medium transition-all flex items-center gap-2 ${
+                                                activeTab === tab.id 
+                                                    ? 'bg-accent text-primary' 
+                                                    : 'hover:bg-white/10'
+                                            }`}
+                                        >
+                                            {tab.label}
+                                        </button>
+                                    ))}
+                                </nav>
+                            </div>
+                        </div>
+                    )}
+                </header>
+            );
+        };
+        
+        // Login Modal Component
+        const LoginModal = ({ onClose }) => {
+            const { t } = useTranslation();
+            const { loginWithGoogle, loginWithApple, loginWithEmail, registerWithEmail } = useAuth();
+            const [isLogin, setIsLogin] = useState(true);
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [name, setName] = useState('');
+            const [error, setError] = useState('');
+            const [loading, setLoading] = useState(false);
+            
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setLoading(true);
+                
+                try {
+                    if (isLogin) {
+                        await loginWithEmail(email, password);
+                    } else {
+                        await registerWithEmail(email, password, name);
+                    }
+                    onClose();
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            
+            return (
+                <div className="p-6 space-y-4">
+                    {/* Login / Signup Toggle */}
+                    <div className="flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1 gap-1">
+                        <button
+                            onClick={() => setIsLogin(true)}
+                            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${isLogin ? 'bg-white dark:bg-dark-card shadow text-primary dark:text-white' : 'text-gray-500'}`}
+                        >{t('login')}</button>
+                        <button
+                            onClick={() => setIsLogin(false)}
+                            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${!isLogin ? 'bg-white dark:bg-dark-card shadow text-primary dark:text-white' : 'text-gray-500'}`}
+                        >Sign Up</button>
+                    </div>
+                    
+                    {error && (
+                        <div className="p-3 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl text-sm">
+                            {error}
+                        </div>
+                    )}
+                    
+                    <form onSubmit={handleSubmit} className="space-y-3">
+                        {!isLogin && (
+                            <input
+                                type="text"
+                                placeholder="Full Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:border-accent focus:outline-none text-sm"
+                                required
+                            />
+                        )}
+                        <input
+                            type="email"
+                            placeholder="Email address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:border-accent focus:outline-none text-sm"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:border-accent focus:outline-none text-sm"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 bg-accent text-primary font-bold rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50 text-sm shadow"
+                        >
+                            {loading ? 'Please wait...' : isLogin ? t('login') : 'Create Account'}
+                        </button>
+                    </form>
+                    
+                    <div className="relative py-1">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                            <span className="px-3 bg-light-card dark:bg-dark-card text-gray-400 font-medium">Or continue with</span>
+                        </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                        <button
+                            onClick={() => { loginWithGoogle(); onClose(); }}
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
+                        >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Google
+                        </button>
+                        <button
+                            onClick={() => { loginWithApple(); onClose(); }}
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
+                        >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            </svg>
+                            Apple
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+        
+        // News Card Component
+        const NewsCard = ({ news, index }) => {
+            const { t } = useTranslation();
+            const { user } = useAuth();
+            const { addNotification } = useNotifications();
+            const [isLiked, setIsLiked] = useState(false);
+            const [isSaved, setIsSaved] = useState(false);
+            const [showComments, setShowComments] = useState(false);
+            const [shareMenuOpen, setShareMenuOpen] = useState(false);
+            const [views, setViews] = useState(news.views || 0);
+            const [likes, setLikes] = useState(news.likes || 0);
+            const [commentCount, setCommentCount] = useState(news.commentCount || 0);
+            
+            // Increment views on mount
+            useEffect(() => {
+                const incrementViews = async () => {
+                    try {
+                        await db.collection('news').doc(news.id).update({
+                            views: firebase.firestore.FieldValue.increment(1)
+                        });
+                        setViews(prev => prev + 1);
+                    } catch (error) {
+                        console.error('Error incrementing views:', error);
+                    }
+                };
+                
+                const timer = setTimeout(incrementViews, 2000);
+                return () => clearTimeout(timer);
+            }, [news.id]);
+            
+            const handleLike = async () => {
+                if (!user) {
+                    addNotification({ message: 'Please login to like', type: 'info' });
+                    return;
+                }
+                
+                try {
+                    const newsRef = db.collection('news').doc(news.id);
+                    const userRef = db.collection('users').doc(user.uid);
+                    
+                    if (isLiked) {
+                        await newsRef.update({ likes: firebase.firestore.FieldValue.increment(-1) });
+                        await userRef.update({ likedPosts: firebase.firestore.FieldValue.arrayRemove(news.id) });
+                        setLikes(prev => prev - 1);
+                    } else {
+                        await newsRef.update({ likes: firebase.firestore.FieldValue.increment(1) });
+                        await userRef.update({ likedPosts: firebase.firestore.FieldValue.arrayUnion(news.id) });
+                        setLikes(prev => prev + 1);
+                    }
+                    setIsLiked(!isLiked);
+                } catch (error) {
+                    console.error('Like error:', error);
+                }
+            };
+            
+            const handleSave = async () => {
+                if (!user) {
+                    addNotification({ message: 'Please login to save', type: 'info' });
+                    return;
+                }
+                
+                try {
+                    const userRef = db.collection('users').doc(user.uid);
+                    if (isSaved) {
+                        await userRef.update({ savedPosts: firebase.firestore.FieldValue.arrayRemove(news.id) });
+                    } else {
+                        await userRef.update({ savedPosts: firebase.firestore.FieldValue.arrayUnion(news.id) });
+                    }
+                    setIsSaved(!isSaved);
+                    addNotification({ 
+                        message: isSaved ? 'Removed from saved' : 'Saved to your profile',
+                        type: 'success'
+                    });
+                } catch (error) {
+                    console.error('Save error:', error);
+                }
+            };
+            
+            const handleShare = (platform) => {
+                const shareText = `📰 ${news.title}\n\n${news.summary?.substring(0, 100)}...\n\n🔗 Read More: https://kwtnews.com/news/${news.id}\nVia: KWT News`;
+                const shareUrl = `https://kwtnews.com/news/${news.id}`;
+                
+                switch(platform) {
+                    case 'whatsapp':
+                        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+                        break;
+                    case 'facebook':
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+                        break;
+                    case 'twitter':
+                        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+                        break;
+                    case 'copy':
+                        navigator.clipboard.writeText(shareUrl);
+                        addNotification({ message: t('linkCopied'), type: 'success' });
+                        break;
+                }
+                setShareMenuOpen(false);
+            };
+            
+            const totalEngagement = views + likes + commentCount;
+            
+            // Check if video
+            const isVideo = news.mediaType === 'video' || news.imageUrl?.includes('video');
+            
+            return (
+                <article className="bg-light-card dark:bg-dark-card rounded-xl shadow-lg overflow-hidden mb-6 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                    {/* Media */}
+                    <div className="relative aspect-video bg-gray-200 dark:bg-gray-800 overflow-hidden">
+                        {isVideo ? (
+                            <video 
+                                src={news.imageUrl} 
+                                controls 
+                                className="w-full h-full object-cover"
+                                poster={news.thumbnail}
+                            />
+                        ) : (
+                            <img 
+                                src={news.imageUrl || 'https://via.placeholder.com/800x450'} 
+                                alt={news.title}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                loading="lazy"
+                            />
+                        )}
+                        
+                        {/* Category Badge */}
+                        <div className="absolute top-4 left-4 flex gap-2">
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+                                news.category === 'kuwait' ? 'bg-green-500 text-white' :
+                                news.category === 'world' ? 'bg-blue-500 text-white' :
+                                'bg-accent text-primary'
+                            }`}>
+                                {news.category}
+                            </span>
+                            {news.isBreaking && (
+                                <span className="px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white animate-pulse">
+                                    {t('breaking')}
+                                </span>
+                            )}
+                        </div>
+                        
+                        {/* Source */}
+                        <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">
+                            <img 
+                                src={news.sourceLogo || 'https://via.placeholder.com/20'} 
+                                alt={news.source}
+                                className="w-5 h-5 rounded-full"
+                            />
+                            <span className="text-white text-xs font-medium">{news.source}</span>
+                        </div>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="p-5">
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
+                            <TimeAgo date={news.timestamp} />
+                            <span>•</span>
+                            <span>{news.readTime || '5 min read'}</span>
+                        </div>
+                        
+                        <h2 className="text-xl font-bold mb-3 text-light-text dark:text-dark-text hover:text-accent transition-colors cursor-pointer line-clamp-2">
+                            {news.title}
+                        </h2>
+                        
+                        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 leading-relaxed">
+                            {news.summary || news.content?.substring(0, 150)}...
+                        </p>
+                        
+                        {/* Engagement Bar */}
+                        <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center gap-4">
+                                <button 
+                                    onClick={handleLike}
+                                    className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                                        isLiked ? 'text-red-500' : 'text-gray-500 dark:text-gray-400 hover:text-red-500'
+                                    }`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    <span>{likes}</span>
+                                </button>
+                                
+                                <button 
+                                    onClick={() => setShowComments(!showComments)}
+                                    className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-blue-500 transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                    <span>{commentCount}</span>
+                                </button>
+                                
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setShareMenuOpen(!shareMenuOpen)}
+                                        className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-green-500 transition-colors"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                    </button>
+                                    
+                                    {shareMenuOpen && (
+                                        <div className="absolute bottom-full left-0 mb-2 w-48 bg-light-card dark:bg-dark-card rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-10">
+                                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">{t('shareVia')}</div>
+                                            <button onClick={() => handleShare('whatsapp')} className="w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                                <span className="text-green-500 text-lg">📱</span> WhatsApp
+                                            </button>
+                                            <button onClick={() => handleShare('facebook')} className="w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                                <span className="text-blue-600 text-lg">📘</span> Facebook
+                                            </button>
+                                            <button onClick={() => handleShare('twitter')} className="w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                                <span className="text-sky-500 text-lg">🐦</span> X (Twitter)
+                                            </button>
+                                            <hr className="my-1 border-gray-200 dark:border-gray-700" />
+                                            <button onClick={() => handleShare('copy')} className="w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                {t('copyLink')}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <button 
+                                    onClick={handleSave}
+                                    className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                                        isSaved ? 'text-accent' : 'text-gray-500 dark:text-gray-400 hover:text-accent'
+                                    }`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <div className="flex items-center gap-1 text-sm text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <span>{views.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        
+                        {/* Total Engagement */}
+                        <div className="mt-3 text-xs text-gray-400 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            <span>{totalEngagement.toLocaleString()} total engagements</span>
+                        </div>
+                    </div>
+                    
+                    {/* Comments Section */}
+                    {showComments && (
+                        <CommentsSection 
+                            newsId={news.id} 
+                            onCommentCountChange={setCommentCount}
+                        />
+                    )}
+                </article>
+            );
+        };
+        
+        // Comments Section Component
+        const CommentsSection = ({ newsId, onCommentCountChange }) => {
+            const { t } = useTranslation();
+            const { user } = useAuth();
+            const [comments, setComments] = useState([]);
+            const [newComment, setNewComment] = useState('');
+            const [loading, setLoading] = useState(true);
+            
+            useEffect(() => {
+                const unsubscribe = db.collection('comments')
+                    .where('newsId', '==', newsId)
+                    .orderBy('timestamp', 'desc')
+                    .onSnapshot((snapshot) => {
+                        const commentsData = snapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data(),
+                            timestamp: doc.data().timestamp?.toDate()
+                        }));
+                        setComments(commentsData);
+                        onCommentCountChange(commentsData.length);
+                        setLoading(false);
+                    });
+                    
+                return () => unsubscribe();
+            }, [newsId]);
+            
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!newComment.trim() || !user) return;
+                
+                try {
+                    await db.collection('comments').add({
+                        newsId,
+                        content: newComment,
+                        authorId: user.uid,
+                        authorName: user.displayName || 'Anonymous',
+                        authorPhoto: user.photoURL,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        likes: 0,
+                        replies: []
+                    });
+                    setNewComment('');
+                } catch (error) {
+                    console.error('Comment error:', error);
+                }
+            };
+            
+            return (
+                <div className="border-t border-gray-200 dark:border-gray-700 p-5 bg-gray-50 dark:bg-gray-900/50">
+                    <h3 className="font-semibold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        {t('comments')} ({comments.length})
+                    </h3>
+                    
+                    {/* Comment Input */}
+                    {user ? (
+                        <form onSubmit={handleSubmit} className="mb-6 flex gap-3">
+                            <img 
+                                src={user.photoURL || 'https://via.placeholder.com/40'} 
+                                alt={user.displayName}
+                                className="w-10 h-10 rounded-full"
+                            />
+                            <div className="flex-1">
+                                <textarea
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                    placeholder={t('writeComment')}
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-light-card dark:bg-dark-card resize-none focus:border-accent focus:outline-none"
+                                    rows="2"
+                                />
+                                <div className="flex justify-end mt-2">
+                                    <button 
+                                        type="submit"
+                                        disabled={!newComment.trim()}
+                                        className="px-6 py-2 bg-accent text-primary font-semibold rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {t('post')}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    ) : (
+                        <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-center text-gray-500">
+                            {t('loginToComment')}
+                        </div>
+                    )}
+                    
+                    {/* Comments List */}
+                    <div className="space-y-4">
+                        {comments.map(comment => (
+                            <div key={comment.id} className="flex gap-3">
+                                <img 
+                                    src={comment.authorPhoto || 'https://via.placeholder.com/40'} 
+                                    alt={comment.authorName}
+                                    className="w-10 h-10 rounded-full"
+                                />
+                                <div className="flex-1">
+                                    <div className="bg-light-card dark:bg-dark-card p-3 rounded-lg">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="font-semibold text-sm">{comment.authorName}</span>
+                                            <span className="text-xs text-gray-500">
+                                                <TimeAgo date={comment.timestamp} />
+                                            </span>
+                                        </div>
+                                        <p className="text-gray-700 dark:text-gray-300 text-sm">{comment.content}</p>
+                                    </div>
+                                    <div className="flex items-center gap-4 mt-2 ml-2">
+                                        <button className="text-xs text-gray-500 hover:text-accent flex items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                                            {comment.likes || 0}
+                                        </button>
+                                        <button className="text-xs text-gray-500 hover:text-accent">
+                                            {t('reply')}
+                                        </button>
+                                        <button className="text-xs text-gray-500 hover:text-red-500">
+                                            {t('report')}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+        
+        // Ad Component
+        const AdBanner = ({ position, className = "" }) => {
+            const { t } = useTranslation();
+            const [adData, setAdData] = useState(null);
+            
+            useEffect(() => {
+                // Fetch ad from Firestore based on position
+                const fetchAd = async () => {
+                    try {
+                        const snapshot = await db.collection('ads')
+                            .where('position', '==', position)
+                            .where('active', '==', true)
+                            .where('startDate', '<=', new Date())
+                            .where('endDate', '>=', new Date())
+                            .limit(1)
+                            .get();
+                            
+                        if (!snapshot.empty) {
+                            setAdData(snapshot.docs[0].data());
+                            // Track impression
+                            await db.collection('ads').doc(snapshot.docs[0].id).update({
+                                impressions: firebase.firestore.FieldValue.increment(1)
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Ad fetch error:', error);
+                    }
+                };
+                
+                fetchAd();
+            }, [position]);
+            
+            const handleAdClick = async () => {
+                if (adData) {
+                    try {
+                        await db.collection('ads').doc(adData.id).update({
+                            clicks: firebase.firestore.FieldValue.increment(1)
+                        });
+                    } catch (error) {
+                        console.error('Ad click tracking error:', error);
+                    }
+                }
+            };
+            
+            if (!adData) return null;
+            
+            return (
+                <div className={`relative bg-light-card dark:bg-dark-card rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 ${className}`}>
+                    <div className="absolute top-2 right-2 px-2 py-1 bg-black/50 text-white text-xs rounded">
+                        {t('sponsored')}
+                    </div>
+                    <a 
+                        href={adData.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={handleAdClick}
+                        className="block"
+                    >
+                        <img 
+                            src={adData.imageUrl} 
+                            alt={adData.title}
+                            className="w-full h-auto object-cover"
+                        />
+                        <div className="p-3">
+                            <h4 className="font-semibold text-sm mb-1">{adData.title}</h4>
+                            <p className="text-xs text-gray-500">{adData.description}</p>
+                        </div>
+                    </a>
+                </div>
+            );
+        };
+        
+        // Sidebar Component
+        const Sidebar = () => {
+            const { t } = useTranslation();
+            const [trending, setTrending] = useState([]);
+            const [latest, setLatest] = useState([]);
+            
+            useEffect(() => {
+                // Fetch trending news
+                const unsubTrending = db.collection('news')
+                    .orderBy('views', 'desc')
+                    .limit(5)
+                    .onSnapshot(snapshot => {
+                        setTrending(snapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data()
+                        })));
+                    });
+                    
+                // Fetch latest news
+                const unsubLatest = db.collection('news')
+                    .orderBy('timestamp', 'desc')
+                    .limit(5)
+                    .onSnapshot(snapshot => {
+                        setLatest(snapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data()
+                        })));
+                    });
+                    
+                return () => {
+                    unsubTrending();
+                    unsubLatest();
+                };
+            }, []);
+            
+            const SidebarItem = ({ item, index }) => (
+                <a 
+                    href={`/news/${item.id}`}
+                    className="flex gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
+                >
+                    <span className="text-2xl font-bold text-gray-300 dark:text-gray-600 group-hover:text-accent transition-colors">
+                        {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <div className="flex-1">
+                        <h4 className="font-medium text-sm line-clamp-2 group-hover:text-accent transition-colors">
+                            {item.title}
+                        </h4>
+                        <span className="text-xs text-gray-500 mt-1 block">
+                            <TimeAgo date={item.timestamp?.toDate()} />
+                        </span>
+                    </div>
+                </a>
+            );
+            
+            return (
+                <aside className="space-y-6">
+                    {/* Top Banner Ad */}
+                    <AdBanner position="sidebar_top" />
+                    
+                    {/* Trending Section */}
+                    <div className="bg-light-card dark:bg-dark-card rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary to-primary/90">
+                            <h3 className="font-bold text-white flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-accent"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                {t('trending')}
+                            </h3>
+                        </div>
+                        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                            {trending.map((item, idx) => (
+                                <SidebarItem key={item.id} item={item} index={idx} />
+                            ))}
+                        </div>
+                    </div>
+                    
+                    {/* Latest Section */}
+                    <div className="bg-light-card dark:bg-dark-card rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary to-primary/90">
+                            <h3 className="font-bold text-white flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-accent"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                {t('latest')}
+                            </h3>
+                        </div>
+                        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                            {latest.map((item, idx) => (
+                                <SidebarItem key={item.id} item={item} index={idx} />
+                            ))}
+                        </div>
+                    </div>
+                    
+                    {/* Sidebar Ad */}
+                    <AdBanner position="sidebar_bottom" />
+                    
+                    {/* Social Links */}
+                    <div className="bg-light-card dark:bg-dark-card rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
+                        <h3 className="font-bold mb-4 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-accent"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            {t('followUs')}
+                        </h3>
+                        <div className="flex gap-3">
+                            <a href="https://twitter.com/kwtnews_com" target="_blank" rel="noopener noreferrer" 
+                               className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg bg-black text-white hover:bg-gray-800 transition-colors">
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                                <span className="text-sm font-medium">X</span>
+                            </a>
+                            <a href="https://instagram.com/kwtnews_com" target="_blank" rel="noopener noreferrer"
+                               className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white hover:opacity-90 transition-opacity">
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                                <span className="text-sm font-medium">IG</span>
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+            );
+        };
+        
+        // Footer Component
+        const Footer = () => {
+            const { t } = useTranslation();
+            
+            return (
+                <footer className="bg-primary text-white mt-12">
+                    <div className="container mx-auto px-4 py-5">
+                        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+                            <p className="text-gray-400 text-sm">© 2026 KWT News. All rights reserved. Domain reserved 2017.</p>
+                            <div className="flex items-center gap-2 text-sm text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-red-500"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <span>Made in Kuwait</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Footer Ad */}
+                    <AdBanner position="footer" className="mx-4 mb-4" />
+                </footer>
+            );
+        };
+        
+        // Main App Component
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('all');
+            const [searchQuery, setSearchQuery] = useState('');
+            const { news, loading, hasMore, loadMore } = useNews(activeTab);
+            const { notifications, removeNotification, addNotification } = useNotifications();
+            const { t } = useTranslation();
+            const [notifPermission, setNotifPermission] = useState(
+                typeof Notification !== 'undefined' ? Notification.permission : 'default'
+            );
+            const [showNotifBanner, setShowNotifBanner] = useState(false);
+
+            // ── Hardware Back Button ──────────────────────────────────────────
+            // We push a state entry on every "page" change so Android back
+            // button pops it instead of leaving the app.
+            const tabHistory = useRef(['all']);
+
+            const navigateTab = useCallback((tabId) => {
+                if (tabId === activeTab) return;
+                tabHistory.current.push(tabId);
+                // Push a new history entry so popstate fires on back press
+                window.history.pushState({ tab: tabId }, '', '');
+                setActiveTab(tabId);
+            }, [activeTab]);
+
+            useEffect(() => {
+                // Push initial entry so first back has something to pop
+                window.history.replaceState({ tab: 'all' }, '', '');
+
+                const onPopState = (e) => {
+                    // Go one step back in our tab history
+                    const hist = tabHistory.current;
+                    if (hist.length > 1) {
+                        hist.pop();
+                        const prev = hist[hist.length - 1];
+                        setActiveTab(prev);
+                        // Keep browser history in sync
+                        window.history.pushState({ tab: prev }, '', '');
+                    }
+                    // If only one entry left, let browser handle (exit / go back normally)
+                };
+
+                window.addEventListener('popstate', onPopState);
+                return () => window.removeEventListener('popstate', onPopState);
+            }, []);
+
+            // ── Push Notification Permission ─────────────────────────────────
+            useEffect(() => {
+                // Show banner after 4 sec if permission not decided yet
+                if (typeof Notification === 'undefined') return;
+                if (Notification.permission === 'default') {
+                    const timer = setTimeout(() => setShowNotifBanner(true), 4000);
+                    return () => clearTimeout(timer);
+                }
+            }, []);
+
+            const requestNotifPermission = async () => {
+                setShowNotifBanner(false);
+                if (typeof Notification === 'undefined') return;
+                try {
+                    const permission = await Notification.requestPermission();
+                    setNotifPermission(permission);
+                    if (permission === 'granted') {
+                        // Try to get FCM token
+                        try {
+                            const token = await messaging.getToken({
+                                vapidKey: 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDkBWAVe7axcl0bYFdCvD29NBwkk5K2cGjlj'
+                            });
+                            if (token) {
+                                await db.collection('fcm_tokens').doc(token).set({
+                                    token,
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    platform: 'web'
+                                });
+                            }
+                        } catch (fcmErr) {
+                            console.log('FCM token error (non-critical):', fcmErr);
+                        }
+                        // Show test notification
+                        new Notification('KWT News 🗞️', {
+                            body: 'Notifications enabled! You will receive breaking news alerts.',
+                            icon: '/icon-192.png',
+                            badge: '/icon-192.png',
+                            tag: 'kwt-welcome'
+                        });
+                        addNotification({ message: '🔔 Notifications enabled!', type: 'success' });
+                    }
+                } catch (err) {
+                    console.error('Notification permission error:', err);
+                }
+            };
+
+            // Listen for new breaking news from Firestore → fire native notification
+            useEffect(() => {
+                if (notifPermission !== 'granted') return;
+                const unsubscribe = db.collection('news')
+                    .where('breaking', '==', true)
+                    .orderBy('timestamp', 'desc')
+                    .limit(1)
+                    .onSnapshot((snapshot) => {
+                        snapshot.docChanges().forEach((change) => {
+                            if (change.type === 'added') {
+                                const article = change.doc.data();
+                                // Only notify if article is fresh (< 2 min old)
+                                const age = Date.now() - (article.timestamp?.toMillis?.() || 0);
+                                if (age < 120000) {
+                                    new Notification('🚨 Breaking News — KWT News', {
+                                        body: article.title || 'New breaking news alert',
+                                        icon: article.imageUrl || '/icon-192.png',
+                                        badge: '/icon-192.png',
+                                        tag: 'kwt-breaking-' + change.doc.id,
+                                        requireInteraction: true
+                                    });
+                                }
+                            }
+                        });
+                    });
+                return () => unsubscribe();
+            }, [notifPermission]);
+
+            // Filter news based on search
+            const filteredNews = useMemo(() => {
+                if (!searchQuery) return news;
+                return news.filter(item => 
+                    item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.summary?.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }, [news, searchQuery]);
+            
+            // Insert ads every 5th item
+            const newsWithAds = useMemo(() => {
+                const result = [];
+                filteredNews.forEach((item, index) => {
+                    if (index > 0 && index % 5 === 0) {
+                        result.push({ type: 'ad', id: `ad-${index}` });
+                    }
+                    result.push({ type: 'news', data: item });
+                });
+                return result;
+            }, [filteredNews]);
+            
+            const tabs = [
+                { id: 'all', label: t('home') },
+                { id: 'kuwait', label: t('kuwait') },
+                { id: 'world', label: t('world') }
+            ];
+
+            return (
+                <div className="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text font-sans transition-colors duration-300">
+                    <Header 
+                        activeTab={activeTab} 
+                        setActiveTab={navigateTab}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                    />
+                    
+                    {/* 🔔 Notification Permission Banner */}
+                    {showNotifBanner && (
+                        <div className="bg-gradient-to-r from-primary to-blue-900 text-white px-4 py-3 flex items-center gap-3 shadow-lg">
+                            <span className="text-2xl flex-shrink-0">🔔</span>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold">Stay updated with Breaking News!</p>
+                                <p className="text-xs text-gray-300">Get instant alerts for latest Kuwait & World news.</p>
+                            </div>
+                            <button
+                                onClick={requestNotifPermission}
+                                className="flex-shrink-0 bg-accent text-primary text-xs font-bold px-4 py-2 rounded-full hover:bg-yellow-400 transition-colors"
+                            >
+                                Allow
+                            </button>
+                            <button
+                                onClick={() => setShowNotifBanner(false)}
+                                className="flex-shrink-0 p-1.5 hover:bg-white/10 rounded-full transition-colors"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                    )}
+                    
+                    {/* Dashboard Search + Tabs + Mini Ad */}
+                    <div className="bg-light-card dark:bg-dark-card border-b border-gray-200 dark:border-gray-700 shadow-sm">
+                        <div className="container mx-auto px-4 py-3">
+                            {/* Search Bar */}
+                            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl px-4 py-2.5 mb-3 gap-2 border border-gray-200 dark:border-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-gray-400 flex-shrink-0"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <input
+                                    type="text"
+                                    placeholder={t('search')}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="bg-transparent border-none outline-none text-sm w-full placeholder-gray-400"
+                                />
+                                {searchQuery && (
+                                    <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+                                )}
+                            </div>
+                            {/* Category Tabs */}
+                            <div className="flex gap-2">
+                                {tabs.map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => navigateTab(tab.id)}
+                                        className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                            activeTab === tab.id
+                                                ? 'bg-primary text-white dark:bg-accent dark:text-primary shadow'
+                                                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                                        }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        {/* Mini Scrolling Ad Strip */}
+                        <div className="border-t border-gray-100 dark:border-gray-700 bg-amber-50 dark:bg-amber-900/20 px-4 py-2 flex items-center gap-3 overflow-hidden">
+                            <span className="text-xs font-bold text-accent bg-accent/10 px-2 py-0.5 rounded flex-shrink-0">{t('advertisement')}</span>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">🎯 Advertise here — kwtnews.com@gmail.com · Reach thousands of readers daily in Kuwait and worldwide</p>
+                        </div>
+                    </div>
+
+                    {/* Top Banner Ad */}
+                    <div className="container mx-auto px-4 mt-4">
+                        <AdBanner position="top_banner" />
+                    </div>
+                    
+                    {/* Main Content */}
+                    <main className="container mx-auto px-4 py-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            {/* News Feed */}
+                            <div className="lg:col-span-2 space-y-6">
+                                {loading ? (
+                                    <>
+                                        <NewsCardSkeleton />
+                                        <NewsCardSkeleton />
+                                        <NewsCardSkeleton />
+                                    </>
+                                ) : newsWithAds.length === 0 ? (
+                                    <div className="bg-light-card dark:bg-dark-card rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-10 text-center">
+                                        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center shadow-inner">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" className="text-gray-400"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+                                        </div>
+                                        <h3 className="text-lg font-bold text-gray-600 dark:text-gray-300 mb-1">{t('noResults')}</h3>
+                                        <p className="text-sm text-gray-400">Check back later for the latest news updates.</p>
+                                    </div>
+                                ) : (
+                                    <>
+                                        {newsWithAds.map((item, index) => (
+                                            item.type === 'ad' ? (
+                                                <AdBanner key={item.id} position="in_feed" />
+                                            ) : (
+                                                <NewsCard 
+                                                    key={item.data.id} 
+                                                    news={item.data} 
+                                                    index={index}
+                                                />
+                                            )
+                                        ))}
+                                        
+                                        {hasMore && (
+                                            <button 
+                                                onClick={loadMore}
+                                                className="w-full py-4 bg-light-card dark:bg-dark-card rounded-xl border border-gray-200 dark:border-gray-700 text-accent font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+                                                {t('loadMore')}
+                                            </button>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                            
+                            {/* Sidebar */}
+                            <div className="hidden lg:block">
+                                <div className="sticky top-24">
+                                    <Sidebar />
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    
+                    <Footer />
+                    
+                    {/* Toast Notifications */}
+                    <div className="fixed top-4 right-4 z-50 space-y-2">
+                        {notifications.map(notif => (
+                            <Toast 
+                                key={notif.id}
+                                message={notif.message}
+                                type={notif.type}
+                                onClose={() => removeNotification(notif.id)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+        
+        // Root Render
+        const Root = () => (
+            <ThemeProvider>
+                <AuthProvider>
+                    <LanguageProvider>
+                        <NotificationProvider>
+                            <App />
+                        </NotificationProvider>
+                    </LanguageProvider>
+                </AuthProvider>
+            </ThemeProvider>
+        );
+        
+        const root = createRoot(document.getElementById('root'));
+        root.render(<Root />);
+    </script>
+    
+    <!-- PWA Service Worker -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('data:text/javascript;base64,' + btoa(`
+                    const CACHE_NAME = 'kwt-news-v1';
+                    const urlsToCache = [
+                        '/',
+                        '/index.html'
+                    ];
+                    
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => {
+                                    if (response) return response;
+                                    return fetch(event.request);
+                                })
+                        );
+                    });
+                `)).then(registration => {
+                    console.log('SW registered:', registration);
+                }).catch(error => {
+                    console.log('SW registration failed:', error);
+                });
+            });
+        }
+        
+        // PWA Install Prompt
+        let deferredPrompt;
+        const installPrompt = document.getElementById('install-prompt');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                installPrompt.classList.add('show');
+            }, 3000);
+        });
+        
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    installPrompt.classList.remove('show');
+                });
+            }
+        }
+        
+        function dismissInstall() {
+            installPrompt.classList.remove('show');
+            deferredPrompt = null;
+        }
+    </script>
+</body>
+              </html>
