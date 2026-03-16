@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KWT News | Latest Kuwait & World News</title>
+    
+    <meta name="description" content="KWT News delivers the latest breaking news, real-time updates from Kuwait, and top international stories. Stay informed with our live news feed.">
+    <meta name="keywords" content="Kuwait news, KWT News, Middle East news, breaking news, world news, real-time news, Kuwait live">
+    <meta name="author" content="KWT News">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kwtnews.com/">
+    <meta property="og:title" content="KWT News | Latest Kuwait & World News">
+    <meta property="og:description" content="KWT News delivers the latest breaking news, real-time updates from Kuwait, and top international stories.">
+    <meta property="og:image" content="https://api.cloudinary.com/v1_1/duqq5vfcx/image/upload/v1/default-og-image.jpg">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kwtnews.com/">
+    <meta property="twitter:title" content="KWT News | Latest Kuwait & World News">
+    <meta property="twitter:description" content="KWT News delivers the latest breaking news, real-time updates from Kuwait, and top international stories.">
+    <meta property="twitter:image" content="https://api.cloudinary.com/v1_1/duqq5vfcx/image/upload/v1/default-og-image.jpg">
+    <meta name="twitter:site" content="@kwtnews_com">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsMediaOrganization",
+      "name": "KWT News",
+      "url": "https://kwtnews.com",
+      "logo": "https://api.cloudinary.com/v1_1/duqq5vfcx/image/upload/v1/logo.png",
+      "sameAs": [
+        "https://twitter.com/kwtnews_com",
+        "https://instagram.com/kwtnews_com"
+      ]
+    }
+    </script>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0A1628">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0A1628',
+                        golden: '#F5A623',
+                        darkbg: '#1A1A2E',
+                        lightbg: '#F4F4F4',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-lightbg dark:bg-darkbg text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- CONFIGURATIONS ---
+        
+        // 1. Firebase Configuration (Hardcoded as requested)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDLRqQ8WRohNDWz_6UgafI7Kn2f8U0KL3c",
+            authDomain: "kwt-news.firebaseapp.com",
+            databaseURL: "https://kwt-news-default-rtdb.firebaseio.com",
+            projectId: "kwt-news",
+            storageBucket: "kwt-news.firebasestorage.app",
+            messagingSenderId: "604704031845",
+            appId: "1:604704031845:web:b835af9ab1872ddd1d728c",
+            measurementId: "G-J161YE3FDP"
+        };
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const analytics = firebase.analytics();
+
+        // 2. Cloudinary Configuration
+        const cloudinaryConfig = {
+            cloudName: "duqq5vfcx",
+            uploadPreset: "Kwt news",
+            uploadUrl: "https://api.cloudinary.com/v1_1/duqq5vfcx/image/upload"
+        };
+
+        // --- COMPONENTS ---
+
+        // SVG Logo Component
+        const Logo = () => (
+            <div className="flex items-center gap-2 cursor-pointer">
+                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" rx="20" fill="#0A1628"/>
+                    <path d="M25 70V30L50 50L75 30V70" stroke="#F5A623" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span className="text-2xl font-bold tracking-tight text-navy dark:text-white">
+                    KWT <span className="text-golden">News</span>
+                </span>
+            </div>
+        );
+
+        // Header Component
+        const Header = ({ theme, toggleTheme, activeTab, setActiveTab }) => (
+            <header className="sticky top-0 z-50 bg-white dark:bg-navy shadow-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+                <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                    {/* Left: Logo */}
+                    <div className="flex-shrink-0"><Logo /></div>
+
+                    {/* Center: Navigation Tabs */}
+                    <nav className="hidden md:flex gap-8">
+                        {['HOME', 'KUWAIT', 'WORLD'].map(tab => (
+                            <button 
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`font-semibold text-sm tracking-wider pb-1 border-b-2 transition-all duration-200 ${
+                                    activeTab === tab 
+                                    ? 'border-golden text-golden' 
+                                    : 'border-transparent text-gray-500 hover:text-navy dark:text-gray-400 dark:hover:text-white'
+                                }`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </nav>
+
+                    {/* Right: Actions */}
+                    <div className="flex items-center gap-5">
+                        <button className="text-gray-600 dark:text-gray-300 hover:text-golden" title="Language"><i className="fas fa-globe text-xl"></i></button>
+                        <button className="text-gray-600 dark:text-gray-300 hover:text-golden relative" title="Notifications">
+                            <i className="fas fa-bell text-xl"></i>
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                        </button>
+                        <button onClick={toggleTheme} className="text-gray-600 dark:text-gray-300 hover:text-golden" title="Toggle Dark Mode">
+                            {theme === 'dark' ? <i className="fas fa-sun text-xl"></i> : <i className="fas fa-moon text-xl"></i>}
+                        </button>
+                        <button className="text-gray-600 dark:text-gray-300 hover:text-golden" title="Profile"><i className="fas fa-user-circle text-2xl"></i></button>
+                    </div>
+                </div>
+            </header>
+        );
+
+        // News Card Component (Facebook Style)
+        const NewsCard = ({ article }) => {
+            const [likes, setLikes] = useState(article.likes);
+            const [isLiked, setIsLiked] = useState(false);
+
+            const handleLike = () => {
+                setIsLiked(!isLiked);
+                setLikes(isLiked ? likes - 1 : likes + 1);
+            };
+
+            const handleShare = () => {
+                const text = `📰 ${article.title}\n${article.summary}\n🔗 Read More: https://kwtnews.com/news/${article.id}\nVia: KWT News`;
+                if (navigator.share) {
+                    navigator.share({ title: article.title, text: text });
+                } else {
+                    navigator.clipboard.writeText(text);
+                    alert("Link copied to clipboard!");
+                }
+            };
+
+            return (
+                <div className="bg-white dark:bg-[#1E293B] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-6 overflow-hidden">
+                    {/* Card Header */}
+                    <div className="p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                                {article.sourceLogo ? <img src={article.sourceLogo} alt="source" /> : <i className="fas fa-newspaper text-gray-400"></i>}
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-sm text-navy dark:text-white">{article.publisher}</h4>
+                                <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 gap-2">
+                                    <span className="text-golden font-semibold">{article.category}</span>
+                                    <span>•</span>
+                                    <span>{article.timeAgo}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i className="fas fa-ellipsis-h"></i></button>
+                    </div>
+
+                    {/* Content */}
+                    <div className="px-4 pb-2">
+                        <h2 className="text-xl font-bold mb-2 text-navy dark:text-white">{article.title}</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">{article.summary}</p>
+                    </div>
+
+                    {/* Media */}
+                    {article.image && (
+                        <div className="w-full h-64 bg-gray-200 dark:bg-gray-800">
+                            <img src={article.image} alt="News Media" className="w-full h-full object-cover" loading="lazy" />
+                        </div>
+                    )}
+
+                    {/* Stats */}
+                    <div className="px-4 py-3 flex justify-between text-xs text-gray-500 border-b border-gray-100 dark:border-gray-700">
+                        <div className="flex items-center gap-1">
+                            <span className="bg-golden text-white rounded-full h-4 w-4 flex items-center justify-center text-[10px]"><i className="fas fa-thumbs-up"></i></span>
+                            <span>{likes}</span>
+                        </div>
+                        <div className="flex gap-3">
+                            <span>{article.comments} Comments</span>
+                            <span>{article.views} Views</span>
+                        </div>
+                    </div>
+
+                    {/* Action Bar */}
+                    <div className="px-2 py-1 flex justify-between items-center">
+                        <button onClick={handleLike} className={`flex-1 py-2 font-semibold text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition ${isLiked ? 'text-golden' : 'text-gray-600 dark:text-gray-400'}`}>
+                            <i className={`${isLiked ? 'fas' : 'far'} fa-heart mr-2`}></i> Like
+                        </button>
+                        <button className="flex-1 py-2 font-semibold text-sm text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <i className="far fa-comment-alt mr-2"></i> Comment
+                        </button>
+                        <button onClick={handleShare} className="flex-1 py-2 font-semibold text-sm text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <i className="fas fa-share mr-2"></i> Share
+                        </button>
+                        <button className="flex-1 py-2 font-semibold text-sm text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <i className="far fa-bookmark mr-2"></i> Save
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Advertisement Component
+        const AdBanner = ({ type }) => {
+            const height = type === 'sidebar' ? 'h-64' : 'h-24';
+            return (
+                <div className={`w-full ${height} bg-gray-200 dark:bg-gray-800 flex flex-col items-center justify-center border border-dashed border-gray-400 dark:border-gray-600 mb-6 rounded-lg`}>
+                    <span className="text-xs text-gray-400 mb-1">Advertisement</span>
+                    <span className="text-sm font-semibold text-gray-500">Google AdSense Space</span>
+                </div>
+            );
+        };
+
+        // Sidebar Component
+        const Sidebar = () => (
+            <aside className="hidden lg:block w-80 space-y-6">
+                <div className="bg-white dark:bg-[#1E293B] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+                    <h3 className="font-bold text-lg mb-4 text-navy dark:text-white border-b-2 border-golden inline-block pb-1">Trending News</h3>
+                    <ul className="space-y-4">
+                        <li className="flex gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition">
+                            <div className="text-golden font-bold text-xl">1</div>
+                            <div>
+                                <h4 className="font-semibold text-sm line-clamp-2">New infrastructure developments announced in Kuwait City</h4>
+                                <span className="text-xs text-gray-500">2 hours ago</span>
+                            </div>
+                        </li>
+                        <li className="flex gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded transition">
+                            <div className="text-golden font-bold text-xl">2</div>
+                            <div>
+                                <h4 className="font-semibold text-sm line-clamp-2">Global markets react to recent economic shifts</h4>
+                                <span className="text-xs text-gray-500">5 hours ago</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <AdBanner type="sidebar" />
+            </aside>
+        );
+
+        // Main App Component
+        const App = () => {
+            const [theme, setTheme] = useState('dark');
+            const [activeTab, setActiveTab] = useState('HOME');
+            
+            // Mock Data Generator
+            const mockArticles = [
+                {
+                    id: 1,
+                    publisher: "KWT Official",
+                    category: "KUWAIT",
+                    timeAgo: "1 hour ago",
+                    title: "Kuwait Announces Major Tech Initiative for 2026",
+                    summary: "The government has unveiled a comprehensive plan to boost tech infrastructure, aiming to position Kuwait as a regional digital hub.",
+                    image: "https://images.unsplash.com/photo-1574510174828-090c8a32490b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    likes: 1240, comments: 342, views: 5040
+                },
+                {
+                    id: 2,
+                    publisher: "Global Times",
+                    category: "WORLD",
+                    timeAgo: "3 hours ago",
+                    title: "International Climate Summit Reaches Historic Agreement",
+                    summary: "Leaders from over 100 nations have agreed on aggressive new carbon reduction targets during the summit held in Geneva.",
+                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9cce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    likes: 890, comments: 156, views: 3200
+                }
+            ];
+
+            const toggleTheme = () => {
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+                if (newTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            };
+
+            // Filter logic
+            const displayedArticles = mockArticles.filter(a => activeTab === 'HOME' || a.category === activeTab);
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Header theme={theme} toggleTheme={toggleTheme} activeTab={activeTab} setActiveTab={setActiveTab} />
+                    
+                    {/* Top Banner Ad */}
+                    <div className="max-w-7xl mx-auto w-full px-4 mt-4">
+                        <AdBanner type="banner" />
+                    </div>
+
+                    <main className="flex-grow max-w-7xl mx-auto w-full px-4 py-6 flex gap-6">
+                        {/* Feed Column */}
+                        <div className="flex-1 max-w-2xl mx-auto lg:mx-0">
+                            {/* Mobile Tabs */}
+                            <div className="flex md:hidden gap-4 mb-6 overflow-x-auto hide-scrollbar border-b border-gray-200 dark:border-gray-700">
+                                {['HOME', 'KUWAIT', 'WORLD'].map(tab => (
+                                    <button 
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        className={`font-semibold whitespace-nowrap pb-2 ${activeTab === tab ? 'text-golden border-b-2 border-golden' : 'text-gray-500'}`}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* PWA Add to Home Screen Prompt (UI Mockup) */}
+                            <div className="bg-navy text-white rounded-lg p-3 mb-6 flex items-center justify-between shadow-lg">
+                                <div className="flex items-center gap-3">
+                                    <Logo />
+                                    <span className="text-sm">Install KWT News App</span>
+                                </div>
+                                <button className="bg-golden text-navy font-bold py-1 px-3 rounded text-sm hover:bg-yellow-500 transition">Install</button>
+                            </div>
+
+                            {/* News Feed */}
+                            {displayedArticles.length > 0 ? (
+                                displayedArticles.map((article, index) => (
+                                    <React.Fragment key={article.id}>
+                                        <NewsCard article={article} />
+                                        {(index + 1) % 5 === 0 && <AdBanner type="banner" />}
+                                    </React.Fragment>
+                                ))
+                            ) : (
+                                <div className="text-center py-10 text-gray-500">No news found for this category.</div>
+                            )}
+                        </div>
+
+                        {/* Right Sidebar */}
+                        <Sidebar />
+                    </main>
+
+                    {/* Footer */}
+                    <footer className="bg-white dark:bg-[#1E293B] border-t border-gray-200 dark:border-gray-800 mt-auto">
+                        <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <Logo />
+                            <div className="flex gap-4 text-sm font-semibold text-gray-600 dark:text-gray-400">
+                                <a href="#" className="hover:text-golden">About Us</a>
+                                <a href="#" className="hover:text-golden">Contact</a>
+                                <a href="#" className="hover:text-golden">Privacy</a>
+                                <a href="#" className="hover:text-golden">Terms</a>
+                            </div>
+                            <div className="flex gap-4 text-gray-500 dark:text-gray-400">
+                                <a href="https://twitter.com/kwtnews_com" className="hover:text-golden"><i className="fab fa-x-twitter text-xl"></i></a>
+                                <a href="https://instagram.com/kwtnews_com" className="hover:text-golden"><i className="fab fa-instagram text-xl"></i></a>
+                                <a href="mailto:kwtnews.com@gmail.com" className="hover:text-golden"><i className="fas fa-envelope text-xl"></i></a>
+                            </div>
+                        </div>
+                        <div className="text-center pb-4 text-xs text-gray-500">
+                            &copy; 2024 KWT News. All rights reserved.
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+  </html>
