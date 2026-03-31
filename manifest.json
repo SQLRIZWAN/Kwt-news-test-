@@ -2,8 +2,7 @@
   "name": "Kuwait News - أخبار الكويت",
   "short_name": "KWT News",
   "description": "Latest news from Kuwait - أحدث الأخبار من الكويت",
-  "start_url": "/kwt-news-test-/",
-  "scope": "/kwt-news-test-/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#c8a84b",
@@ -61,5 +60,18 @@
   "categories": ["news"],
   "lang": "ar",
   "dir": "rtl",
-  "prefer_related_applications": false
+  "screenshots": [
+    {
+      "src": "screenshots/desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshots/mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
 }

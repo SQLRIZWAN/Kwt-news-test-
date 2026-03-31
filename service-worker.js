@@ -1,13 +1,11 @@
-const CACHE_NAME = 'kwt-news-v2';
-const BASE = '/kwt-news-test-';
+const CACHE_NAME = 'kwt-news-v1';
 const STATIC_ASSETS = [
-  BASE + '/',
-  BASE + '/index.html',
-  BASE + '/css/style.css',
-  BASE + '/js/main.js',
-  BASE + '/js/pwa-update.js',
-  BASE + '/manifest.json',
-  BASE + '/offline.html'
+  '/',
+  '/index.html',
+  '/css/style.css',
+  '/js/main.js',
+  '/manifest.json',
+  '/offline.html'
 ];
 
 // Install - cache static assets
@@ -52,7 +50,7 @@ self.addEventListener('fetch', event => {
       .catch(() =>
         caches.match(request).then(cached => {
           if (cached) return cached;
-          if (request.mode === 'navigate') return caches.match(BASE + '/offline.html');
+          if (request.mode === 'navigate') return caches.match('/offline.html');
         })
       )
   );
