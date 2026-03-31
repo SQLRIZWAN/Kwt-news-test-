@@ -1,0 +1,5 @@
+# GitHub Pages config
+title: Kuwait News
+description: Latest news from Kuwait
+baseurl: "/kwt-news-test-"
+url: "https://sqlrizwan.github.io"

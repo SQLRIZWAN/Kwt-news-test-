@@ -1,0 +1,10 @@
+@media print {
+  header, nav, .top-bar, .breaking-banner, .sidebar,
+  .scroll-top, .toast-container, .install-banner,
+  .btn-install, .category-pills { display: none !important; }
+  body { background: #fff !important; color: #000 !important; direction: rtl; }
+  .news-card { border: 1px solid #ccc !important; break-inside: avoid; }
+  .news-grid { grid-template-columns: 1fr 1fr !important; }
+  a { color: #000 !important; }
+  footer { background: #f5f5f5 !important; color: #333 !important; }
+}
