@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block admin or private areas (add if needed)
+# Disallow: /admin/
+
+Sitemap: https://sqlrizwan.github.io/kwt-news-test-/sitemap.xml
