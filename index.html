@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO -->
+  <title>Kuwait News | أخبار الكويت - آخر الأخبار المحلية والعالمية</title>
+  <meta name="description" content="أحدث أخبار الكويت والعالم - أخبار محلية، رياضة، اقتصاد، تقنية، صحة. Kuwait News - Latest breaking news from Kuwait and around the world.">
+  <meta name="keywords" content="أخبار الكويت, Kuwait news, أخبار محلية, رياضة, اقتصاد, KWT news">
+  <meta name="author" content="Kuwait News">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://sqlrizwan.github.io/kwt-news-test-/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Kuwait News | أخبار الكويت">
+  <meta property="og:description" content="أحدث أخبار الكويت والعالم - أخبار محلية، رياضة، اقتصاد">
+  <meta property="og:url" content="https://sqlrizwan.github.io/kwt-news-test-/">
+  <meta property="og:image" content="https://sqlrizwan.github.io/kwt-news-test-/icons/icon-512x512.png">
+  <meta property="og:locale" content="ar_KW">
+  <meta property="og:site_name" content="Kuwait News">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kuwait News | أخبار الكويت">
+  <meta name="twitter:description" content="أحدث أخبار الكويت والعالم">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#c8a84b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KWT News">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a2e'/><text y='.9em' font-size='80' x='10'>🇰🇼</text></svg>">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="css/style.css" as="style">
+  <link rel="preload" href="js/main.js" as="script">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "Kuwait News",
+    "alternateName": "أخبار الكويت",
+    "url": "https://sqlrizwan.github.io/kwt-news-test-/",
+    "logo": "https://sqlrizwan.github.io/kwt-news-test-/icons/icon-512x512.png",
+    "sameAs": [],
+    "description": "أحدث أخبار الكويت والعالم"
+  }
+  </script>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loader-logo">🇰🇼 KWT</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="container">
+    <div class="ticker-wrap">
+      <span class="ticker-label">⚡ عاجل</span>
+      <div class="ticker">
+        <div class="ticker-inner" id="ticker-inner">
+          <span>الكويت تستضيف مؤتمر الاستثمار الدولي في أبريل القادم</span>
+          <span>ارتفاع معدلات التوظيف في القطاع الخاص بنسبة 12%</span>
+          <span>إطلاق مشروع تحلية المياه الجديد في منطقة الصبية</span>
+          <span>الكويت تتصدر قائمة أعلى الدول في احتياطي النفط</span>
+          <span>افتتاح المرحلة الثانية من مترو الكويت العام القادم</span>
+        </div>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <span id="live-time"></span>
+      <span>الثلاثاء - ٣١ مارس ٢٠٢٦</span>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="/" class="logo">
+        <div class="logo-icon">🇰🇼</div>
+        <div class="logo-text">
+          <span>Kuwait News</span>
+          <span>أخبار الكويت</span>
+        </div>
+      </a>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <input type="search" placeholder="ابحث في الأخبار..." aria-label="بحث في الأخبار">
+        <button aria-label="بحث">🔍</button>
+      </div>
+
+      <!-- Actions -->
+      <div class="header-actions">
+        <button class="btn-install hidden" id="btn-install" aria-label="تثبيت التطبيق">
+          📲 <span>تثبيت</span>
+        </button>
+        <button class="theme-toggle" aria-label="تغيير المظهر">🌙</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav aria-label="التصنيفات الرئيسية">
+  <div class="container">
+    <ul class="nav-list">
+      <li><a href="#" class="active">🏠 الرئيسية</a></li>
+      <li><a href="#">📰 محلي</a></li>
+      <li><a href="#">🌍 عالمي</a></li>
+      <li><a href="#">⚽ رياضة</a></li>
+      <li><a href="#">💼 اقتصاد</a></li>
+      <li><a href="#">💻 تقنية</a></li>
+      <li><a href="#">🏥 صحة</a></li>
+      <li><a href="#">🎭 ثقافة <span class="badge">جديد</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Breaking News Banner -->
+<div class="breaking-banner" role="marquee" aria-label="أخبار عاجلة">
+  <div class="container" style="display:flex;align-items:center;width:100%;overflow:hidden;">
+    <span class="breaking-label">🔴 عاجل</span>
+    <div class="breaking-text">
+      <div class="breaking-scroll" id="breaking-scroll">
+        <span>🇰🇼 مجلس الوزراء يعقد جلسة طارئة لمناقشة الميزانية العامة للدولة</span>
+        <span>💰 صندوق الثروة السيادي الكويتي يسجل أرباحاً قياسية في الربع الأول</span>
+        <span>🏗️ انطلاق أعمال البناء في مشروع مدينة الحرير الضخم</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container">
+
+  <!-- Hero Section -->
+  <section class="hero" aria-label="الأخبار المميزة">
+    <div class="hero-grid">
+
+      <!-- Featured Article -->
+      <article class="featured-card" onclick="openArticle(1)">
+        <div class="img-wrap">
+          <span>🕌</span>
+          <span class="cat-tag">محلي</span>
+        </div>
+        <div class="content">
+          <h2>الكويت تطلق رؤية 2035 لتحويل الاقتصاد الوطني وتنويع مصادر الدخل</h2>
+          <p>أعلنت الحكومة الكويتية عن خطة طموحة لتحويل الاقتصاد الوطني بعيداً عن الاعتماد على النفط، وذلك ضمن رؤية 2035 الشاملة التي تشمل قطاعات السياحة والتكنولوجيا والصناعة.</p>
+          <div class="meta">
+            <span>🕐 منذ 30 دقيقة</span>
+            <span class="dot"></span>
+            <span>👁 12.4K مشاهدة</span>
+            <span class="dot"></span>
+            <span>✍️ فريق التحرير</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Side Cards -->
+      <article class="side-card" onclick="openArticle(2)">
+        <div class="thumb"><span>⚽</span></div>
+        <div class="info">
+          <div class="cat-badge">رياضة</div>
+          <h3>المنتخب الكويتي يفوز بثلاثية على منافسه في كأس الخليج</h3>
+          <div class="meta"><span>🕑 منذ ساعتين</span><span>👁 8.7K</span></div>
+        </div>
+      </article>
+
+      <article class="side-card" onclick="openArticle(3)">
+        <div class="thumb"><span>🛢️</span></div>
+        <div class="info">
+          <div class="cat-badge">اقتصاد</div>
+          <h3>ارتفاع أسعار النفط الكويتي إلى 88 دولاراً للبرميل</h3>
+          <div class="meta"><span>🕒 منذ 3 ساعات</span><span>👁 6.1K</span></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar" aria-label="إحصائيات الموقع">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-articles">0</div>
+      <div class="stat-label">مقال منشور</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-visitors">0</div>
+      <div class="stat-label">زيارة يومية</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-categories">8</div>
+      <div class="stat-label">تصنيف إخباري</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-hours">24</div>
+      <div class="stat-label">ساعة تغطية</div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="main-layout">
+
+    <!-- News Feed -->
+    <div>
+      <!-- Category Pills -->
+      <div class="category-pills" role="tablist" aria-label="تصفية الأخبار">
+        <button class="pill active" data-cat="all" role="tab">الكل</button>
+        <button class="pill" data-cat="محلي" role="tab">📰 محلي</button>
+        <button class="pill" data-cat="رياضة" role="tab">⚽ رياضة</button>
+        <button class="pill" data-cat="اقتصاد" role="tab">💼 اقتصاد</button>
+        <button class="pill" data-cat="تقنية" role="tab">💻 تقنية</button>
+        <button class="pill" data-cat="صحة" role="tab">🏥 صحة</button>
+        <button class="pill" data-cat="عالمي" role="tab">🌍 عالمي</button>
+      </div>
+
+      <section aria-label="آخر الأخبار">
+        <div class="section-header">
+          <h2 class="section-title">آخر الأخبار</h2>
+          <a href="#" class="section-link">عرض الكل →</a>
+        </div>
+        <div class="news-grid" id="news-grid" role="list">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+      <!-- Install Banner -->
+      <div class="install-banner" id="install-banner">
+        <div class="ib-icon">📲</div>
+        <h3>أضف إلى الشاشة الرئيسية</h3>
+        <p>احصل على أحدث أخبار الكويت مباشرة على هاتفك</p>
+        <button class="btn-add-home" id="btn-add-home">⬇️ تثبيت التطبيق</button>
+        <button id="btn-dismiss-banner" style="background:none;border:none;color:var(--text-muted);font-size:12px;cursor:pointer;margin-top:8px;width:100%;">لاحقاً</button>
+      </div>
+
+      <!-- Trending -->
+      <div class="widget">
+        <div class="widget-header">🔥 الأكثر قراءة</div>
+        <div class="widget-body">
+          <div class="trending-item">
+            <div class="trending-num top">1</div>
+            <div>
+              <h4>الكويت تطلق رؤية 2035 الاقتصادية</h4>
+              <div class="t-meta">👁 12.4K · منذ 30 دقيقة</div>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num top">2</div>
+            <div>
+              <h4>المنتخب الكويتي يفوز في كأس الخليج</h4>
+              <div class="t-meta">👁 8.7K · منذ ساعتين</div>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">3</div>
+            <div>
+              <h4>ارتفاع أسعار النفط الكويتي</h4>
+              <div class="t-meta">👁 6.1K · منذ 3 ساعات</div>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">4</div>
+            <div>
+              <h4>افتتاح أكبر مركز تجاري في السالمية</h4>
+              <div class="t-meta">👁 5.3K · منذ 5 ساعات</div>
+            </div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-num">5</div>
+            <div>
+              <h4>بورصة الكويت تسجل مكاسب قوية</h4>
+              <div class="t-meta">👁 4.5K · أمس</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weather -->
+      <div class="widget">
+        <div class="widget-header">🌤️ الطقس</div>
+        <div class="widget-body">
+          <div id="weather-widget" class="weather-widget">جارٍ التحميل...</div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="widget">
+        <div class="widget-header">🔗 روابط سريعة</div>
+        <div class="widget-body">
+          <ul style="list-style:none;">
+            <li style="padding:8px 0;border-bottom:1px solid var(--card-border);"><a href="#" style="color:var(--text-muted);font-size:13px;">🏛️ الديوان الأميري</a></li>
+            <li style="padding:8px 0;border-bottom:1px solid var(--card-border);"><a href="#" style="color:var(--text-muted);font-size:13px;">🏥 وزارة الصحة</a></li>
+            <li style="padding:8px 0;border-bottom:1px solid var(--card-border);"><a href="#" style="color:var(--text-muted);font-size:13px;">📊 بورصة الكويت</a></li>
+            <li style="padding:8px 0;border-bottom:1px solid var(--card-border);"><a href="#" style="color:var(--text-muted);font-size:13px;">✈️ مطار الكويت</a></li>
+            <li style="padding:8px 0;"><a href="#" style="color:var(--text-muted);font-size:13px;">🚌 الهيئة العامة للطرق</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">🇰🇼</div>
+          <div class="logo-text">
+            <span>Kuwait News</span>
+            <span>أخبار الكويت</span>
+          </div>
+        </div>
+        <p>مصدرك الموثوق لأحدث أخبار الكويت والعالم على مدار الساعة. نقدم لكم تغطية شاملة للأحداث المحلية والعالمية بموضوعية وشفافية.</p>
+        <div class="social-links">
+          <a class="social-link" href="#" aria-label="تويتر">🐦</a>
+          <a class="social-link" href="#" aria-label="إنستغرام">📸</a>
+          <a class="social-link" href="#" aria-label="يوتيوب">▶️</a>
+          <a class="social-link" href="#" aria-label="تيليغرام">✈️</a>
+          <a class="social-link" href="#" aria-label="واتساب">💬</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>التصنيفات</h4>
+        <ul>
+          <li><a href="#">📰 أخبار محلية</a></li>
+          <li><a href="#">🌍 أخبار عالمية</a></li>
+          <li><a href="#">⚽ الرياضة</a></li>
+          <li><a href="#">💼 الاقتصاد</a></li>
+          <li><a href="#">💻 التقنية</a></li>
+          <li><a href="#">🏥 الصحة</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>الموقع</h4>
+        <ul>
+          <li><a href="#">من نحن</a></li>
+          <li><a href="#">اتصل بنا</a></li>
+          <li><a href="#">سياسة الخصوصية</a></li>
+          <li><a href="#">شروط الاستخدام</a></li>
+          <li><a href="#">الإعلان معنا</a></li>
+          <li><a href="sitemap.xml">خريطة الموقع</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>التطبيق</h4>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">حمّل تطبيقنا واحصل على الأخبار فور نشرها</p>
+        <button onclick="document.getElementById('install-banner').classList.toggle('show')" style="background:var(--gold);color:var(--dark);border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:8px;">📲 أضف للشاشة الرئيسية</button>
+        <button class="btn-install hidden" id="btn-install-footer" style="background:var(--dark-3);color:var(--text);border:1px solid var(--card-border);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;width:100%;">⬇️ تثبيت</button>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Kuwait News - جميع الحقوق محفوظة</span>
+      <span>صُنع بـ ❤️ في الكويت 🇰🇼</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" aria-label="العودة للأعلى">↑</button>
+
+<!-- Toast Container -->
+<div class="toast-container" aria-live="polite"></div>
+
+<!-- Scripts -->
+<script src="js/main.js" defer></script>
+
+<!-- Counter Animation Script (inline, tiny) -->
+<script>
+  // Animate counters
+  function animateCounter(el, target, suffix) {
+    let start = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = start.toLocaleString('ar') + (suffix || '');
+    }, 30);
+  }
+  window.addEventListener('load', () => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateCounter(document.getElementById('stat-articles'), 1247);
+          animateCounter(document.getElementById('stat-visitors'), 58400);
+          obs.disconnect();
+        }
+      });
+    });
+    const statsBar = document.querySelector('.stats-bar');
+    if (statsBar) obs.observe(statsBar);
+  });
+</script>
+
+</body>
+</html>
